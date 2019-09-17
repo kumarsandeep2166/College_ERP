@@ -1,0 +1,4 @@
+<option value="">---------------------</option>
+{% for obj in queryset %}
+  <option value="{{ obj.pk }}">{{ obj.name }}</option>
+{% endfor %}

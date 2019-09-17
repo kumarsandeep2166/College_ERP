@@ -1,0 +1,48 @@
+{% extends 'student/base.html' %}
+{% load static %}
+{% block content %}
+<section id="main-content">
+    <div class="wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel">
+                    <header class="panel-heading">
+                        Batch  Details For "{{object.batch_no}}" ({{object.starting_date}} - {{object.ending_date}})
+                    </header>
+                    <div class="panel-body" style="overflow-x:auto;">
+                        <table class="table table-bordered table-striped table-condensed">
+                            <tbody>
+                                <tr>
+                                    <td>Stream Name</td>
+                                    <td>{{object.stream}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Course Name</td>
+                                    <td>{{object.course_name}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Session</td>
+                                    <td>{{object.batch_no}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Starting Date</td>
+                                    <td>{{object.starting_date}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Ending Date</td>
+                                    <td>{{object.ending_date}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Remarks</td>
+                                    <td>{{object.remark}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock content %}

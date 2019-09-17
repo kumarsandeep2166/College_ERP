@@ -1,0 +1,47 @@
+{% extends 'student/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+<section id="main-content">
+    <div class="wrapper">
+        <div class="col-sm-12 col-xs-12 col-sm-offset-0">
+            <div class="text-center">
+                <h1 class="hdrcolorbg">
+                   Affiliated SetUp
+                </h1>
+            </div>
+            <form class="frmbgg clear-fx" method="post">
+                <div class="row">
+                    {% csrf_token %}
+                    <div class="form-group col-sm-3 col-xs-12">
+                        <label>Affiliated To</label>
+                        {{ form.name}}
+                    </div>                  
+                </div>
+                <button class="btn btn-info save" id="submit">Submit</button>
+            </form>
+        </div>        
+    </div>    
+</section>
+<script type="text/javascript">
+    $("#submit").on('click', function(){
+        console.log("coming here to save part");
+        $.ajax(
+            { 
+                method: "POST",
+                url:"",
+                data:{
+                    "form_json":form_json,            
+                },
+                success:function(data){
+                    if(data.msg=="success"){
+                        alert(data.msg);                   
+                    } 
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                        alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+                    }
+            });
+    });
+</script>
+{% endblock content %}

@@ -1,0 +1,48 @@
+{% extends 'student/base.html' %}
+{% load static %}
+{% block content %}
+<section id="main-content">
+    <div class="wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel">
+                    <header class="panel-heading">
+                        Course  Details For {{object.course_name}}
+                    </header>
+                    <div class="panel-body" style="overflow-x:auto;">
+                        <table class="table table-bordered table-striped table-condensed">
+                            <tbody>
+                                <tr>
+                                    <td>Stream Name</td>
+                                    <td>{{object.semestar.stream.name}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Course Name</td>
+                                    <td>{{object.semestar.course.course_name}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Session</td>
+                                    <td>{{object.semestar.batch.batch_no}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Semestar</td>
+                                    <td>{{object.semestar}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Section Name</td>
+                                    <td>{{object.section_name}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Remark</td>
+                                    <td>{{object.remark}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock content %}

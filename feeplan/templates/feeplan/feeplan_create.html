@@ -1,0 +1,159 @@
+{% extends 'student/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+<div class="wrapper">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-8 col-xs-10 col-sm-offset-3">
+                <form action="" class="frmbgg clear-fx"  method="POST" id="mysectionForm" data-course-url="{% url 'ajax_load_course' %}" data-batch-url="{% url 'ajax_load_batch' %}" data-fee-url="{% url 'ajax_load_feeplan' %}" data-view-list-url="{% url 'ajax_load_list_data' %}">
+                    <div class="row">
+                        {% csrf_token %}
+                        <div class="form-group col-sm-3 col-xs-12">
+                            <label>Stream</label>
+                            {{ form.stream}}
+                        </div>
+                        <div class="form-group col-sm-3 col-xs-12">
+                            <label>Course</label>
+                            {{ form.course}}
+                        </div>
+                        <div class="form-group col-sm-3 col-xs-12">
+                            <label>Batch</label>
+                            {{ form.batch}}
+                        </div>
+                        <div class="form-group col-sm-3 col-xs-12">
+                            <label>Fees Type</label>
+                            {{ form.fees_type}}
+                        </div>
+                        <div class="form-group col-sm-3 col-xs-12">
+                            <label>Year</label>
+                            {{ form.year}}
+                        </div>
+                        <div class="form-group col-sm-3 col-xs-12">
+                            <label>Actual Fees</label>
+                            {{ form.actual_fees}}
+                        </div>
+                        <div class="form-group col-sm-3 col-xs-12">
+                            <label>Default Installment</label>
+                            {{ form.default_installment}}
+                        </div>
+                        
+                        
+                    </div>
+                    <button type="submit" class="btn btn-info subbtn" id="submit_attn">Submit</button>
+                    <input type="hidden" name="student_section" id="total_count" hidden="hidden" value="">
+                    
+                </form>
+                
+            </div>
+            <div class="col-xs-10 col-sm-8 col-sm-offset-3">
+                <table class="table table-bordered table-striped table-condensed" id="feeplan_create_list">
+                    <thead>
+                        <tr class="hdclr">
+                            <th>Sl No</th>                                
+                            <th>Name</th>                                
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody id="fee_create">   
+                        {% for stud in objects %}     
+                        <tr>                                                           
+                            <td>{{stud.id}}</td> 
+                            <td>{{stud.fees_type}}</td>              
+                            <td>{{stud.actual_fees}}</td>
+                        </tr>  
+                        {% endfor %}   
+                        
+                    </tbody>
+                </table>  
+            </div>
+        </div>
+    </div>
+</div>
+<script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+<script type="text/javascript">
+$("#id_stream").change(function(event){
+            console.log("Hello");
+            event.preventDefault();
+            var url=$("#mysectionForm").attr("data-course-url");
+            var stream_id=$(this).val();
+            $.ajax({
+                url:url,
+            data:{
+                'stream':stream_id,
+            },
+            success:function(data){
+                $("#id_course").html(data);
+            }
+            });
+
+        });
+    $("#id_course").change(function(event){
+        event.preventDefault();
+        var url=$("#mysectionForm").attr("data-batch-url");
+        var course_id=$(this).val();
+        $.ajax({
+            url:url,
+        data:{
+            'course':course_id,
+        },
+        success:function(data){
+            $("#id_batch").html(data);
+        }
+        });
+    });
+
+    $("#id_batch").change(function(event){
+        event.preventDefault();
+        var url=$("#mysectionForm").attr("data-fee-url");
+        console.log(url);
+        var stream_id=$("#id_stream").val();
+        var course_id=$("#id_course").val();
+        var batch_id=$("#id_batch").val();
+        console.log();
+        var current_url=$(location).attr('href');
+    $.ajax({
+        url:url,
+        data:{
+        'course_id':course_id,
+        'stream_id':stream_id,
+        'batch_id':batch_id,
+        },
+        success:function(data){
+                $("#id_fees_type").html(data);
+             }
+        });
+    });
+    $("#submit_attn").on('click', function(){
+        event.preventDefault();
+        var url=$("#mysectionForm").attr("data-fee-url");
+        console.log(url);
+        var stream_id=$("#id_stream").val();
+        var course_id=$("#id_course").val();
+        var batch_id=$("#id_batch").val();
+        var fees_type_id=$("#id_fees_type").val();
+        var year_id=$("#id_year").val();
+        var actual_fees_id=$("#id_actual_fees").val();
+        var default_installment_id=$("#id_default_installment").val();
+        
+        console.log();
+        var current_url=$(location).attr('href');
+
+        $.ajax({
+        url:'/ajax_load_list_data_fee/',
+        data:{
+        'course_id':course_id,
+        'stream_id':stream_id,
+        'batch_id':batch_id,
+        'fees_type_id':fees_type_id,
+        'year_id':year_id,
+        'actual_fees_id':actual_fees_id,
+        'default_installment_id':default_installment_id,
+        },
+        success:function(data){
+                $("#fee_create").html(data);
+             }
+        });
+    });
+</script>
+{% endblock content %}

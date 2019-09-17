@@ -1,0 +1,126 @@
+{% extends 'student/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.css">
+<section id="main-content">
+    <div class="wrapper">
+        <div>
+            <div class="alert alert-info">Transaction / Issue / Return</div>
+                <div class="form-group pull-left">
+                    <div class="row">
+                        <label>Student Name:</label>
+                        <input type="search" name="student_search" id="student_search">
+                    </div>
+                    <div class="row">
+                        <span name="save_borrow" class="btn btn-primary" id="search_btn"><span class="glyphicon glyphicon-thumbs-up"></span>
+                        Search
+                        </span>
+                    </div>
+                </div>
+                <div class="row" id="hidden_div" style="display: none;" class="col-sm-12 col-xs-12">
+                    <div class="form-group col-sm-3 col-xs-12">                    
+                        <select class="form-control" name="books_present" id="books_present">
+                            <option value=''>--------------------</option>
+                            <option value=''>X</option>
+                            <option value=''>X</option>
+                            <option value=''>X</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-sm-3 col-xs-12">                    
+                            <input type="text" name="autocomplete_box_books" id="autocomplete_box">
+                        </div>
+                </div> 
+               
+                <div class="col-sm-12 col-xs-12" style="display: none;" id="table_book_list">
+                    <table class="table table-bordered table-striped table-condensed" id="">
+                        <thead>
+                            <tr class="hdclr">
+                                <th>Sl No</th>                                    
+                                <th>Book Name</th>
+                                <th>Book Author</th>
+                                <th>Issue Date</th>
+                                <th>Status</th>                
+                                <th>Action</th>                
+                            </tr>
+                        </thead>
+                        <tbody id="book_list_issued">   
+                            
+                        </tbody>
+                    </table>
+                            
+                </div>
+                
+                    
+                
+        </div>
+    </div>
+</section>
+<script type="text/javascript">
+    function getCookie(c_name) {
+        if (document.cookie.length > 0)
+        {
+            c_start = document.cookie.indexOf(c_name + "=");
+            if (c_start != -1)
+            {
+                c_start = c_start + c_name.length + 1;
+                c_end = document.cookie.indexOf(";", c_start);
+                if (c_end == -1) c_end = document.cookie.length;
+                return unescape(document.cookie.substring(c_start,c_end));
+            }
+        }
+        return "";
+    }
+    $(function(){
+        $.ajaxSetup({
+            headers:{"X-CSRFToken":getCookie('csrftoken')}
+        });
+    });
+</script>
+<script src="{% static 'js/datepicker.js' %}"></script>
+<script>
+$( function() {
+        $( "#id_publication_date" ).datepicker();
+        $( "#id_publication_date" ).attr('autocomplete','off');
+} );
+
+</script>
+
+<script type="text/javascript">    
+    $("#search_btn").on('click',function(){
+        $("#hidden_div").show();
+        var student = $("#student_search").val();
+        console.log(student);
+        var select_type = $("#books_present").val();
+        var autocomplete_data = $("#autocomplete_box").val();
+    $.ajax({
+        url:"/autocompletesearchbooks/",
+        type:'POST',
+        data:{
+            'student': student,
+            'select_type':select_type,
+            'autocomplete_data':autocomplete_data,
+        },
+        success:function(data){      
+            $("#hidden_div").show();
+            
+            }
+        });
+    });
+</script>
+<script type="text/javascript">
+    $(document).ready(function(){ 
+        $("#autocomplete_box").autocomplete({
+            source: "/autocompletesearchbooks/",
+            minLength: 2,
+            open: function(){
+                setTimeout(function () {
+                    $('.ui-autocomplete').css('z-index', 99);
+                }, 0);
+            }
+          });
+    });
+</script>
+
+
+{% endblock content %}

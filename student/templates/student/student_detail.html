@@ -1,0 +1,371 @@
+{% extends 'student/base.html' %}
+{% load static %}
+{% block content %}
+<section id="main-content">
+    <div class="wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel">
+                    <header class="panel-heading">
+                        Student  Details For {{object.first_name}}  {{object.middle_name}}  {{object.last_name}}
+                    </header>
+                    <div class="panel-body" style="overflow-x:auto;">
+                        <table class="table table-bordered table-striped table-condensed">
+                            <tbody>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>{{object.first_name}}  {{object.middle_name}}  {{object.last_name}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Date Of Birth</td>
+                                    <td>{{object.date_of_birth}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Blood Group</td>
+                                    <td>{{object.blood_group}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Caste</td>
+                                    <td>{{object.caste}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Sub Caste</td>
+                                    <td>{{object.sub_caste}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Place Of Birth</td>
+                                    <td>{{object.place_of_birth}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Aadhar Number</td>
+                                    <td>{{object.aadhar_number}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Gender</td>
+                                    <td>{{object.gender}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Father's Name</td>
+                                    <td>{{object.fathers_name}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Father's Occupation</td>
+                                    <td>{{object.fathers_occupation}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Father's Date Of Birth</td>
+                                    <td>{{object.fathers_date_of_birth}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Father's Phone Number</td>
+                                    <td>{{object.fathers_phone_no}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Father's EmailId</td>
+                                    <td>{{object.fathers_email_id}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Father's Annual Income</td>
+                                    <td>{{object.fathers_annual_income}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Mother's Name</td>
+                                    <td>{{object.mothers_name}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Mother's Occupation</td>
+                                    <td>{{object.mothers_occupation}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Mother's Date of Birth</td>
+                                    <td>{{object.mothers_date_of_birth}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td>Mother's Phone Number</td>
+                                    <td>{{object.mothers_phone_no}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Mother's EmailId</td>
+                                    <td>{{object.mothers_email_id}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Mother's Annaul Income</td>
+                                    <td>{{object.mothers_annual_income}}</td>
+                                </tr>
+                                <tr>
+                                    <td>10th Board</td>
+                                    <td>{{object.tenth_board}}</td>
+                                </tr>
+                                <tr>
+                                    <td>10th Subjects</td>
+                                    <td>{{object.tenth_subjects}}</td>
+                                </tr>
+                                <tr>
+                                    <td>10th School</td>
+                                    <td>{{object.tenth_school}}</td>
+                                </tr>
+                                <tr>
+                                    <td>10th Full Mark</td>
+                                    <td>{{object.tenth_full_mark}}</td>
+                                </tr>
+                                <tr>
+                                    <td>10th Secured Mark</td>
+                                    <td>{{object.tenth_secured_mark}}</td>
+                                </tr>
+                                <tr>
+                                    <td>10th Percentage</td>
+                                    <td>{{object.tenth_percentage}}</td>
+                                </tr>
+                                <tr>
+                                    <td>10th Document</td>
+                                    <td><a href="/media/{{object.student_tenth}}" target="_blank">view document</a></td>
+                                </tr>
+                                <tr>
+                                    <td>10th Mark Sheet</td>
+                                    <td><a href="/media/{{object.tenth_marksheet}}" target="_blank">view document</a></td>
+                                </tr>
+                                <tr>
+                                    <td>12th Board</td>
+                                    <td>{{object.twelth_board}}</td>
+                                </tr>
+                                <tr>
+                                    <td>12th Stream</td>
+                                    <td>{{object.twelth_stream}}</td>
+                                </tr>
+                                <tr>
+                                    <td>12th College</td>
+                                    <td>{{object.twelth_school}}</td>
+                                </tr>
+                                <tr>
+                                    <td>12th  Occupation</td>
+                                    <td>{{object.twelth_board}}</td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>12th  Document</td>
+                                    <td><a href="/media/{{object.student_twelth}}" target="_blank">view document</a></td>
+                                </tr>
+                                <tr>
+                                    <td>12th  Mark Sheet</td>
+                                    <td><a href="/media/{{object.tewlth_marksheet}}" target="_blank">view document</a></td>
+                                </tr>
+                                <tr>
+                                    <td>Degree Stream</td>
+                                    <td>{{object.degree_stream}}</td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>Degree College</td>
+                                    <td>{{object.degree_college}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Degree University</td>
+                                    <td>{{object.degree_university}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Degree Full Mark</td>
+                                    <td>{{object.degree_full_mark}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Degree Secured Mark</td>
+                                    <td>{{object.degree_secured_mark}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Degree Percentage</td>
+                                    <td>{{object.degree_percentage}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Degree Document</td>
+                                    <td><a href="/media/{{object.student_degree}}" target="_blank">view document</a></td>                                  
+                                </tr>
+                                <tr>
+                                    <td>Degree Mark Sheet</td>
+                                    <td><a href="/media/{{object.degree_marksheet}}" target="_blank">view document</a></td>                                   
+                                </tr>
+                                <tr>
+                                    <td>CLC</td>
+                                    <td><a href="/media/{{object.student_clc}}" target="_blank">view document</a></td>                                   
+                                </tr>
+                                <tr>
+                                    <td>Conduct</td>
+                                    <td><a href="/media/{{object.student_conduct_certificate}}" target="_blank">view document</a></td>                                   
+                                </tr>
+                                <tr>
+                                    <td>Migration</td>
+                                    <td><a href="/media/{{object.student_migration}}" target="_blank">view document</a></td>                                   
+                                </tr>
+                                <tr>
+                                    <td>Birth Certificate</td>
+                                    <td><a href="/media/{{object.student_birth_certificate}}" target="_blank">view document</a></td>                                   
+                                </tr>
+                                <tr>
+                                    <td>Student Thumb</td>
+                                    <td><a href="/media/{{object.student_thumb}}" target="_blank">view document</a></td>                                   
+                                </tr>
+                                <tr>
+                                    <td>Student Address</td>
+                                    <td><a href="/media/{{object.student_address}}" target="_blank">view document</a></td>                                   
+                                </tr>
+                                <tr>
+                                    <td>Student Signature</td>
+                                    <td><a href="/media/{{object.student_signature}}" target="_blank">view document</a></td>                                   
+                                </tr>
+                                <tr>
+                                    <td>Stream Applied For</td>
+                                    <td>{{object.stream}}</td>                                   
+                                </tr>
+                                <tr>
+                                    <td>Course Applied For</td>
+                                    <td>{{object.course}}</td>                                   
+                                </tr>
+                                <tr>
+                                    <td>Batch</td>
+                                    <td>{{object.batch}}</td>                                   
+                                </tr>
+                               
+                            </tbody>
+                        </table>
+                    </div>
+                    {% if object.academic_status < 1 %}
+                        <span id="approve_msg">Rejected</span>
+                    {% elif object.academic_status < 2 %}
+                        <a href="" class="btn btn-info" id="approve_btn">Approve</a>
+                        <a href="" class="btn btn-info" id="reject_btn">Reject</a>
+                        <span id="approve_msg"></span>
+                    {% else %}
+                        <span id="approve_msg">Approved</span>                       
+                    {% endif %}
+                </div>
+                <input type="text" id="student_id" value="{{object.pk}}" hidden="hidden">
+                <div class="form-group">
+                    <label for="note">Remark:</label>
+                    <textarea class="form-control" name="note" rows="3" id="note"></textarea>
+                </div>  
+                <div class="form-group col-sm-2 col-xs-2">
+                    <button type="submit" id="addnote" class="btn btn-default okbtn">Add Note</button>
+                </div> <br><br><br>
+                <div id="notesDiv" class="table-responsive">
+                    <table id="note_table" class="table table-striped table-hover">
+                        <tbody>
+                            
+                        </tbody>
+                    </table> 
+                </div>                  
+            </div>
+        </div>
+    </div>
+</section>
+<script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+    var student_id=$("#student_id").val();
+    $.ajax({
+    type:'GET',
+    url:'/add_note/',
+    data:{
+        'student_id':student_id,
+        'note_type': '2',
+    },
+    success:function(data){
+            $("#note_table").html(data);
+            }
+    });    
+});
+    function pinToggle(id){
+        var student_id=$("#student_id").val();
+        $.ajax({
+        type:'GET',
+        url:'/pin_toggle_note/',
+        data:{
+            'student_id':student_id,
+            'note_id':id,
+            'note_type': '2',
+        },
+        success:function(data){
+                $("#note_table").html(data);
+                }
+        });
+    }
+    $('#addnote').on('click', function(event){
+    event.preventDefault();
+    console.log("form submitted!")  // sanity check
+    var note = $("#note").val();
+    var student_id=$("#student_id").val();
+    console.log(student_id);
+    $.ajax({
+
+
+        type:'POST',
+        url:'/add_note/',
+        data:{
+            'student_id':student_id,
+            'note': note,
+            'note_type': '2',
+        },
+        success:function(data){
+                $("#note_table").html(data);
+             }
+        });
+});
+$('#approve_btn').on('click', function(event){
+    event.preventDefault();
+    var student_id=$("#student_id").val();
+    $.ajax({
+
+
+        type:'POST',
+        url:'/approve_academic/',
+        data:{
+            'student_id':student_id,
+        },
+        success:function(result){
+               if(result.msg=="Approved"){
+                   $("#approve_btn").hide();
+                   $("#reject_btn").hide();
+                   $("#approve_msg").text("Approved");
+               }
+             }
+        });
+});
+$('#reject_btn').on('click', function(event){
+    event.preventDefault();
+    var student_id=$("#student_id").val();
+    $.ajax({
+
+
+        type:'POST',
+        url:'/reject_academic/',
+        data:{
+            'student_id':student_id,
+        },
+        success:function(result){
+               if(result.msg=="Rejected"){
+                   $("#approve_btn").hide();
+                   $("#reject_btn").hide();
+                   $("#approve_msg").text("Rejected");
+               }
+             }
+        });
+});
+function getCookie(c_name) {
+    if (document.cookie.length > 0)
+    {
+        c_start = document.cookie.indexOf(c_name + "=");
+        if (c_start != -1)
+        {
+            c_start = c_start + c_name.length + 1;
+            c_end = document.cookie.indexOf(";", c_start);
+            if (c_end == -1) c_end = document.cookie.length;
+            return unescape(document.cookie.substring(c_start,c_end));
+        }
+    }
+    return "";
+}
+    $(function(){
+        $.ajaxSetup({
+            headers:{"X-CSRFToken":getCookie('csrftoken')}
+        });
+    });
+</script>
+{% endblock content %}

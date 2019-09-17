@@ -1,0 +1,46 @@
+{% extends 'student/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+<section id="main-content">
+        <div class="wrapper">
+                <div class="col-sm-10 col-xs-12 col-sm-offset-1">
+                    <a type="button" class="btn btn-info" href="{% url 'assign_subject_teacher' %}">Assign a subject to another teacher</a>
+                    <table class="table table-bordered table-striped table-condensed" id="subject_table">
+                            <thead>
+                                <tr class="hdclr">                                       
+                                        <th>Teacher</th>
+                                        <th>Subject</th>
+                                        <th>Semestar</th>
+                                        <th>Section</th>
+                                        <th>Batch</th>
+                                        <th>Course</th>
+                                        <th>Stream</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for i in object_list %}
+                                <tr>
+                                        <td>{{i.teacher}}</td>
+                                        <td>{{i.subject}}</td>                                        
+                                        <td>{{i.subject.semestar}}</td>
+                                        <td>{{i.section}}</td>
+                                        <td>{{i.subject.semestar.batch}}</td>
+                                        <td>{{i.subject.semestar.course}}</td>
+                                        <td>{{i.subject.semestar.stream}}</td>                                                  
+                                        <td><a href="{% url 'subject_teacher_update' pk=i.id %}">EDIT</a>||<a href="{% url 'subject_teacher_delete' pk=i.id %}">DELETE</a> </td>                                                  
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                </div>
+        </div>
+</section>
+<script>
+    $(document).ready(function(){
+        $("#subject_table").dataTable();
+    });
+</script>
+{% endblock content %}

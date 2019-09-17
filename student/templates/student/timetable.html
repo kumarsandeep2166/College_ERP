@@ -1,0 +1,166 @@
+{% extends 'student/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+<link href="{% static 'css/js-timepicker.css' %}" rel="stylesheet" />
+{% block content %}
+<style>
+    .clk {
+    position: absolute;
+    right: 25px;
+    top: 14px;
+    font-size: 16px;
+    color: #ff6c60;
+}
+.tmpbg{
+    position:relative;
+}
+.mn10{
+    margin-top:10px;
+}
+.daybg {
+    font-size: 21px;
+    font-family: 'Roboto', sans-serif;
+    color: #1fb5ad;
+    vertical-align: middle;
+    text-align: center;
+    line-height: 100px !important;
+}
+.tmop{
+    margin-bottom: 5px;
+}
+.tmop .form-control{
+    height: 24px;
+}
+.tmop .input-group-addon {
+    padding: 3px 12px;
+}
+  
+</style>
+<section id="main-content">
+        <div class="wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel">
+                        <header class="panel-heading clearfix col-sm-12">
+                            <div class="col-sm-4 col-xs-12">
+                                Class TimeTable Create
+                            </div>
+                        </header>
+                        <div class="panel-body" style="overflow-x:auto;">
+                            <table class="table table-bordered table-striped table-condensed">
+                                <thead>
+                                    <tr class="hdclr">
+                                        <th width="10%">Day</th>
+                                        <th>Class1</th>
+                                        <th>Class2</th>
+                                        <th>Class3</th>
+                                        <th>Class4</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="daybg">Monday</td>
+                                        <td>
+                                            <div class="col-sm-12 col-xs-12 tmop">
+                                                <div class="input-group bootstrap-timepicker timepicker">
+                                                    <input type="text" class="form-control input-small timepicker1">
+                                                    <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+                                                </div>
+                                            </div> 
+                                            <div class="col-sm-12 col-xs-12 tmop">
+                                                <div class="input-group bootstrap-timepicker timepicker">
+                                                    <input type="text" class="form-control input-small timepicker1">
+                                                    <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-sm-12 col-xs-12 mn10">
+                                                <select class="form-control">
+                                                    <option value="">----Select Teacher----</option>
+                                                    <option value="Department1">Teacher1</option>
+                                                    <option value="Department2">Teacher2</option>
+                                                    <option value="Department3">Teacher3</option>
+                                                </select>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="col-sm-12 col-xs-12 tmop">
+                                                <div class="input-group bootstrap-timepicker timepicker">
+                                                    <input type="text" class="form-control input-small timepicker1">
+                                                    <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12 col-xs-12 tmop">
+                                                <div class="input-group bootstrap-timepicker timepicker">
+                                                    <input type="text" class="form-control input-small timepicker1">
+                                                    <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-sm-12 col-xs-12 mn10">
+                                                <select class="form-control">
+                                                    <option value="">----Select Teacher----</option>
+                                                    <option value="Department1">Teacher1</option>
+                                                    <option value="Department2">Teacher2</option>
+                                                    <option value="Department3">Teacher3</option>
+                                                </select>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="col-sm-12 col-xs-12 tmop">
+                                                <div class="input-group bootstrap-timepicker timepicker">
+                                                    <input type="text" class="form-control input-small timepicker1">
+                                                    <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12 col-xs-12 tmop">
+                                                <div class="input-group bootstrap-timepicker timepicker">
+                                                    <input type="text" class="form-control input-small timepicker1">
+                                                    <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-sm-12 col-xs-12 mn10">
+                                                <select class="form-control">
+                                                    <option value="">----Select Teacher----</option>
+                                                    <option value="Department1">Teacher1</option>
+                                                    <option value="Department2">Teacher2</option>
+                                                    <option value="Department3">Teacher3</option>
+                                                </select>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="col-sm-12 col-xs-12 tmop">
+                                                <div class="input-group bootstrap-timepicker timepicker">
+                                                    <input type="text" class="form-control input-small timepicker1">
+                                                    <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12 col-xs-12 tmop">
+                                                <div class="input-group bootstrap-timepicker timepicker">
+                                                    <input type="text" class="form-control input-small timepicker1">
+                                                    <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-sm-12 col-xs-12 mn10">
+                                                <select class="form-control">
+                                                    <option value="">----Select Teacher----</option>
+                                                    <option value="Department1">Teacher1</option>
+                                                    <option value="Department2">Teacher2</option>
+                                                    <option value="Department3">Teacher3</option>
+                                                </select>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+<script src="{% static 'js/bootstrap-timepicker.js' %}"></script>
+
+<script type="text/javascript">
+    $('.timepicker1').timepicker();
+</script>
+
+{% endblock content %}

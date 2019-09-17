@@ -1,0 +1,9 @@
+{% load crispy_forms_tags %}
+<div class="form-group col-sm-4 col-xs-12">
+    <option value="">----Select Course----</option>
+        {% for branch in branches %}
+        <option value="{{ branch.pk }}">{{branch.course_name}}</option>
+        {% endfor %}
+    
+</div>
+    

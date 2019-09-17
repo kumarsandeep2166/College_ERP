@@ -1,0 +1,15 @@
+collectfeesave
+pay_by_id
+
+
+mr_obj = MoneyReceipt.objects.all().orderby('-pk')
+if len(mr_obj)>0:
+    mr_no = int(mr_obj[0].mr_no)
+    mr_no = str(mr_no+1)
+
+else:
+    mr_no = "1"
+mr_obj = MoneyReceipt()
+mr_obj.mr_no = mr_no
+mr_obj.enrollment_number = enr_obj
+mr_obj.save()

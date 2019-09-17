@@ -1,0 +1,36 @@
+<table class="table table-bordered table-striped table-condensed">
+    <thead>
+        <tr class="hdclr">
+            <th>Feetype</th>
+            <th>Actual Fees</th>
+            <th>Default Installments</th>            
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% if objects %}
+            {% for obj in objects %}
+                <tr>
+                    <td>{{obj.fees_type}}</td>
+                    <td>{{obj.actual_fees}}</td>
+                    <td>{{obj.default_installment}}</td>                        
+                    <td>
+                        <a href="#" class="social-icon">
+                            <i class="fa fa-eye vieww"></i>
+                            <div class="tooltip">Save</div>
+                        </a>
+                        <a href="#" class="social-icon">
+                            <i class="fa fa-pencil editt"></i>
+                            <div class="tooltip">Installments</div>
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td></td><td>No Data Found</td><td></td><td></td>
+            </tr>
+        {% endif %}
+    </tbody>
+</table>
+                      

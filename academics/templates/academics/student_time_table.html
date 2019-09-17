@@ -1,0 +1,197 @@
+{% extends 'student/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+<section id="main-content">
+    <div class="wrapper">
+        <div class="col-sm-12 col-xs-12 col-sm-offset-0">
+            <div class="text-center">
+                <h1 class="hdrcolorbg">
+                    Student Time Table
+                </h1>
+            </div>
+            <form class="frmbgg clear-fx"  id="assignSubjectTeacherForm" data-course-url="{% url 'ajax_load_course' %}" data-batch-url="{% url 'ajax_load_batch' %}" data-semestar-url="{% url 'ajax_load_sem' %}"  data-subject-url="{% url 'ajax_load_subject' %}">
+                <div class="row">
+                {% csrf_token %}
+                <div class="form-group col-sm-4 col-xs-12">
+                    {{ form.stream| as_crispy_field}}
+                </div>
+                <div class="form-group col-sm-4 col-xs-12">
+                    {{ form.course| as_crispy_field}}
+                </div>
+                <div class="form-group col-sm-4 col-xs-12">
+                    {{ form.batch| as_crispy_field}}
+                </div>
+                <div class="form-group col-sm-4 col-xs-12">
+                    {{ form.semestar| as_crispy_field}}
+                </div>
+                <div class="form-group col-sm-4 col-xs-12">
+                    {{ form.section| as_crispy_field}}
+                </div>
+            </form>
+            
+        </div>
+    </div>
+    <div class="row" id="time_table_div" style="display: none;">
+        <div class="col-lg-12">
+            <div class="panel">
+                <header class="panel-heading clearfix col-sm-12">
+                    <div class="col-sm-4 col-xs-12">
+                        Class TimeTable
+                    </div>
+                </header>
+                <div class="panel-body" style="overflow-x:auto;">
+                    <table class="table table-bordered table-striped table-condensed" id="timetable_table">
+                        <thead>
+            
+                        </thead>
+                        <tbody>
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    $("#id_stream").change(function(){
+        var url=$("#assignSubjectTeacherForm").attr("data-course-url");
+        var stream_id=$(this).val();
+        $.ajax({
+            url:url,
+        data:{
+            'stream':stream_id,
+        },
+        success:function(data){
+            $("#id_course").html(data);
+        }
+        });
+    });
+    $("#id_course").change(function(){
+        var url=$("#assignSubjectTeacherForm").attr("data-batch-url");
+        var course_id=$(this).val();
+        $.ajax({
+            url:url,
+            data:{
+                'course':course_id,
+            },
+            success:function(data){
+                $("#id_batch").html(data);
+            }
+        });
+    });
+    $("#id_batch").change(function(){
+        var url=$("#assignSubjectTeacherForm").attr("data-semestar-url");
+        var batch_id=$(this).val();
+        var course_id=$("#id_course").val();
+        var stream_id = $("#id_stream").val();
+        $.ajax({
+            url:url,
+            data:{
+                'batch_id': batch_id,
+                'course':course_id,
+                'stream_id': stream_id,
+            },
+            success:function(data){
+                $("#id_semestar").html(data);
+            }
+        });
+    });
+    $("#id_semestar").change(function(){       
+        var semestar_id =$(this).val();
+        $.ajax({
+            url:'/get_section_subject/',
+            data:{
+                'semestar_id': semestar_id,
+            },
+            success:function(data){
+                subj_str = "<option>----------</option>";
+                sec_str = "<option>----------</option>";
+                if(data.section_list.length){
+                    for(var i in data.section_list) {
+                        sec_str += "<option value=\""+ data.section_list[i].id +"\">"+ data.section_list[i].name +"</option>";
+                    }
+                }
+                $("#id_section").html(sec_str);
+            },
+            error:function(data){
+                $("#id_section").html("<option>----------</option>");
+            }
+        });
+    });
+    $("#id_section").change(function(){
+        var section = $("#id_section").val(); 
+        $.ajax({
+            url:'/student_time_table_view/',
+            type: "GET",
+            data:{
+                'section': section,
+            },
+            success:function(data){
+                $("#time_table_div").show();
+                var thead_str = '<tr class="hdclr"><th width="10%">Day</th><th>Paticular</th>';
+                for(i=1; i<=data.maximum;i++){
+                    thead_str += '<th colspan="2">Class'+i+'</th>';
+                }
+                thead_str += '</tr>';
+                var body_str = '';
+                for(i=0; i<data.section_time_table.length;i++){
+                    if(data.section_time_table[i].class.length>0){
+                        body_str += '<tr><td rowspan="3">'+data.section_time_table[i].day+'</td><td>Time</td>';
+                        for(j=0; j<data.section_time_table[i].class.length;j++){
+                            body_str += '<td>';
+                            body_str += data.section_time_table[i].class[j].fromtime;
+                            body_str += '</td>';
+                            body_str += '<td>';
+                            body_str += data.section_time_table[i].class[j].totime;
+                            body_str += '</td>';
+                        }
+                        body_str += '</tr>';
+                        body_str += '<tr><td>Subject</td>';
+                        for(j=0; j<data.section_time_table[i].class.length;j++){
+                            body_str += '<td  colspan="2">';
+                            body_str += data.section_time_table[i].class[j].subject;
+                            body_str += '</td>';
+                        }
+                        body_str += '</tr>';
+                        body_str += '<tr><td>Teacher</td>';
+                        for(j=0; j<data.section_time_table[i].class.length;j++){
+                            body_str += '<td  colspan="2">';
+                            body_str += data.section_time_table[i].class[j].teacher;
+                            body_str += '</td>';
+                        }
+                        body_str += '</tr>';
+                    }
+                }
+                
+                
+                $("#timetable_table thead").html(thead_str);
+                $("#timetable_table tbody").html(body_str);
+            },
+            error:function(data){
+                
+            }
+        });
+    });
+    function getCookie(c_name) {
+        if (document.cookie.length > 0)
+        {
+            c_start = document.cookie.indexOf(c_name + "=");
+            if (c_start != -1)
+            {
+                c_start = c_start + c_name.length + 1;
+                c_end = document.cookie.indexOf(";", c_start);
+                if (c_end == -1) c_end = document.cookie.length;
+                return unescape(document.cookie.substring(c_start,c_end));
+            }
+        }
+        return "";
+    }
+    $(function(){
+        $.ajaxSetup({
+            headers:{"X-CSRFToken":getCookie('csrftoken')}
+        });
+    });
+</script>
+{% endblock content %}

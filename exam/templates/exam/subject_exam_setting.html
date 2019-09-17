@@ -1,0 +1,67 @@
+{% extends 'student/base.html' %}
+{% block content %}
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+<section id="main-content">
+    <div class="wrapper">
+            <header class="panel-heading clearfix col-sm-12">
+                <div class="col-sm-4 col-xs-12">
+                    Student Exam Plans
+                </div>
+            </header>
+        <div class="row">
+            <div class="panel-body" style="overflow-x:auto;">
+                <table class="table table-bordered table-striped table-condensed" id="table_student">
+                    <thead>
+                        <tr class="hdclr">
+                            <th>Sl No.</th>
+                            <th>Batch</th>
+                            <th>Semestar</th>
+                            <th>Subject Name</th>
+                            <th>Exam Type</th>
+                            <th>Exam Number</th>
+                            <th>No Of Exams</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in queryset %}
+                        <tr>
+                            <td>{{i.id}}</td>
+                            <td>{{i.exam.semestar.batch}}</td>
+                            <td>{{i.exam.semestar}}</a></td>
+                            <td>{{i.subject.name}}</td>
+                            <td>{{i.exam.exam.exam_type}}</td>
+                            <td>{{i.exam_number}}</td>
+                            <td>{{i.exam.no_of_exams}}</td>
+                            <td>
+                                <a href="{% url 'subject_exam_update' pk=i.id %}" class="social-icon">
+                                    <i class="fa fa-pencil editt"></i>
+                                    <div class="tooltip">Edit</div>
+                                </a>
+                                <form method="post" action="{% url 'subject_exam_delete' pk=i.id  %}" enctype="multipart/form-data" >
+                                    {% csrf_token %}                        
+                                    <button type="submit"  class="social-icon"  id="delete" onclick="return confirm('Are you sure to delete this?');">
+                                        <i class="fa fa-trash-o deletee"></i>  
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <div class="container-fluid">
+                            <h3>No Posts Found having search query "{{ request.POST.q }}"</h3>
+                        </div>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>                 
+        </div>
+    </div>
+</section>
+<script>
+    $(document).ready(function(){
+        $("#table_student").dataTable();
+            });
+  
+</script>
+{% endblock content %}

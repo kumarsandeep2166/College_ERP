@@ -1,0 +1,120 @@
+{% extends 'student/base.html' %}
+{% block content %}
+<section id="main-content">
+        <div class="wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel">
+                        <header class="panel-heading clearfix col-sm-12">                            
+                            <form class="form-horizontal" role="form" id="assignSubjectTeacherForm" data-course-url="{% url 'ajax_load_course' %}" data-batch-url="{% url 'ajax_load_batch' %}">
+                            <div class="col-sm-3 col-xs-12">
+                                <div class="input-group" style="width: 100%;">
+                                        <select class="form-control" id="id_stream">
+                                            {% for obj in stream_object %}
+                                            <option value="{{obj.pk}}" selected=""> {{obj.name}}</option>                                           
+                                            {% endfor %}
+                                        </select>                           
+                                    
+                                </div>
+                            </div>
+                            <div class="col-sm-3 col-xs-12">
+                                <div class="input-group" style="width: 100%;">
+                                  
+                                        <select class="form-control" id="id_course">
+                                                {% for obj in course_object %}
+                                                <option value="{{obj.pk}}" selected=""> {{obj.course_name}}</option>                                           
+                                                {% endfor %}
+                                        </select>
+                                    </div>
+                            </div>
+                            <div class="col-sm-3 col-xs-12">
+                                <div class="input-group" style="width: 100%;">
+                                    
+                                        <select class="form-control" id="id_batch">
+                                                {% for obj in batch_obj %}
+                                                <option value="{{obj.pk}}" selected=""> {{obj.batch_no}}</option>                                           
+                                                {% endfor %}
+                                        </select>                                  
+                                    
+                                </div>
+                            </div>
+                            <div class="col-sm-1 col-xs-12 col-sm-offset-2">
+                                <button type="button" value="View" class="vwe" data-toggle="collapse" id="listview" data-target="#demo" data-view-list-url="{% url 'ajax_load_list_data' %}">View</button>
+                            </div>
+                        </form>
+                        </header>
+                        <div class="panel-body collapse" style="overflow-x:auto;" id="demo">                        
+                        </div>                     
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+<script type="text/javascript">
+    $("#listview").on('click', function(event){
+        //event.preventDefault();
+        var url=$("#listview").attr("data-view-list-url");
+        var stream_id=$("#id_stream").val();
+        var batch_id=$("#id_batch").val();
+        var course_id=$("#id_course").val();
+    $.ajax({
+        url:url,
+        data:{
+        'batch_id':batch_id,
+        'stream_id': stream_id,
+        'course_id': course_id,
+        },
+        success:function(data){
+                $("#demo").html(data);
+             }
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    $("#id_stream").change(function(){
+        var url=$("#assignSubjectTeacherForm").attr("data-course-url");
+        var stream_id=$(this).val();
+        $.ajax({
+            url:url,
+        data:{
+            'stream':stream_id,
+        },
+        success:function(data){
+            $("#id_course").html(data);
+        }
+        });
+    });
+    $("#id_course").change(function(){
+        var url=$("#assignSubjectTeacherForm").attr("data-batch-url");
+        var course_id=$(this).val();
+        $.ajax({
+            url:url,
+            data:{
+                'course':course_id,
+            },
+            success:function(data){
+                $("#id_batch").html(data);
+            }
+        });
+    });
+    $("#id_batch").change(function(){
+        var url=$("#assignSubjectTeacherForm").attr("data-semestar-url");
+        var batch_id=$(this).val();
+        var course_id=$("#id_course").val();
+        var stream_id = $("#id_stream").val();
+        $.ajax({
+            url:url,
+            data:{
+                'batch_id': batch_id,
+                'course':course_id,
+                'stream_id': stream_id,
+            },
+            success:function(data){
+                $("#id_semestar").html(data);
+            }
+        });
+    });
+    
+</script>
+{% endblock content %}

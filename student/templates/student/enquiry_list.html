@@ -1,0 +1,81 @@
+{% extends 'student/base.html' %}
+{% block content %}
+<script>
+        document.getElementById("enqry").className += " active";
+        document.getElementById("enqry1").className += " active";
+        document.getElementById("enqry01").className += " active";        
+</script>
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+<style>
+        #enqry01 a{
+                color:#fff !important;
+        }
+</style>
+<section id="main-content">
+    <div class="wrapper">
+        <div class="row">
+                <div class="panel-body" style="overflow-x:auto;">
+                        <table class="table table-bordered table-striped table-condensed" id="table_id">
+                            <thead>
+                                <tr class="hdclr">
+                                    <th>Sl No.</th>
+                                    <th>Student Name</th>
+                                    <th>Date Of Birth</th>
+                                    <th>Phone No.</th>
+                                    <th>Email Id</th>
+                                    <th>Department</th>
+                                    <th>Branch</th>
+                                    <th>Shift</th>
+                                    <th>Last Education</th>  
+                                    <th>Entrance</th>  
+                                    <th>Year</th>  
+                                    <th>Score</th>
+                                    <th>Action</th> 
+
+                                    <!-- <th>Father's Name</th>
+                                    <th>Father's Occupation</th> 
+                                    <th>Father's D.O.B</th>
+                                    <th>Father's Phone No</th>  
+                                    <th>Father's Email Id</th>                       
+                                    <th>Father's Annual Income</th> 
+                                    <th>Mother's Name</th>
+                                    <th>Mother's Occupation</th> 
+                                    <th>Mother's D.O.B</th>
+                                    <th>Mother's Phone No</th>  
+                                    <th>Mother's Email Id</th>                       
+                                    <th>Mother's Annual Income</th>              -->
+                                   
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for enq in object_list %}
+                                <tr>
+                                        <td>{{enq.id}}</td>
+                                        <td>{{enq.first_name}}{{enq.middle_name}}{{enq.last_name}}</td>
+                                        <td>{{enq.date_of_birth}}</td>
+                                        <td>{{enq.phone_no}}</td>                                        
+                                        <td>{{enq.email_id}}</td>
+                                        <td>{{enq.stream}}</td>
+                                        <td>{{enq.course}}</td>
+                                        <td>{{enq.shift}}</td>      
+                                        <td>{{enq.last_education}}</td>      
+                                        <td>{{enq.entrance}}</td>      
+                                        <td>{{enq.year}}</td>      
+                                        <td>{{enq.score}}</td>      
+                                        <td><a href="/start_admission/{{enq.id}}">Admission</a></td>
+                                    
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                </div>
+        </div>
+    </div>
+</section>
+<script>
+    $(document).ready(function(){
+        $("#table_id").dataTable();
+         });
+</script>
+{% endblock content %}

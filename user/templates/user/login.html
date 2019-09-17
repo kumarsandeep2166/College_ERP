@@ -1,0 +1,10 @@
+<h2>Login page</h2>
+<form action="." method="POST">
+    {% csrf_token %}
+    <p>username:</p>
+    <input type="text" name="username" id="">
+    <p>Password</p>
+    <input type="password" name="password" id="">
+    <input type="hidden" name="next" value="{{request.GET.next}}"/>
+    <input type="submit" value="submit">
+</form>

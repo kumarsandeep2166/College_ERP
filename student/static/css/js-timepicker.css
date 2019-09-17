@@ -1,0 +1,64 @@
+.js-t{
+    font-family:'Open Sans',sans-serif;
+	position: absolute;
+	z-index: 9999;
+	top: 200px;
+	top: -9999px;
+	left: 500px;
+	overflow: hidden;
+	width: auto;
+	padding:20px;
+	opacity: 0;
+	border: 1px solid #ccc;
+	border-bottom-color: #bbb;
+	-webkit-transition: opacity 300ms ease-out;
+	-moz-transition: opacity 300ms ease-out;
+	-ms-transition: opacity 300ms ease-out;
+	transition: opacity 300ms ease-out;
+	background: #fff;
+	box-shadow: 0 5px 15px -5px rgba(0,0,0,.5);
+}
+
+.js-t.visible{
+	overflow: visible;
+	opacity: 1;
+}
+
+.js-t:after{
+	clear: both;
+}
+
+.js-t .js-t-hour-container,
+.js-t .js-t-minute-container{
+	position: relative;
+	float: left;
+	width: 164px;
+	height: 100%;
+}
+
+.js-t .js-t-minute-container{
+	width: 87px;
+	margin-left: 10px;
+}
+
+.js-t .js-t-hour,
+.js-t .js-t-minute{
+	font-size: 14px;
+	line-height: 16px;
+	float: left;
+	width: 21px;
+	height: 20px;
+	padding: 3px;
+	cursor: pointer;
+	text-align: center;
+        margin-bottom: 10px;
+}
+
+.js-t .js-t-hour.active,
+.js-t .js-t-minute.active,
+.js-t .js-t-hour:hover,
+.js-t .js-t-minute:hover {
+	color: #fff;
+	border-radius: 3px;
+	background: #ff8000;
+}

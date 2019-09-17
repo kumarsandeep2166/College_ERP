@@ -1,0 +1,506 @@
+﻿{% extends 'student/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+
+<section id="main-content">
+    <div class="wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="hdr">
+                    Student Admission
+                </h1>
+                <div class="panel">
+                    <div class="panel-body">
+                        <div class="col-xs-12 col-sm-3 text-center">
+                            <div class="row">
+                            <ul class="list-group">
+                                <li class="list-group-item text-center">
+                                    <img src="{{object.student_pic.url}}" alt="" class=" avtar img-profile img-responsive" style="padding-left:0px; "/>
+                                </li>
+                                <li class="list-group-item text-right">
+                                    <span class="pull-left">
+                                        <strong>Student Id</strong>
+                                        </span>{{object.id}}
+                                </li>
+                                <li class="list-group-item text-right gry">
+                                    <span class="pull-left">
+                                        <strong>Name</strong>
+                                    </span>{{object.first_name}}  {{object.middle_name}}  {{object.last_name}}
+                                </li>
+                                <li class="list-group-item text-right">
+                                    <span class="pull-left">
+                                    <strong>D.O.B</strong>
+                                    </span>{{object.date_of_birth}}
+                                </li>
+                                <li class="list-group-item text-right gry">
+                                    <span class="pull-left">
+                                        <strong>Blood Group</strong>
+                                    </span>{{object.blood_group}}
+                                </li>
+                                <li class="list-group-item text-right">
+                                    <span class="pull-left">
+                                    <strong>Gender</strong>
+                                    </span>{{object.gender}}
+                                </li>
+                                <li class="list-group-item text-right">
+                                    <span class="pull-left">
+                                    <strong>Aadhar Number</strong>
+                                    </span>{{object.aadhar_number}}
+                                </li>
+                                <li class="list-group-item text-right">
+                                    <span class="pull-left">
+                                    <strong>Caste</strong>
+                                    </span>{{object.caste}}
+                                </li>
+                                <li class="list-group-item text-right gry">
+                                    <span class="pull-left">
+                                        <strong>Status</strong>
+                                    </span><button class="activbtn">Active</button>
+                                </li>
+                            </ul>
+                        </div>
+                        </div>
+                        <div class="col-sm-9 col-xs-12">
+                            <div class="tab_wrapper first_tab">
+                                <ul class="tab_list">
+                                    <!-- <li class=""><i class="fa fa-info" aria-hidden="true"></i> ENROLLMENT</li> -->
+                                    <li><i class="fa fa-male active" aria-hidden="true"></i> PERSONAL INFO</li>
+                                    <li><i class="fa fa-book"></i> ACADEMIC Info</li>
+                                    <li><i class="fa fa-user" aria-hidden="true"></i> GUARDIANS</li>
+                                    <li><i class="fa fa-home" aria-hidden="true"></i> ADDRESS</li>
+                                    <li><i class="fa fa-file" aria-hidden="true"></i> DOCUMENTS</li>
+                                    <!-- <li><i class="fa fa-inr" aria-hidden="true"></i> FEES PLAN</li> -->
+                                </ul>
+                                <div class="content_wrapper">
+                                    <!-- <div class="tab_content active">
+                                        <form role="form" method="GET">
+                                            {% csrf_token %}
+                                            <div class="row">
+                                                <div class="col-sm-12 col-xs-12">
+                                                    <div class="form-group col-sm-6 col-xs-12">
+                                                        <label for="exampleInputEmail1">Enroll Department</label>
+                                                            
+                                                        <input type="text" class="form-control" placeholder="Enroll Department">
+                                                    </div>
+                                                    <div class="form-group col-sm-6 col-xs-12">
+                                                        <label for="exampleInputPassword1">Enroll Course</label>
+                                                        
+                                                        <input type="text" class="form-control" placeholder="Enroll Course">
+                                                    </div>
+                                                    <div class="form-group col-sm-6 col-xs-12">
+                                                        <label for="exampleInputEmail1">Registration No.</label>
+                                                       
+                                                        <input type="text" class="form-control" placeholder="Registration No." >
+                                                    </div>
+                                                    <div class="form-group col-sm-6 col-xs-12" id="datetimepicker1" data-target-input="nearest">
+                                                            <label for="exampleInputEmail1">Date Of Admission</label>
+                                                           
+                                                        <input type="date" class="form-control datetimepicker-input" data-target="#datetimepicker1"/>
+                                                       
+                                                      </div>
+                                                   
+                                                </div>
+                                            </div>
+                                            <button type="submit" class="btn btn-info edit"><a href="">Enroll This Student</a>></button>
+                                            <button type="submit" class="btn btn-info subbtn">Edit Student Data</button>
+                                        </form>
+                                    </div> -->
+                                    <div class="tab_content">
+                                        
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="form-group col-sm-6 col-xs-12">
+                                                    <label for="exampleInputEmail1">First Name</label>
+                                                    <input type="text" class="form-control" placeholder="First Name" value="{{object.first_name}}">
+                                                   
+                                                </div>
+                                                <div class="form-group col-sm-6 col-xs-12">
+                                                    <label for="exampleInputPassword1">Last Name</label>
+                                                    <input type="text" class="form-control" placeholder="Last Name" value=" {{object.last_name}} ">
+                                                   
+                                                </div>
+                                                <div class="form-group col-sm-6 col-xs-12">
+                                                    <label for="exampleInputEmail1">phone Number</label>
+                                                    <input type="text" class="form-control" placeholder="phone Number" value="{{ object.phone_number }}">
+                                                </div>
+                                                <div class="form-group col-sm-6 col-xs-12">
+                                                    <label for="exampleInputPassword1">Email ID</label>
+                                                    <input type="text" class="form-control" placeholder="Email ID" value="{{ object.email }}">
+                                                </div>
+                                                <div class="form-group col-sm-6 col-xs-12">
+                                                    <div class="col-sm-12">
+                                                        <label class="row col-form-label">
+                                                            Gender
+                                                        </label>
+                                                    </div>
+                                                   
+                                                    <div class="radio minimal rdr">
+                                                        <input tabindex="3" type="radio" name="demo-radio" value="{{ object.gender}}">
+                                                        <label>Male</label>
+                                                    </div>
+                                                   
+                                                    <div class="radio minimal rdr">
+                                                        <input tabindex="3" type="radio" name="demo-radio" value="{{ object.gender}}">
+                                                        <label>Female</label>
+                                                    </div>
+                                                   
+                                                </div>
+                                                <div class="form-group col-sm-6 col-xs-12">
+                                                    <label for="exampleInputPassword1">Date of Birth</label>
+                                                    <input type="text" class="form-control" placeholder="Date of Birth" value="{{ object.date_of_birth }}">
+                                                </div>
+                                                <div class="form-group col-sm-6 col-xs-12">
+                                                    <label for="exampleInputPassword1">Aadhar Card No.*</label>
+                                                    <input type="text" class="form-control" placeholder="Aadhar Card No."value="{{ object.aadhar_number }}">
+                                                </div>
+                                                <div class="form-group col-sm-6 col-xs-12">
+                                                    <label for="exampleInputPassword1">Place of Birth</label>
+                                                    <input type="text" class="form-control" placeholder="Date of Birth" value="{{ object.place_of_birth }}">
+                                                </div>
+                                                <div class="form-group col-sm-6 col-xs-12">
+                                                    <label for="exampleInputPassword1">Nationality</label>
+                                                    <input type="text" class="form-control" placeholder="Nationality"value="{{ object.nationality }}">
+                                                </div>
+                                                <div class="form-group col-sm-6 col-xs-12">
+                                                    <label for="exampleInputPassword1">Blood Group</label>
+                                                    <input type="text" class="form-control" placeholder="Blood Group" value="{{ object.blood_group }}">
+                                                </div>
+                                                <div class="form-group col-sm-6 col-xs-12">
+                                                    <label for="exampleInputPassword1">Caste</label>
+                                                    <input type="text" class="form-control" placeholder="Caste"value="{{ object.caste }}">
+                                                </div>
+                                                <div class="form-group col-sm-6 col-xs-12">
+                                                    <label for="exampleInputPassword1">Sub Caste</label>
+                                                    <input type="text" class="form-control" placeholder="Sub Caste" value="{{ object.sub_caste }}">
+                                                </div>
+                                                
+                                            </div>
+                                        <button type="submit" class="btn btn-info edit"><a href="{% url 'student_update' pk=object.id %}">Edit</a> </button>
+                                        <button type="submit" class="btn btn-info subbtn">Submit</button>
+                                        <button type="submit" class="btn btn-info edit"><a href="{% url 'enrollment' pk=object.id  %}">Enroll This Student</a></button>
+                                        
+                                    </div>
+                                    </div>
+                                    <div class="tab_content" style="overflow-x:auto;">
+                                            <table class="table table-bordered table-striped cf">
+                                                <thead class="cf">
+                                                    <tr class="dth">
+                                                        <th>Exam </th>
+                                                        <th>Stream</th>
+                                                        <th class="numeric">School/College</th>
+                                                        <th class="numeric">Board/University</th>
+                                                        <th class="numeric">Full Mark</th>
+                                                        <th class="numeric">Secured Mark</th>
+                                                        <th class="numeric">% / CGPA</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>10th</td>
+                                                        <td><input type="text" class="form-control" id="exampleInputPassword1" placeholder="" value="{{object.tenth_board}}"></td>
+                                                        <td class="numeric"><input readonly type="text" class="form-control" id="exampleInputPassword1" placeholder="" value="{{object.tenth_school}}"></td>
+                                                        <td class="numeric"><input type="text" class="form-control" id="exampleInputPassword1" placeholder="" value="{{object.tenth_subjects}}"></td>
+                                                        <td class="numeric"><input type="text" class="form-control" id="exampleInputEmail1" placeholder="" value="{{object.tenth_full_mark}}"></td>
+                                                        <td class="numeric"><input type="text" class="form-control" id="exampleInputEmail1" placeholder="" value="{{object.tenth_secured_mark}}"></td>
+                                                        <td class="numeric"><input type="text" class="form-control" id="exampleInputEmail1" placeholder="" value="{{object.tenth_percentage}}"></td>
+                                                       
+                                                        
+                                                    </tr>
+                                                    <tr>
+                                                        <td>+2</td>
+                                                        <td><input type="text" class="form-control" id="exampleInputPassword1" placeholder="" value="{{object.twelth_stream}}"></td>
+                                                        <td class="numeric"><input type="text" class="form-control" id="exampleInputPassword1" placeholder="" value="{{object.twelth_school}}"></td>
+                                                        <td class="numeric"><input type="text" class="form-control" id="exampleInputPassword1" placeholder="" value="{{object.twelth_board}}"></td>
+                                                        <td class="numeric"><input type="text" class="form-control" id="exampleInputEmail1" placeholder="" value="{{object.twelth_full_mark}}"></td>
+                                                        <td class="numeric"><input type="text" class="form-control" id="exampleInputEmail1" placeholder="" value="{{object.twelth_secured_mark}}"></td>
+                                                        <td class="numeric"><input type="text" class="form-control" id="exampleInputEmail1" placeholder="" value="{{object.tewlth_percentage}}"></td>
+                                                       
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Graduate</td>
+                                                        <td><input type="text" class="form-control" id="exampleInputPassword1" placeholder="" value="{{object.degree_stream}}"></td>
+                                                        <td class="numeric"><input type="text" class="form-control" id="exampleInputPassword1" placeholder="" value="{{object.degree_college}}"></td>
+                                                        <td class="numeric"><input type="text" class="form-control" id="exampleInputPassword1" placeholder="" value="{{object.degree_university}}"></td>
+                                                        <td class="numeric"><input type="text" class="form-control" id="exampleInputEmail1" placeholder="" value="{{object.degree_full_mark}}"></td>
+                                                        <td class="numeric"><input type="text" class="form-control" id="exampleInputEmail1" placeholder="" value="{{object.degree_secured_mark}}"></td>
+                                                        <td class="numeric"><input type="text" class="form-control" id="exampleInputEmail1" placeholder="" value="{{object.degree_percentage}}"></td>
+                                                      
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Post Graduate</td>
+                                                        <td><input type="text" class="form-control" id="exampleInputPassword1" placeholder="" value="{{object.postdegree_stream}}"></td>
+                                                        <td class="numeric"><input type="text" class="form-control" id="exampleInputPassword1" placeholder="" value="{{object.postdegree_college}}"></td>
+                                                        <td class="numeric"><input type="text" class="form-control" id="exampleInputPassword1" placeholder="" value="{{object.postdegree_university}}"></td>
+                                                        <td class="numeric"><input type="text" class="form-control" id="exampleInputEmail1" placeholder="" value="{{object.postdegree_full_mark}}"></td>
+                                                        <td class="numeric"><input type="text" class="form-control" id="exampleInputEmail1" placeholder="" value="{{object.postdegree_secured_mark}}"></td>
+                                                        <td class="numeric"><input type="text" class="form-control" id="exampleInputEmail1" placeholder="" value="{{object.postdegree_percentage}}"></td>
+                                                      
+                                                      
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <button type="submit" class="btn btn-info edit">Edit</button>
+                                            <button type="submit" class="btn btn-info subbtn">Submit</button>
+                                       
+                                    </div>
+                                    <div class="tab_content">
+                                       
+                                            <div class="row">
+                                                <div class="form-group col-sm-6 col-xs-12">
+                                                    <label for="exampleInputEmail1">Father Name</label>
+                                                    <input type="text" class="form-control" placeholder="Father Name" value=" {{object.fathers_name}}">
+                                                   
+                                                </div>
+                                                <div class="form-group col-sm-6 col-xs-12">
+                                                    <label for="exampleInputPassword1">Mother Name</label>
+                                                    <input type="text" class="form-control" placeholder="Mother Name" value=" {{object.mothers_name}}">
+                                                    
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="form-group col-sm-6 col-xs-12">
+                                                    <label for="exampleInputEmail1">Father Occupation</label>
+                                                    <input type="text" class="form-control" placeholder="Father Occupation" value="{{object.fathers_occupation}}">
+                                                    
+                                                </div>
+                                                <div class="form-group col-sm-6 col-xs-12">
+                                                    <label for="exampleInputEmail1">Mother's Occupation</label>
+                                                    <input type="text" class="form-control" placeholder="Mother's Occupation" value=" {{object.mothers_occupation}}">
+                                                    
+                                                </div>
+                                                <div class="form-group col-sm-6 col-xs-12">
+                                                    <label for="exampleInputEmail1">Father's Contact Number</label>
+                                                    <input type="text" class="form-control" placeholder="Father's Contact Number" value="{{object.fathers_phone_no}}">
+                                                    
+                                                </div>
+
+                                                <div class="form-group col-sm-6 col-xs-12">
+                                                    <label for="exampleInputPassword1">Mother's Contact Number</label>
+                                                    <input type="text" class="form-control" placeholder="Mother's Contact Number" value="{{object.mothers_phone_no}}">
+                                                    
+                                                </div>
+                                                <div class="form-group col-sm-6 col-xs-12">
+                                                    <label for="exampleInputEmail1">Father's Email Id</label>
+                                                    <input type="text" class="form-control" placeholder="Father's Email Id" value="{{object.fathers_email_id}}">
+                                                    
+                                                </div>
+                                                <div class="form-group col-sm-6 col-xs-12">
+                                                    <label for="exampleInputEmail1">Mother's Email Id</label>
+                                                    <input type="text" class="form-control" placeholder="Father's Email Id" value="{{object.mothers_email_id}}">
+                                                    
+                                                </div>
+                                                <div class="form-group col-sm-6 col-xs-12">
+                                                    <label for="exampleInputEmail1">Father's Annual Income</label>
+                                                    <input type="text" class="form-control" placeholder="Father's Annual Income" value="{{object.fathers_annual_income}}">
+                                                    
+                                                </div>
+                                                <div class="form-group col-sm-6 col-xs-12">
+                                                    <label for="exampleInputEmail1">Mother's Annual Income</label>
+                                                    <input type="text" class="form-control" placeholder="Father's Annual Income" value="{{object.mothers_annual_income}}">
+                                                    
+                                                </div>
+                                           
+                                            <button type="submit" class="btn btn-info edit">Edit</button>
+                                            <button type="submit" class="btn btn-info subbtn">Submit</button>
+                                        </div>
+                                        
+                                    </div>
+                                    <div class="tab_content">
+                                        <div class="row">
+                                        <div class="form-group col-sm-6 col-xs-12">
+                                            <label for="exampleInputEmail1">Country</label>
+                                            <input type="text" class="form-control" placeholder="Country" value="">
+                                        </div>
+                                        <div class="form-group col-sm-6 col-xs-12">
+                                            <label for="exampleInputPassword1">State</label>
+                                            <input type="text" class="form-control" placeholder="State" value="">
+                                        </div>
+                                        <div class="form-group col-sm-6 col-xs-12">
+                                            <label for="exampleInputEmail1">City</label>
+                                            <input type="text" class="form-control" placeholder="City" value="">
+                                        </div>
+                                        <div class="form-group col-sm-6 col-xs-12">
+                                            <label for="exampleInputPassword1">Pincode</label>
+                                            <input type="text" class="form-control" placeholder="Pincode" value="">
+                                        </div>
+                                        <div class="form-group col-sm-6 col-xs-12">
+                                            <label for="exampleInputPassword1">Present Address</label>
+                                            <textarea class="form-control" rows="4" placeholder="Present Address" value=""></textarea>
+                                        </div>
+                                        <div class="form-group col-sm-6 col-xs-12">
+                                            <label for="exampleInputPassword1">Permanent Address</label>
+                                            <textarea class="form-control" rows="4" placeholder="Permanent Address" value=""></textarea>
+                                        </div>
+                                        <button type="submit" class="btn btn-info edit">Edit</button>
+                                        <button type="submit" class="btn btn-info subbtn">Submit</button>
+                                    </div>
+                                    </div>
+                                    <div class="tab_content" style="overflow-x:auto;">
+                                        <div class="row">
+                                            <table class="table table-bordered table-striped cf mytable1" id="dataTable1">
+                                                <thead class="cf tbhd">
+                                                    <tr class="dth dtm">
+                                                        <th>Document Type</th>
+                                                        <th>Attach File</th>
+                                                        <th>Action</th>
+                                                        <th class="adbtn">
+                                                            <i class="fa fa-plus icon"></i>
+                                                            <input type="button" id="btnSubmit" class="addmor addCF1" name="add" value="Add More">
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr class="addMoreData">
+                                                        <td>
+                                                            <div class="form-group">
+                                                                <select class="form-control" id="exampleSelect1">
+                                                                    <option>Aadhar Card</option>
+                                                                    <option>Aadhar Card</option>
+                                                                    <option>Aadhar Card</option>
+                                                                </select>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="form-group">
+                                                                <label for="exampleInputFile">Upload Photo</label>
+                                                                <input type="file" id="exampleInputFile">
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <button type="button" class="btn uplodbtn">Upload</button>
+                                                        </td>
+                                                        <td>
+                                                            <a href="javascript:void(0);" class="remCF">
+                                                                <i class="fa fa-times fclosee"></i>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        <button type="submit" class="btn btn-info edit">Edit</button>
+                                        <button type="submit" class="btn btn-info subbtn">Submit</button>
+                                    </div>
+                                    </div>
+                                    <!-- <div class="tab_content">
+                                        <div class="row">
+                                            <table class="table table-bordered table-striped cf">
+                                                <thead class="cf">
+                                                    <tr class="dth">
+                                                        <th>Fee Type </th>
+                                                        <th>Actual Fee</th>
+                                                        <th>Sanction Fee</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>Admission Fee</td>
+                                                        <td><input type="text" class="form-control" id="exampleInputPassword1" placeholder=""></td>
+                                                        <td class="numeric"><input type="text" class="form-control" id="exampleInputPassword1" placeholder=""></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <button type="submit" class="btn btn-info edit">Edit</button>
+                                        <button type="submit" class="btn btn-info subbtn">Submit</button>
+                                    </div> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>                    
+        </div>
+    </div>
+</section>        
+
+
+
+<!--js-->
+
+<!-- sidebar_dropdown -->
+<script src="{% static 'js/jquery.dcjqaccordion.2.7.js' %}"></script>
+<script src="{% static 'js/jquery.nicescroll.js' %}"></script>
+<!--common_script-->
+<script src="{% static 'js/scripts.js' %}"></script>
+<!-- add_row_js -->
+<script>
+$(document).ready(function () {
+    $(".addCF").click(function () {
+        $(".mytable").each(function () {
+            var tds = '<tr>';
+            jQuery.each($('tr:last td', this), function () {
+                tds += '<td>' + $(this).html() + '</td>';
+            });
+            tds += '</tr>';
+            if ($('tbody', this).length > 0) {
+                $('tbody', this).append(tds);
+            } else {
+                $(this).append(tds);
+            }
+        });
+    });
+});
+$("#dataTable").on('click', '.remCF', function () {
+    $(this).parent().parent().remove();
+});
+$(document).ready(function () {
+    $(".addCF1").click(function () {
+        $(".mytable1").each(function () {
+            var tds = '<tr>';
+            jQuery.each($('tr:last td', this), function () {
+                tds += '<td>' + $(this).html() + '</td>';
+            });
+            tds += '</tr>';
+            if ($('tbody', this).length > 0) {
+                $('tbody', this).append(tds);
+            } else {
+                $(this).append(tds);
+            }
+        });
+    });
+});
+$("#dataTable1").on('click', '.remCF', function () {
+    $(this).parent().parent().remove();
+});
+</script> 
+<!-- tab_js -->
+<script src="{% static 'js/jquery.multipurpose_tabcontent.js' %}"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+    $(".first_tab").champ();
+
+    //$(".accordion_example").champ({
+    //    plugin_type: "accordion",
+    //    side: "left",
+    //    active_tab: "3",
+    //    controllers: "true"
+    //});
+    //$(".second_tab").champ({
+    //    plugin_type: "tab",
+    //    side: "right",
+    //    active_tab: "1",
+    //    controllers: "false"
+    //});
+    //$(".third_tab").champ({
+    //    plugin_type: "tab",
+    //    side: "",
+    //    active_tab: "4",
+    //    controllers: "true",
+    //    ajax: "true",
+    //    show_ajax_content_in_tab: "4",
+    //    content_path: "html.txt"
+    //});
+
+    $(".multipleTab").champ({
+        //plugin_type :  "accordion",
+        multiple_tabs: "true"
+    });
+});
+</script>    
+  <script>
+    $(function () {
+      $("#datetimepicker1").datetimepicker();
+    });
+  </script>
+{% endblock content %}

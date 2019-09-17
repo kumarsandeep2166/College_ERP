@@ -1,0 +1,110 @@
+{% extends 'student/base.html' %}
+{% block content %}
+<script>
+        document.getElementById("stt").className += " active";
+        document.getElementById("stm1").className += " active";
+        document.getElementById("stm03").className += " active";
+ </script>
+ <style>
+     #stm03 a{
+         color:#fff !important;
+     }
+ </style>
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+<section id="main-content">
+    <div class="wrapper">
+        <header class="panel-heading clearfix col-sm-12">
+            <div class="col-sm-8 col-xs-12">
+                Journal List
+            </div>
+            <div class="col-sm-4 col-xs-12">
+                <button type="submit" class="btn btn-info feebtn"><a href="{% url 'ebook_create' %}">Add an Ebook</a></button>
+            </div>
+            
+        </header>
+        <div class="row">
+            <div class="panel-body" style="overflow-x:auto;">
+                <table class="table table-bordered table-striped table-condensed" id="table_student">
+                    <thead>
+                        <tr class="hdclr">
+                            <th>Sl No.</th>
+                            <th>Name</th>
+                            <th>Publisher</th>
+                            <th>Publication Year</th>
+                            <th>Location</th>
+                            <th>Category</th>                                 
+                            <th>ISBN</th>                                 
+                            <th>Price</th>                                 
+                            <th>Type</th>                                                         
+                            <th>Supplier</th>                                                         
+                            <th>Subject</th>                                                         
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for stud in object_list %}
+                        <tr>
+                            <td>{{stud.id}}</td>
+                            <td>{{stud.name}}</td>
+                            <td>{{stud.publisher}}</td>
+                            <td>{{stud.publication_year}}</td> 
+                            <td>{{stud.location.selve_no}}</td>
+                            <td>{{stud.category}}</td>
+                            <td>{{stud.ISBN}}</td> 
+                            <td>{{stud.price}}</td> 
+                            <td>{{stud.ebook_type}}</td> 
+                            <td>{{stud.supplier}}</td> 
+                            <td>{{stud.subject}}</td> 
+                            <td>
+                                <!-- <a href="{% url 'student_detail' pk=stud.id %}" class="social-icon">
+                                    <i class="fa fa-eye vieww"></i>
+                                    <div class="tooltip">View</div>
+                                </a>-->
+                                <a href="{% url 'ebook_edit' pk=stud.id %}" class="social-icon">
+                                    <i class="fa fa-pencil editt"></i>
+                                    <div class="tooltip">Edit</div>
+                                </a>
+                                
+                                <form method="post" action="{% url 'ebook_delete' pk=stud.id  %}" enctype="multipart/form-data" >
+                                    {% csrf_token %}                        
+                                    <button type="submit"  class="social-icon"  id="delete" onclick="return confirm('Are you sure to delete {{ stud }}?');">
+                                            <i class="fa fa-trash-o deletee"></i>  
+                                    </button>
+                                </form> 
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <div class="container-fluid">
+                            <h3>No Posts Found having search query "{{ request.GET }}"</h3>
+                        </div>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                </div>
+                  <!-- Modal -->
+                  <!-- <div class="modal fade" id="myModal" role="dialog">
+                    <div class="modal-dialog">
+                       
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <p>Are you sure, you want to delete?</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-default okbtn">Ok</button>
+                                <button type="button" class="btn btn-default cnlbtn" data-dismiss="modal">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+        </div>
+    </div>
+</section>
+<script>
+    $(document).ready(function(){
+        $("#table_student").dataTable();
+            });
+  
+</script>
+
+{% endblock content %}

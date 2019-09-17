@@ -1,0 +1,115 @@
+{% extends 'student/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+<script>
+        document.getElementById("strm").className += " active";
+        document.getElementById("strm1").className += " active";
+        document.getElementById("strm02").className += " active";        
+</script>
+<style>
+        #strm02 a{
+                color:#fff !important;
+        }
+</style>
+<section id="main-content">
+    <div class="wrapper">
+        <div class="row">
+            <div class="col-lg-6 col-sm-6 col-sm-offset-3">
+                <div class="">
+                    <div class="panel-body">
+                        <div class="text-center">
+                            <h1 class="hdrcolorbg">
+                                Course
+                            </h1>
+                        </div>
+                        <form role="form" class="frmbgg" action="" method="POST" id="mycourseForm" data-course-url="{% url 'ajax_load_course' %}" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="row">
+                                        <div class="form-group col-sm-4 col-xs-12">
+                                            <label>Stream</label>
+                                            {{ form.stream }}
+                                        </div>
+                                        <div class="form-group col-sm-4 col-xs-12"> 
+                                            <label>Course Code</label>                                           
+                                            {{ form.course_code }}                                            
+                                        </div>
+                                        <div class="form-group col-sm-4 col-xs-12">
+                                                <label>Course Name</label>
+                                                {{ form.course_name  }}
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="form-group col-sm-4 col-xs-12">
+                                                <label>Course Alises</label>
+                                                {{ form.course_aliases  }}
+                                        </div>
+                                        <div class="form-group col-sm-5 col-xs-12 aprov">
+                                            <div>
+                                                <label>Approved Date</label>
+                                            </div>
+                                                {{ form.approved_date  }}
+                                        </div>
+                                      
+                                        <div class="form-group col-sm-3 col-xs-12">
+                                                <label>Exam Pattern</label>
+                                                {{ form.exam_pattern  }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-sm-4 col-xs-12">
+                                                <label>Duration(in yrs) </label>
+                                                {{ form.duration  }}
+                                        </div>
+                                        <div class="form-group col-sm-4 col-xs-12 ">                                                
+                                                <label>Total Seat</label>                                               
+                                                {{ form.total_seats  }}
+                                        </div>
+                                        <div class="form-group col-sm-4 col-xs-12">
+                                                <label>Syllabus</label>
+                                                {{ form.syllabus  }}
+                                        </div>
+                                        <div class="form-group col-sm-4 col-xs-12">
+                                                <label>Affiliated Body</label>
+                                                {{ form.affiliated_body  }}
+                                        </div>
+                                    </div>
+                                    <div class="row">                                        
+                                        <div class="form-group col-sm-4 col-xs-12">
+                                            <label>Remark</label>
+                                            {{ form.remark  }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="reset" class="btn btn-info cancel">Cancel</button>
+                            <button type="submit" class="btn btn-info save">Create</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+<script type="text/javascript">
+        $("#id_stream").change(function(event){
+            event.preventDefault();
+            var url=$("#mycourseForm").attr("data-course-url");
+            var stream_id=$(this).val();
+            $.ajax({
+                url:url,
+            data:{
+                'stream':stream_id,
+            },
+            success:function(data){
+                $("#id_course_name").html(data);
+            }
+            });
+
+        });
+</script> -->
+{% endblock content %}

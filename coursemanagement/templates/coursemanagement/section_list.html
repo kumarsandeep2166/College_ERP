@@ -1,0 +1,56 @@
+{% extends 'student/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<script>
+        document.getElementById("strm").className += " active";
+        document.getElementById("strm1").className += " active";
+        document.getElementById("strm04").className += " active";        
+</script>
+<style>
+        #strm04 a{
+                color:#fff !important;
+        }
+</style>
+<section id="main-content">
+        <div class="wrapper">
+                <div class="col-sm-12 col-xs-12">
+                    <button type="submit" class="btn btn-info feebtn"><a href="{% url 'section_create' %}">Add a Section</a></button>
+                    <table class="table table-bordered table-striped table-condensed">
+                            <thead>
+                                <tr class="hdclr">
+                                        <th>Sl No.</th>
+                                        <th>Stream Name</th>                                                                             
+                                        <th>Course Name</th>
+                                        <th>Session</th>
+                                        <th>Semestar</th>
+                                        <th>Section Name</th>                                        
+                                        <th>Remark</th>                                       
+                                        <th>Action</th>
+                                        
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for i in object_list %}
+                                <tr>
+                                        <td>{{i.id}}</td>
+                                        <td>{{i.semestar.stream.name}}</td>
+                                        <td>{{i.semestar.course.course_name}}</td>
+                                        <td>{{i.semestar.batch.batch_no}}</td>
+                                        <td>{{i.semestar}}</td>
+                                        <td>{{i.section_name}}</td>                                        
+                                        <td>{{i.remark}}</td>                                        
+                                        <td width="150"><a href="{% url 'section_edit' pk=i.pk %}" class="btn btn-info btn-xs smnu">Edit</a> <form method="post" action="{% url 'section_delete' pk=i.pk %}" enctype="multipart/form-data" >
+                                                {% csrf_token %}                                               
+                                                <button type="submit" value="Submit" class="btn btn-danger btn-xs smnu" onclick="return confirm('Are you sure to delete {{ object }}?');">
+                                                    Delete
+                                                </button>
+                                            </form></td>
+                                       
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                </div>
+        </div>
+</section>
+{% endblock content %}

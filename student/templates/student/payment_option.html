@@ -1,0 +1,22 @@
+<p>the due is:100</p>
+<p>{{enr_no}}</p>
+<p>{{enr_no.student_name}}</p>
+<p>{{enr_no.course}}</p>
+{% for i in feesc %}
+<p>{{i.amount_paid}}</p>
+<p>{{i.amount_left}}</p>
+<p>{{i.approve_fee.fees_node.fees_type}}</p>
+
+{% endfor %}
+<input type="submit" name="ctl00$ContentPlaceHolder1$btnBookAdd" value="Print" onclick="return btnprint_onclick();" id="ContentPlaceHolder1_btnBookAdd" class="btn-info" style="font-family:US;font-weight:bold;" />
+
+<script id="Script1" language="javascript" type="text/javascript">
+    function btnprint_onclick() {
+    var DocumentContainer = document.getElementById('');
+    var WindowObject = window.open('print', "PrintData", "width=850px,height=650px,top=20,left=250,toolbars=no,scrollbars=yes,status=no,resizable=no");
+    WindowObject.document.writeln(DocumentContainer.innerHTML);
+    WindowObject.document.close();
+    WindowObject.focus();
+    WindowObject.print();
+    }
+    </script>

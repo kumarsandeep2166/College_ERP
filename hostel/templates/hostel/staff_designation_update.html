@@ -1,0 +1,47 @@
+{% extends 'student/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<style>
+        #strm04 a{
+                color:#fff !important;
+        }
+</style>
+<section id="main-content">
+    <div class="wrapper">
+        <div class="row">
+            <div class="col-lg-6 col-sm-6 col-sm-offset-3">
+                <div class="">
+                    <div class="panel-body">
+                        <div class="text-center">
+                            <h1 class="hdrcolorbg">
+                                Update Designation
+                            </h1>
+                        </div>
+                        <form role="form" class="frmbgg" action="." method="POST">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="row">
+                                        <div class="form-group col-sm-4 col-xs-12">
+                                            <label>Designation</label>
+                                            {{ form.name }}
+                                        </div>
+                                        
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            <button type="reset" class="btn btn-info cancel">Cancel</button>
+                            <button type="submit" class="btn btn-info save">Update</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+
+{% endblock content %}

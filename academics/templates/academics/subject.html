@@ -1,0 +1,40 @@
+{% extends 'student/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+<section id="main-content">
+        <div class="wrapper">
+                <div class="col-sm-10 col-xs-12 col-sm-offset-1">
+                    <button type="submit" class="btn btn-info"><a href="{% url 'subject_create' %}">Add a Subject</a></button>
+                    <table class="table table-bordered table-striped table-condensed" id="subject_table">
+                            <thead>
+                                <tr class="hdclr">
+                                        <th>Stream</th>
+                                        <th>Course</th>
+                                        <th>Batch</th>
+                                        <th>Semestar</th>
+                                        <th>Subject</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for i in object_list %}
+                                <tr>
+                                        <td>{{i.semestar.stream.name}}</td>
+                                        <td>{{i.semestar.course.course_name}}</td>
+                                        <td>{{i.semestar.batch.batch_no}}</td>
+                                        <td>{{i.semestar.name}}</td>
+                                        <td>{{i.name}}</td>             
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                </div>
+        </div>
+</section>
+<script>
+    $(document).ready(function(){
+        $("#subject_table").dataTable();
+    });
+</script>
+{% endblock content %}

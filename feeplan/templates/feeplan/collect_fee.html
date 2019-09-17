@@ -1,0 +1,192 @@
+{% extends 'student/base.html' %}
+{% block content %}
+<section id="main-content">
+        <div class="wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel">
+                        <header class="panel-heading clearfix col-sm-12">                            
+                            <input type="text" id="enr_id" name="enr_number">
+                            <button class="btn btn-info okbtn" id="enr_submit">View Fee</button>
+                        </header>                     
+                    </div>
+                </div>    
+            </div>           
+        </div>
+        <div class="container">
+            <div class="panel panel-default">
+                    <input type="text" id="stud_name" name="stud_name">
+              <div class="panel-heading" data-toggle="collapse" data-target="#demo1">First Installment</div>
+              <div class="panel-body collapse" id="demo1">
+                  <table class="table">
+                      <thead>
+                            <td>Type</td>
+                            <td>Amount</td>
+                            <td>Paid</td>
+                            <td>Left</td>
+                            <td>Pay</td>
+                            <td>Action</td>
+                      </thead>
+                      <tbody id="tbody1">
+                    
+                    </tbody>
+                  </table>
+              </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="panel panel-default">
+              <div class="panel-heading" data-toggle="collapse" data-target="#demo2">Second Installment</div>
+              <div class="panel-body collapse" id="demo2">
+                    <table class="table">
+                            <thead>
+                                  <td>Type</td>
+                                  <td>Amount</td>
+                                  <td>Paid</td>
+                                  <td>Left</td>
+                                  <td>Pay</td>
+                                  <td>Action</td>
+                            </thead>
+                            <tbody id="tbody2">
+                          
+                          </tbody>
+                        </table>
+              </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="panel panel-default">
+              <div class="panel-heading" data-toggle="collapse" data-target="#demo3">Third Installment</div>
+              <div class="panel-body collapse" id="demo3">
+                    <table class="table">
+                            <thead>
+                                  <td>Type</td>
+                                  <td>Amount</td>
+                                  <td>Paid</td>
+                                  <td>Left</td>
+                                  <td>Pay</td>
+                                  <td>Action</td>
+                            </thead>
+                            <tbody id="tbody3">
+                          
+                          </tbody>
+                        </table>
+              </div>
+            </div>
+        </div>
+    </section>
+    
+
+<script type="text/javascript">
+    $("#enr_submit").on('click', function(event){
+        event.preventDefault();
+        var enr_number=$("#enr_id").val();
+    $.ajax({
+        type:'GET',
+        url:'/get_remaning_fee_list/',
+        data:{
+        'enr_number':enr_number,
+        },
+        success:function(data){
+            $("#stud_name").val(data.student_name);
+                var tableString = "";
+                if(data.first_fee_list.length === 0) {
+                    tableString = "<tr><td></td><td>No fee available.</td><td></td><td></td></tr>";
+                }
+                else {
+                    for(var i in data.first_fee_list){
+                        tableString += "<tr><td>" + data.first_fee_list[i].fee_type + "</td>";
+                        tableString += "<td>" + data.first_fee_list[i].fee_amount + "</td>";
+                        tableString += "<td>" + data.first_fee_list[i].fee_paid + "</td>";
+                        tableString += "<td>" + data.first_fee_list[i].fee_left + "</td>";
+                        if(data.first_fee_list[i].fee_left>0){
+                            tableString += "<td><input type='text' id='amount"+data.first_fee_list[i].fee_id+"'></td>";
+                            tableString += "<td><a type='button' class='btn btn-info savepay' onclick='pay_amount("+data.first_fee_list[i].fee_id+")'>Submit</a></td></tr>";
+                        } else {
+                            tableString += "<td></td>";
+                            tableString += "<td></tr>";
+                        }
+                    }
+                }
+                $("#tbody1").html(tableString);
+                tableString = "";
+                if(data.second_fee_list.length === 0) {
+                    tableString = "<tr><td></td><td></td><td>No fee available.</td><td></td><td></td></tr>";
+                }
+                else {
+                    for(var i in data.second_fee_list){
+                        tableString += "<tr><td>" + data.second_fee_list[i].fee_type + "</td>";
+                        tableString += "<td>" + data.second_fee_list[i].fee_amount + "</td>";
+                        tableString += "<td>" + data.second_fee_list[i].fee_paid + "</td>";
+                        tableString += "<td>" + data.second_fee_list[i].fee_left + "</td>";
+                        if(data.second_fee_list[i].fee_left>0){
+                            tableString += "<td><input type='text' id='amount"+data.second_fee_list[i].fee_id+"'></td>";
+                            tableString += "<td><a type='button' class='btn btn-info savepay' onclick='pay_amount("+data.second_fee_list[i].fee_id+")'>Submit</a></td></tr>";
+                        } else {
+                            tableString += "<td></td>";
+                            tableString += "<td></tr>";
+                        }
+                    }
+                }
+                $("#tbody2").html(tableString);
+                tableString = "";
+                if(data.third_fee_list.length === 0) {
+                    tableString = "<tr><td></td><td></td><td>No fee available.</td><td></td><td></td></tr>";
+                }
+                else {
+                    for(var i in data.third_fee_list){
+                        tableString += "<tr><td>" + data.third_fee_list[i].fee_type + "</td>";
+                        tableString += "<td>" + data.third_fee_list[i].fee_amount + "</td>";
+                        tableString += "<td>" + data.third_fee_list[i].fee_paid + "</td>";
+                        tableString += "<td>" + data.third_fee_list[i].fee_left + "</td>";
+                        if(data.third_fee_list[i].fee_left>0){
+                            tableString += "<td><input type='text' id='amount"+data.third_fee_list[i].fee_id+"'></td>";
+                            tableString += "<td><a type='button' class='btn btn-info' onclick='pay_amount("+data.third_fee_list[i].fee_id+")'>Submit</a></td></tr>";
+                        } else {
+                            tableString += "<td></td>";
+                            tableString += "<td></tr>";
+                        }
+                    }
+                }
+                $("#tbody3").html(tableString);
+             }
+        });
+    });
+    function pay_amount(id){
+        
+        
+        var text_id = "#amount" + id;
+        var pay_value = $(text_id).val();
+        $.ajax({
+            type:'POST',
+            url:'/pay_by_id/',
+            data:{
+            'pay_id': id,
+            'pay_amount': pay_value,
+            },
+            success:function(data){
+                $("#enr_submit").click();
+            },
+        });
+    }
+    function getCookie(c_name) {
+        if (document.cookie.length > 0)
+        {
+            c_start = document.cookie.indexOf(c_name + "=");
+            if (c_start != -1)
+            {
+                c_start = c_start + c_name.length + 1;
+                c_end = document.cookie.indexOf(";", c_start);
+                if (c_end == -1) c_end = document.cookie.length;
+                return unescape(document.cookie.substring(c_start,c_end));
+            }
+        }
+        return "";
+    }
+    $(function(){
+        $.ajaxSetup({
+            headers:{"X-CSRFToken":getCookie('csrftoken')}
+        });
+    });
+</script>
+{% endblock content %}

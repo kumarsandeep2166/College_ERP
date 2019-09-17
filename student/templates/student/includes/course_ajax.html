@@ -1,0 +1,4 @@
+<option value="">---------------------</option>
+{% for obj in course %}
+  <option value="{{ obj.pk }}">{{ obj.course_name }}</option>
+{% endfor %}

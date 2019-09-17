@@ -1,0 +1,56 @@
+<div class="panel-body" style="overflow-x:auto;">
+    <div class="text-center">
+        <h1 class="hdrcolorbg">
+            Choose From The Selected Areas
+        </h1>
+    </div>
+
+    <table class="table table-bordered table-striped table-condensed" id="table_id">
+        <thead>
+            <tr class="hdclr">
+                <th>Sl No</th>
+                <th>Student List</th>
+                <th>Choose A Section</th>  
+            </tr>
+        </thead>
+        <tbody id="section_assign">   
+                {% for stud in obj %}     
+            <tr>                                                           
+                <td>{{stud.id}}</td> 
+                <td><input type="hidden" name="student_section_assign" id="enr_id" hidden="hidden">{{stud.student_name}}</td>              
+                <td>
+                    <input type="hidden" name="student_section_assign" id="enr_id" hidden="hidden">
+                    <select name="section_assign" id="section_assign">                        
+                        {% for sec in section_list %}
+                            <option value="{{sec.id}}" >{{sec}}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>  
+            {% endfor %}       
+        </tbody>
+    </table>
+</div>
+<script>
+
+    
+function getCookie(c_name) {
+        if (document.cookie.length > 0)
+        {
+            c_start = document.cookie.indexOf(c_name + "=");
+            if (c_start != -1)
+            {
+                c_start = c_start + c_name.length + 1;
+                c_end = document.cookie.indexOf(";", c_start);
+                if (c_end == -1) c_end = document.cookie.length;
+                return unescape(document.cookie.substring(c_start,c_end));
+            }
+        }
+        return "";
+    }
+    $(function(){
+        $.ajaxSetup({
+            headers:{"X-CSRFToken":getCookie('csrftoken')}
+        });
+    });
+</script>

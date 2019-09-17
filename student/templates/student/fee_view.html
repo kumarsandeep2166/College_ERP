@@ -1,0 +1,79 @@
+{% extends 'student/base.html' %}
+{% block content %}
+<script>
+        document.getElementById("stt").className += " active";
+        document.getElementById("stm1").className += " active";
+        document.getElementById("stm03").className += " active";
+ </script>
+ <style>
+     #stm03 a{
+         color:#fff !important;
+     }
+ </style>
+
+<section id="main-content">
+    <div class="wrapper">
+          
+        <div class="row">
+                <div class="panel-body" style="overflow-x:auto;">
+                        <table class="table table-bordered table-striped table-condensed" id="table_student">
+                            <thead>
+                                <tr class="hdclr">
+                                   
+                                    <th>Fee Type</th>                                    
+                                    <th>Fee Amount</th>
+                                    <th>Fee Paid</th>                               
+                                    <th>Fee Left</th>
+                                    
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <form action="/feeplan/save_fee/" method="POST">{% csrf_token %}
+                                    <input type="text" name="total_fee_type" value="{{total_fee_type}}" hidden="hidden">
+                                    <input type="text" name="student_id" value="{{student_id}}" hidden="hidden">
+                                    {% for fee in object_list %}
+                                    <tr>
+                                        <td>{{fee.fee_type}}</td>
+                                        <td>{{fee.fee_amount}}</td>                                       
+                                        <td>
+                                            <input type="text" name="approve_fee_id{{ forloop.counter0 }}" value="{{fee.fee_type_id}}" hidden="hidden">
+                                            <input type="text" name="fee{{ forloop.counter0 }}" value="{{fee.amount_paid}}">
+                                        </td>
+                                        <td>{{fee.amount_left}}</td>
+                                      
+                                    </tr>                                
+                                    {% endfor %}
+                            </tbody>
+                        </table>
+                        
+                        {% if not enrolled %}
+                        <div class="col-sm-4 col-lg-2 col-xs-2">
+                            <button type="submit" class="btn btn-info okbtn">Save</button>
+                            
+                        </div>
+                             
+                        {% else %}
+                        <div class="row">
+                            <!-- <div class="form-group col-sm-2 col-xs-12">                            
+                                    <a href="/collect_student_fee/" type="submit" class="btn btn-info okbtn">Collect Fee</a>
+                                </div> -->
+                                <div class="form-group col-sm-2 col-xs-12">
+                                    <a href="{% url 'viewfeedetails' id=student_id %}" class="btn btn-default">Print Receipt</a>
+                                </div>
+                                <div class="form-group col-sm-2 col-xs-12">
+                                    <a href="{% url 'viewfeedetailsdetail' id=student_id %}" class="btn btn-info okbtn">View Details</a>
+                                </div>
+                                
+                            </div>
+                    </div>
+                        
+                            
+                        {% endif %}
+                    </form>
+                </div>
+                  
+        </div>
+    </div>
+</section>
+
+{% endblock content %}

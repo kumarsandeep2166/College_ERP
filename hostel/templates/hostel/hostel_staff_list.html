@@ -1,0 +1,48 @@
+{% extends 'student/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+<section id="main-content">
+        <div class="wrapper">
+                <div class="col-sm-10 col-xs-12 col-sm-offset-1">
+                    <button type="submit" class="btn btn-info"><a href="{% url 'add_hostel_staff' %}">Add Hostel Staff</a></button>
+                    <table class="table table-bordered table-striped table-condensed" id="hostel_table">
+                            <thead>
+                                <tr class="hdclr">
+                                        <th>Hostel</th>
+                                        <th>Staff</th>
+                                        <th>Designation</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for i in object_list %}
+                                <tr>
+                                        <td>{{i.hostel}}</td>
+                                        <td>{{i.employee}}</td>
+                                        <td>{{i.designation}}</td>
+                                        <td><a href="{% url 'hostel_staff_update' pk=i.pk %}" class="social-icon smnu">
+                                            <i class="fa fa-pencil editt"></i>
+                                            <div class="tooltip">Edit</div>
+                                        </a>
+                                        
+                                        <form method="post" action="{% url 'hostel_staff_delete' pk=i.pk %}" enctype="multipart/form-data" >
+                                            {% csrf_token %}                        
+                                            <button type="submit"  class="social-icon smnu"  id="delete" onclick="return confirm('Are you sure to delete {{ i }}?');">
+                                                    <i class="fa fa-trash-o deletee"></i>  
+                                            </button>
+                                        </form></td>              
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                </div>
+        </div>
+</section>
+<script>
+    $(document).ready(function(){
+        $("#hostel_table").dataTable();
+    });
+</script>
+{% endblock content %}

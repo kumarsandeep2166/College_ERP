@@ -1,0 +1,585 @@
+{% extends 'student/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+<script>
+        document.getElementById("stt").className += " active";
+        document.getElementById("stm1").className += " active";
+        document.getElementById("stm02").className += " active";
+ </script>
+ <style>
+     #stm02 a{
+         color:#fff !important;
+     }
+ </style>
+        <section id="main-content">
+            <div class="wrapper">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="htgt text-center">
+                            Student Admission Form
+                        </h1>
+                        <div class="col-sm-10 col-xs-12 col-sm-offset-1">
+                            <div class="panel-body">
+                                <form role="form" class="stfrmdt1" action="." method="POST" enctype="multipart/form-data" data-course-url="{% url 'ajax_load_course' %}" id="myadmissionForm" data-batch-url="{% url 'ajax_load_batch' %}" data-section-url="{% url 'ajax_load_section' %}">
+                                    {% csrf_token %}
+                                    <div class="col-sm-10 col-xs-12 col-sm-offset-1">
+                                            
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="row">
+                                              <!--   <div class="row clrbg col-sm-9">
+                                                    <div class="subhdrt">
+                                                        <h2>Enrollment Details</h2>
+                                                    </div>
+                                                    <div class="form-group col-sm-4 col-xs-12">
+                                                        <label>Enrollment Date</label>
+                                                        <input type="text" class="form-control" placeholder="Enrollment Date">
+                                                    </div>
+                                                    <div class="form-group col-sm-4 col-xs-12">
+                                                        <label>Addmission No.</label>
+                                                        <input type="text" class="form-control" placeholder="Addmission No.">
+                                                    </div>
+                                                    <div class="form-group col-sm-4 col-xs-12">
+                                                        <label>Admission Date</label>
+                                                        <input type="text" class="form-control" placeholder="Admission Date">
+                                                    </div>
+                                                    <div class="form-group col-sm-4 col-xs-12">
+                                                        <label>Course</label>
+                                                        <input type="text" class="form-control" placeholder="Course">
+                                                    </div>
+                                                </div> --> 
+                                                    <div class="clrbg col-sm-9">
+                                                        <div class="row">
+                                                            <div class="subhdrt">
+                                                                <h2>Student Details</h2>
+                                                            </div>
+                                                            <div class="form-group col-sm-4 col-xs-12">
+                                                                {{ form.first_name | as_crispy_field}}
+                                                            </div>
+                                                            <div class="form-group col-sm-4 col-xs-12">
+                                                                    {{ form.middle_name | as_crispy_field}}
+                                                            </div>
+                                                            <div class="form-group col-sm-4 col-xs-12">
+                                                                    {{ form.last_name | as_crispy_field}}
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="form-group col-sm-4 col-xs-12">                                                       
+                                                                    {{ form.date_of_birth | as_crispy_field}}
+                                                            </div>
+                                                            <div class="form-group col-sm-3 col-xs-12">                                                       
+                                                                    {{ form.phone_number | as_crispy_field}}
+                                                                </div>
+                                                            <div class="form-group col-sm-3 col-xs-12">                                                       
+                                                                    {{ form.email | as_crispy_field}}
+                                                                </div>
+                                                            <div class="form-group col-sm-2 col-xs-12">                                                       
+                                                                    {{ form.blood_group | as_crispy_field}}
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                           
+                                                           
+                                                            <div class="form-group col-sm-3 col-xs-12">
+                                                                    {{ form.nationality | as_crispy_field}}
+                                                            </div>
+                                                            <div class="form-group col-sm-3 col-xs-12">
+                                                                    {{ form.caste | as_crispy_field}}
+                                                            </div>
+                                                            <div class="form-group col-sm-3 col-xs-12">
+                                                                    {{ form.sub_caste | as_crispy_field}}
+                                                            </div>
+                                                            <div class="form-group col-sm-3 col-xs-12">
+                                                                    {{ form.place_of_birth | as_crispy_field}}
+                                                            </div>
+                                                            <div class="form-group col-sm-3 col-xs-12">
+                                                                    {{ form.aadhar_number | as_crispy_field}}                                                                
+                                                            </div>
+                                                            <div class="form-group col-sm-3 col-xs-12">
+                                                                    {{ form.gender | as_crispy_field}}                                                                
+                                                            </div>                                                      
+                                                        </div>
+                                                </div>
+                                                <div class="form-group col-sm-3 col-xs-12">
+                                                    <div class="file-upload">
+                                                        <div class="image-upload-wrap">
+                                                            <!-- <input class="clearablefileinput" type="file" onchange="readURL(this);" accept="image/*"> -->
+                                                            {{ form.student_pic | as_crispy_field}}
+                                                            <div class="drag-text">
+                                                                <h3>Upload Recent Passport size Photo</h3>
+                                                            </div>
+                                                        </div>
+                                                        <div class="file-upload-content">
+                                                            <img class="file-upload-image" src="#" alt="your image">
+                                                            <div class="image-title-wrap">
+                                                                <button type="button" onclick="removeUpload()" class="remove-image">Remove </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="clrbg">
+                                                <div class="row">
+                                                    <div class="subhdrt">
+                                                        <h2>Parents Details</h2>
+                                                    </div>
+                                                    <div class="form-group col-sm-4 col-xs-12">
+                                                            {{ form.fathers_name | as_crispy_field}}
+                                                    </div>
+                                                    <div class="form-group col-sm-4 col-xs-12">
+                                                            {{ form.fathers_occupation | as_crispy_field}}
+                                                    </div>
+                                                    <div class="form-group col-sm-4 col-xs-12">
+                                                            {{ form.fathers_date_of_birth | as_crispy_field}}
+                                                    </div>
+                                                    <div class="form-group col-sm-4 col-xs-12">
+                                                            {{ form.fathers_phone_no | as_crispy_field}}
+                                                    </div>
+                                                    <div class="form-group col-sm-4 col-xs-12">
+                                                            {{ form.fathers_email_id | as_crispy_field}}
+                                                    </div>
+                                                    <div class="form-group col-sm-4 col-xs-12">
+                                                            {{ form.fathers_annual_income | as_crispy_field}}
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="form-group col-sm-4 col-xs-12">
+                                                            {{ form.mothers_name | as_crispy_field}}
+                                                    </div>
+                                                    <div class="form-group col-sm-4 col-xs-12">
+                                                            {{ form.mothers_occupation | as_crispy_field}}
+                                                    </div>
+                                                    <div class="form-group col-sm-4 col-xs-12">
+                                                            {{ form.mothers_date_of_birth | as_crispy_field}}
+                                                    </div>
+                                                    <div class="form-group col-sm-4 col-xs-12">
+                                                            {{ form.mothers_phone_no | as_crispy_field}}
+                                                    </div>
+                                                    <div class="form-group col-sm-4 col-xs-12">
+                                                            {{ form.mothers_email_id | as_crispy_field}}
+                                                    </div>
+                                                    <div class="form-group col-sm-4 col-xs-12">
+                                                            {{ form.mothers_annual_income | as_crispy_field}}
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            
+
+                                            <div class="row clrbg">
+                                                <div class="subhdrt">
+                                                    <h2>Educational Details</h2>
+                                                </div>
+                                                <div class="col-sm-12 col-xs-12" style="overflow-x: auto;">
+                                                    <table class="table table-bordered table-striped table-responsive cf">
+                                                        <thead class="cf">
+                                                            <tr class="dth">
+                                                                <th>Exam</th>
+                                                                <th>Stream</th>
+                                                                <th>School/College</th>
+                                                                <th>Board/University</th>
+                                                                <th>Full Mark</th>
+                                                                <th>Secured Mark</th>
+                                                                <th>% / CGPA</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>10th</td>
+                                                                <td>{{ form.tenth_board | as_crispy_field}}</td>
+                                                                <td>{{ form.tenth_subjects| as_crispy_field}}</td>
+                                                                <td>{{ form.tenth_school| as_crispy_field}}</td>
+                                                                <td>{{ form.tenth_full_mark| as_crispy_field}}</td>
+                                                                <td>{{ form.tenth_secured_mark| as_crispy_field}}</td>
+                                                                <td>{{ form.tenth_percentage| as_crispy_field}}</td>
+                                                                
+                                                            </tr>
+                                                            <tr>
+                                                                <td>+2</td>
+                                                                <td>{{ form.twelth_board | as_crispy_field}}</td>
+                                                                <td>{{ form.twelth_stream | as_crispy_field}}</td>
+                                                                <td>{{ form.twelth_school| as_crispy_field}}</td>
+                                                                
+                                                                <td>{{ form.twelth_full_mark| as_crispy_field}}</td>
+                                                                <td>{{ form.twelth_secured_mark| as_crispy_field}}</td>
+                                                                <td>{{ form.tewlth_percentage| as_crispy_field}}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Graduate</td>
+                                                                <td>{{ form.degree_stream | as_crispy_field}}</td>
+                                                                <td>{{ form.degree_college| as_crispy_field}}</td>
+                                                                <td>{{ form.degree_university| as_crispy_field}}</td>
+                                                                <td>{{ form.degree_full_mark | as_crispy_field}}</td>
+                                                                <td>{{ form.degree_secured_mark| as_crispy_field}}</td>
+                                                                <td>{{ form.degree_percentage| as_crispy_field}}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Post Graduate</td>
+                                                                <td>{{ form.postdegree_stream | as_crispy_field}}</td>
+                                                                <td>{{ form.postdegree_college| as_crispy_field}}</td>
+                                                                <td>{{ form.postdegree_university| as_crispy_field}}</td>
+                                                                <td>{{ form.postdegree_full_mark| as_crispy_field}}</td>
+                                                                <td>{{ form.postdegree_secured_mark| as_crispy_field}}</td>
+                                                                <td>{{ form.postdegree_percentage| as_crispy_field}}</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="row clrbg">
+                                                <div class="subhdrt">
+                                                    <h2>Entrance Details</h2>
+                                                </div>
+                                                <div class="col-sm-12 col-xs-12">
+                                                    <table class="table table-bordered table-striped cf">
+                                                        <thead class="cf">
+                                                            <tr class="dth">
+                                                                <th>Entrance</th>
+                                                                <th>Year of Entrance</th>
+                                                                <th>Score</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>
+                                                                        {{ form.entrance_name| as_crispy_field}}
+                                                                </td>
+                                                                <td class="numeric">{{ form.entrance_year}}</td>
+                                                                <td class="numeric">{{ form.entrance_score| as_crispy_field}}</td>
+                                                            </tr>                                                                                                                         
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="row clrbg">
+                                                    <div class="subhdrt">
+                                                        <h2>Course Details</h2>
+                                                    </div>
+                                                    <div class="col-sm-12 col-xs-12">
+                                                        <table class="table table-bordered table-striped cf">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td>{{ form.stream| as_crispy_field}}</td>                                                                    </td>
+                                                                    <td>{{ form.course | as_crispy_field}}</td>
+                                                                    <td>{{ form.batch| as_crispy_field}}</td>
+                                                                </tr>                                                                                                                         
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            <div class="row clrbg">
+                                                <div class="subhdrt">
+                                                    <h2>Contact Details</h2>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="row subhdrt2">
+                                                        <h2>Present Address</h2>
+                                                    </div>
+                                                    <div class="form-group col-sm-6 col-xs-12">
+                                                            {{ form.present_house_no| as_crispy_field}}
+                                                    </div>
+                                                    <div class="form-group col-sm-6 col-xs-12">
+                                                            {{ form.present_Lane| as_crispy_field}}
+                                                    </div>
+                                                    <div class="form-group col-sm-6 col-xs-12">
+                                                            {{ form.present_pin| as_crispy_field}}
+                                                    </div>
+                                                    <div class="form-group col-sm-6 col-xs-12">
+                                                            {{ form.present_district| as_crispy_field}}
+                                                    </div>
+                                                    <div class="form-group col-sm-6 col-xs-12">
+                                                            {{ form.present_state| as_crispy_field}}
+                                                    </div>
+                                                    <div class="form-group col-sm-6 col-xs-12">
+                                                            {{ form.present_country| as_crispy_field}}
+                                                    </div>                                                    
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="row subhdrt2">
+                                                        <h2>Permanent Address</h2>
+                                                    </div>
+                                                    <div class="form-group col-sm-6 col-xs-12">
+                                                            {{ form.permanent_house_no| as_crispy_field}}
+                                                    </div>
+                                                    <div class="form-group col-sm-6 col-xs-12">
+                                                            {{ form.permanent_Lane| as_crispy_field}}
+                                                    </div>
+                                                    <div class="form-group col-sm-6 col-xs-12">
+                                                            {{ form.permanent_pin| as_crispy_field}}
+                                                    </div>
+                                                    <div class="form-group col-sm-6 col-xs-12">
+                                                            {{ form.permanent_district| as_crispy_field}}
+                                                    </div>
+                                                    <div class="form-group col-sm-6 col-xs-12">
+                                                            {{ form.permanent_state| as_crispy_field}}
+                                                    </div>
+                                                    <div class="form-group col-sm-6 col-xs-12">
+                                                            {{ form.permanent_country| as_crispy_field}}
+                                                    </div>
+                                                    
+                                                </div>
+                                                
+                                                <div class="col-sm-12 col-xs-12 mngtop30">
+                                                    <label class="contnr chrgbl">
+                                                            Check this box if Permanent Address and Present Address are the same.
+                                                        <!-- <span class="checkmark"></span> -->
+                                                    </label>
+                                                    {{ form.present_same_address| as_crispy_field}}
+                                                </div>
+                                            </div>
+                                            
+
+                                            <div class="row clrbg bsil atchpd">
+                                                <div class="subhdrt">
+                                                    <h2>Attachment Details</h2>
+                                                </div>
+                                                <div class="col-sm-12 col-xs-12">
+                                                    <table class="table table-bordered table-striped cf">
+                                                        <thead class="cf">
+                                                            <tr class="dth">
+                                                                <th>Exam</th>
+                                                                <th>Certificate</th>
+                                                                <th>Marksheet</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>10th</td>
+                                                                <td>
+                                                                    <div class="form-group">
+                                                                            {{ form.student_tenth| as_crispy_field}}
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    <div class="form-group">
+                                                                            {{ form.tenth_marksheet| as_crispy_field}}
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>+2</td>
+                                                                <td>
+                                                                    <div class="form-group">
+                                                                            {{ form.student_twelth| as_crispy_field}}
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    <div class="form-group">
+                                                                            {{ form.tewlth_marksheet| as_crispy_field}}
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Degree</td>
+                                                                <td>
+                                                                    <div class="form-group">
+                                                                            {{ form.student_degree| as_crispy_field}}
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    <div class="form-group">
+                                                                            {{ form.degree_marksheet| as_crispy_field}}
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>ClC of Last Exam</td>
+                                                                <td>
+                                                                    <div class="form-group">
+                                                                            {{ form.student_clc| as_crispy_field}}
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Conduct of last Exam</td>
+                                                                <td>
+                                                                    <div class="form-group">
+                                                                            {{ form.student_conduct_certificate| as_crispy_field}}
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Migration</td>
+                                                                <td>
+                                                                    <div class="form-group">
+                                                                            {{ form.student_migration| as_crispy_field}}
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Birth Certificate</td>
+                                                                <td>
+                                                                    <div class="form-group">
+                                                                            {{ form.student_birth_certificate| as_crispy_field}}
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                            <!-- <tr>
+                                                                <td>Medical Certificate</td>
+                                                                <td>
+                                                                    <div class="form-group">
+                                                                            {{ form.present_same_address| as_crispy_field}}
+                                                                    </div>
+                                                                </td>
+                                                            </tr> -->
+                                                            <tr>
+                                                                <td>Address</td>
+                                                                <td>
+                                                                    <div class="form-group">
+                                                                            {{ form.student_address| as_crispy_field}}
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Thumb</td>
+                                                                <td>
+                                                                    <div class="form-group">
+                                                                            {{ form.student_thumb| as_crispy_field}}
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Signature</td>
+                                                                <td>
+                                                                    <div class="form-group">
+                                                                            {{ form.student_signature| as_crispy_field}}
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+
+                                            <h4 class="trem">Terms and Conditions</h4>
+                                            <label class="contnr chrgbl">
+                                                 I accept the terms and conditions for signing up to this service, and hereby confirm I have read the privacy policy.
+                                                
+                                                <!-- <span class="checkmark"></span> -->
+                                            </label>
+                                            {{ form.term_and_condition| as_crispy_field}} 
+                                        </div>
+                                    </div>
+                                    <button type="reset" class="btn btn-info cancel">Cancel</button>
+                                    <button type="submit" class="btn btn-info save">Update</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    <!--js-->
+    <script src="{% static 'js/jquery.dcjqaccordion.2.7.js' %}"></script>
+    <script src="{% static 'js/jquery.nicescroll.js' %}"></script>
+    <!--common_script-->
+    <script src="{% static 'js/scripts.js' %}"></script>
+    <!-- image_upload -->
+    <script>
+         function readURL(input) {
+            if (input.files && input.files[0]) {
+
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('.image-upload-wrap').hide();
+
+                    $('.file-upload-image').attr('src', e.target.result);
+                    $('.file-upload-content').show();
+
+                    $('.image-title').html(input.files[0].name);
+                };
+
+                reader.readAsDataURL(input.files[0]);
+
+            } else {
+                removeUpload();
+            }
+        }
+
+        function removeUpload() {
+            $('.clearablefileinput').replaceWith($('.clearablefileinput').clone());
+            $('.file-upload-content').hide();
+            $('.image-upload-wrap').show();
+        }
+        $('.image-upload-wrap').bind('dragover', function () {
+            $('.image-upload-wrap').addClass('image-dropping');
+        });
+        $('.image-upload-wrap').bind('dragleave', function () {
+            $('.image-upload-wrap').removeClass('image-dropping');
+        });
+    </script>
+    
+   <script>
+    $(document).ready(function () {
+        $("#id_present_same_address").on("change", function () {
+            if (this.checked) {
+                $("#id_permanent_house_no").val($("#id_present_house_no").val());
+                $("#id_permanent_Lane").val($("#id_present_Lane").val());
+                $("#id_permanent_pin").val($("#id_present_pin").val());
+
+            } else {
+                $('#id_permanent_house_no').val("");
+                $('#id_permanent_Lane').val("");
+                $('#id_permanent_pin').val("");
+            }
+        });
+    });
+
+
+    $('#id_present_same_address').click(function (e) {
+        if ($('#id_present_same_address').prop('checked')) {
+            $('#id_permanent_district').val($('#id_present_district option:selected').val())
+        }
+    });
+
+    $('#id_present_same_address').click(function (e) {
+        if ($('#id_present_same_address').prop('checked')) {
+            $('#id_permanent_state').val($('#id_present_state option:selected').val())
+        }
+    });
+
+    $('#id_present_same_address').click(function (e) {
+        if ($('#id_present_same_address').prop('checked')) {
+            $('#id_permanent_country').val($('#id_present_country option:selected').val())
+        }
+    });
+</script>
+<script type="text/javascript">
+    $("#id_stream").change(function(event){
+                event.preventDefault();
+                var url=$("#myadmissionForm").attr("data-course-url");
+                var stream_id=$(this).val();
+                $.ajax({
+                    url:url,
+                data:{
+                    'stream':stream_id,
+                },
+                success:function(data){
+                    $("#id_course").html(data);
+                }
+                });
+    
+            });
+        $("#id_course").change(function(event){
+            event.preventDefault();
+            var url=$("#myadmissionForm").attr("data-batch-url");
+            var course_id=$(this).val();
+            $.ajax({
+                url:url,
+            data:{
+                'course':course_id,
+            },
+            success:function(data){
+                $("#id_batch").html(data);
+            }
+            });      
+    });
+    </script>
+{% endblock content %}

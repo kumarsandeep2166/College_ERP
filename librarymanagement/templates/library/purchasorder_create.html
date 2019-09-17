@@ -1,0 +1,53 @@
+{% extends 'student/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.css">
+<section id="main-content">
+    <div class="wrapper">
+        <div class="col-sm-12 col-xs-12 col-sm-offset-0">
+            <div class="text-center">
+                <h1 class="hdrcolorbg">
+                    Add A Purchase Order
+                </h1>
+            </div>
+            <form class="frmbgg clear-fx"  method="post"  id="assignSubjectTeacherForm" data-course-url="{% url 'ajax_load_course' %}" data-batch-url="{% url 'ajax_load_batch' %}" data-semestar-url="{% url 'ajax_load_sem' %}"  data-subject-url="{% url 'ajax_load_subject' %}">
+                <div class="row">
+                    {% csrf_token %}
+                    <div class="form-group col-sm-6 col-xs-12">
+                        <label>Bill No.</label>
+                        {{ form.bill_no}}
+                    </div>
+                    <div class="form-group col-sm-6 col-xs-12">
+                        <label>Bill Date</label>
+                        {{ form.bill_date}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-sm-3 col-xs-12">
+                        <label>Call No</label>
+                        {{ form.call_no}}
+                    </div>
+                    <div class="form-group col-sm-3 col-xs-12">
+                        <label>Vendor Name</label>
+                        {{ form.vendor}}
+                    </div>
+                    
+                    <div class="form-group col-sm-3 col-xs-12">
+                        <label>Total Price</label>
+                        {{ form.price}}
+                    </div>
+                </div>
+                    <button class="btn btn-info save" type="submit">Submit</button>
+            </form> 
+        </div>       
+    </div>
+</section>
+<script src="{% static 'js/datepicker.js' %}"></script>
+<script>
+$( function() {
+        $( "#id_bill_date" ).datepicker();
+        $( "#id_bill_date" ).attr('autocomplete','off');
+} );
+</script>
+{% endblock content %}

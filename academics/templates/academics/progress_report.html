@@ -1,0 +1,51 @@
+{% extends 'student/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+<section id="main-content">
+    <div class="wrapper">
+            <div class="col-sm-12 col-xs-12 col-sm-offset-0">
+            <div class="text-center">
+                <h1 class="hdrcolorbg">
+                   Subject Report
+                </h1>
+            </div>
+          
+           <div class="panel-body" style="overflow-x:auto;">
+            <table class="table table-bordered table-striped table-condensed" id="table_id">
+                <thead>
+                    <tr class="hdclr">
+                        <th>Stream</th>
+                        <th>Course</th>
+                        <th>Batch</th>
+                        <th>Section</th>
+                        <th>Subject Name</th>        
+                        <th>Topic</th>                        
+                        <th>Starting Time</th>                          
+                        <th>Ending Time</th>
+                        <th>Duration</th>
+                        <th>Remark</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for queryset in objs %}                 
+                    <tr>
+                        <td>{{queryset.report.section.semestar.stream}}</td>
+                        <td>{{queryset.report.section.semestar.course}}</td>
+                        <td>{{queryset.report.section.semestar.batch}}</td>
+                        <td>{{queryset.report.section}}</td>
+                        <td>{{queryset.report.subject}}</td>                
+                        <td>{{queryset.topic}}</td>                                                             
+                        <td>{{queryset.from_datetime}}</td>               
+                        <td>{{queryset.to_datetime}}</td>   
+                        <td>{{queryset.duration}}</td>  
+                        <td>{{queryset.remark}}</td>             
+                    </tr>             
+                    {% endfor %}        
+                </tbody>
+            </table>
+        </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}

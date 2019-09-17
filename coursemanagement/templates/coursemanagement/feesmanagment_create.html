@@ -1,0 +1,79 @@
+{% extends 'student/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+<script>
+        document.getElementById("fee").className += " active";
+        document.getElementById("fee1").className += " active";
+        document.getElementById("fee02").className += " active";        
+</script>
+<style>
+        #fee02 a{
+                color:#fff !important;
+        }
+</style>
+<section id="main-content">
+    <div class="wrapper">
+        <div class="row">
+            <div class="col-lg-4 col-sm-4 col-sm-offset-4">
+                <div class="">
+                    <div class="panel-body">
+                        <div class="text-center">
+                            <h1 class="hdrcolorbg">
+                                Fees Management
+                            </h1>
+                        </div>
+                        <form role="form" class="frmbgg"  method="post" id="myForm"   data-batch-url="{% url 'ajax_load_batch' %}" >
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="row">
+                                        <div class="form-group col-sm-12 col-xs-12">
+                                            <label>Course Name</label>
+                                            {{form.course}}
+                                        </div>
+                                        <div class="form-group col-sm-12 col-xs-12">
+                                                <label>Batch Name</label>
+                                            {{form.batch}}
+                                        </div>
+                                        <div class="form-group col-sm-12 col-xs-12">
+                                                <label>Fees Type</label>
+                                                {% for checkbox in form.fees %}
+                                                <label>
+                                                {{ checkbox.tag }} {{ checkbox.choice_label }}
+                                            </label>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-info save">Add</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+<script type="text/javascript">
+
+$("#id_course").change(function(event){
+    event.preventDefault();
+    var url=$("#myForm").attr("data-batch-url");
+    var course_id=$(this).val();
+    $.ajax({
+        url:url,
+        data:{
+            'course':course_id,
+        },
+        success:function(data){
+            $("#id_batch").html(data);
+        }
+    });
+
+});
+</script>
+{% endblock content %}

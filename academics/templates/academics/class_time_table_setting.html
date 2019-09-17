@@ -1,0 +1,890 @@
+{% extends 'student/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+<link href="{% static 'css/bootstrap-timepicker.css' %}" rel="stylesheet" />
+{% block content %}
+<style>
+        .clk {
+        position: absolute;
+        right: 25px;
+        top: 14px;
+        font-size: 16px;
+        color: #ff6c60;
+    }
+    .tmpbg{
+        position:relative;
+    }
+    .mn10{
+        margin-top:10px;
+    }
+    .daybg {
+        font-size: 21px;
+        font-family: 'Roboto', sans-serif;
+        color: #1fb5ad;
+        vertical-align: middle;
+        text-align: center;
+        line-height: 100px !important;
+    }
+    .tmop{
+        margin-bottom: 5px;
+    }
+    .tmop .form-control{
+        height: 24px;
+    }
+    .tmop .input-group-addon {
+        padding: 3px 12px;
+    }
+      
+    </style>
+<section id="main-content">
+    <div class="wrapper">
+            <div class="col-sm-8 col-xs-12 col-sm-offset-2">
+            <div class="text-center">
+                <h1 class="hdrcolorbg">
+                    Class Timings
+                </h1>
+            </div>
+            <form class="frmbgg clear-fx"  id="assignSubjectTeacherForm" data-course-url="{% url 'ajax_load_course' %}" data-batch-url="{% url 'ajax_load_batch' %}" data-semestar-url="{% url 'ajax_load_sem' %}"  data-subject-url="{% url 'ajax_load_subject' %}">
+                <div class="row">
+                {% csrf_token %}
+                <div class="form-group col-sm-4 col-xs-12">
+                    {{ form.stream| as_crispy_field}}
+                </div>
+                <div class="form-group col-sm-4 col-xs-12">
+                    {{ form.course| as_crispy_field}}
+                </div>
+                <div class="form-group col-sm-4 col-xs-12">
+                    {{ form.batch| as_crispy_field}}
+                </div>
+                <div class="form-group col-sm-4 col-xs-12">
+                    {{ form.semestar| as_crispy_field}}
+                </div>
+                <div class="form-group col-sm-4 col-xs-12">
+                    {{ form.section| as_crispy_field}}
+                </div>
+                <div id="daytable" style="display: none;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <td>Day</td>
+                                <td>Start Time</td>
+                                <td>End Time</td>
+                                <td>No. of Classes</td>
+                                <td>No. of Break</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Monday</td>
+                                <td><input type="time" name="intime1" id="intime1"></td>
+                                <td><input type="time" name="outtime1" id="outtime1"></td>
+                                <td><input type="number" name="class1" id="class1" value="0"></td>
+                                <td><input type="number" name="break1" id="break1" value="0"></td>
+                            </tr>
+                            <tr>
+                                <td>Tuesday</td>
+                                <td><input type="time" name="intime2" id="intime2"></td>
+                                <td><input type="time" name="outtime2" id="outtime2"></td>
+                                <td><input type="number" name="class2" id="class2" value="0"></td>
+                                <td><input type="number" name="break2" id="break2" value="0"></td>
+                            </tr>
+                            <tr>
+                                <td>Wednesday</td>
+                                <td><input type="time" name="intime3" id="intime3"></td>
+                                <td><input type="time" name="outtime3" id="outtime3"></td>
+                                <td><input type="number" name="class3" id="class3" value="0"></td>
+                                <td><input type="number" name="break3" id="break3" value="0"></td>
+                            </tr>
+                            <tr>
+                                <td>Thursday</td>
+                                <td><input type="time" name="intime4" id="intime4"></td>
+                                <td><input type="time" name="outtime4" id="outtime4"></td>
+                                <td><input type="number" name="class4" id="class4" value="0"></td>
+                                <td><input type="number" name="break4" id="break4" value="0"></td>
+                            </tr>
+                            <tr>
+                                <td>Friday</td>
+                                <td><input type="time" name="intime5" id="intime5"></td>
+                                <td><input type="time" name="outtime5" id="outtime5"></td>
+                                <td><input type="number" name="class5" id="class5" value="0"></td>
+                                <td><input type="number" name="break5" id="break5" value="0"></td>
+                            </tr>
+                            <tr>
+                                <td>Saturday</td>
+                                <td><input type="time" name="intime6" id="intime6"></td>
+                                <td><input type="time" name="outtime6" id="outtime6"></td>
+                                <td><input type="number" name="class6" id="class6" value="0"></td>
+                                <td><input type="number" name="break6" id="break6" value="0"></td>
+                            </tr>
+                            <tr>
+                                <td>Sunday</td>
+                                <td><input type="time" name="intime7" id="intime7"></td>
+                                <td><input type="time" name="outtime7" id="outtime7"></td>
+                                <td><input type="number" name="class7" id="class7" value="0"></td>
+                                <td><input type="number" name="break7" id="break7" value="0"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+            </div>
+            <button type="submit" class="btn btn-info save" id="class_time_submit">Submit</button>
+            </form>
+        </div>
+        
+    </div>
+    <div class="row" id="previous_timetable_div" style="display: none;">
+        <div class="col-lg-12">
+            <div class="panel">
+                <header class="panel-heading clearfix col-sm-12">
+                    <div class="col-sm-4 col-xs-12">
+                        Current TimeTable
+                    </div>
+                </header>
+                <div class="panel-body" style="overflow-x:auto;">
+                    <table class="table table-bordered table-striped table-condensed" id="previous_timetable_table">
+                        <thead>
+            
+                        </thead>
+                        <tbody>
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" id="time_table_div" style="display: none;">
+            <div class="col-lg-12">
+                <div class="panel">
+                    <header class="panel-heading clearfix col-sm-12">
+                        <div class="col-sm-4 col-xs-12">
+                            Class TimeTable Create
+                        </div>
+                    </header>
+                    <div class="panel-body" style="overflow-x:auto;">
+                        <table class="table table-bordered table-striped table-condensed" id="timetable_table">
+                            <thead>
+                
+                            </thead>
+                            <tbody>
+                                
+                            </tbody>
+                        </table>
+                        <button onclick="saveTimeTable()">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+</section>
+<script src="{% static 'js/bootstrap-timepicker.js' %}"></script>
+
+<script type="text/javascript">
+function edit_table_content(obj){
+    var start = $(obj).attr('count_start');
+    var class_day = $("#class_day_list").val();
+    var class_day_list = class_day.split(" ");
+    var end = $(obj).attr('count_end');
+    var edit_button_id = "#edit_day_button";
+    var save_button_id = "#save_day_button";
+    var delete_button_id = "#delete_day_button";
+    var cancel_button_id = "#cancel_day_button";
+    $(edit_button_id).hide();
+    $(save_button_id).show();
+    $(delete_button_id).hide();
+    $(cancel_button_id).show();
+    for(i=start;i<end;i++){
+        edit_content(i);
+    }
+    for(i=0;i<class_day_list.length;i++){
+        var count = class_day_list[i];
+        if(count){
+            var edit_button_id = "#edit_day_button"+count;
+            var save_button_id = "#save_day_button"+count;
+            var delete_button_id = "#delete_day_button"+count;
+            var cancel_button_id = "#cancel_day_button"+count;
+            $(edit_button_id).hide();
+            $(save_button_id).show();
+            $(delete_button_id).hide();
+            $(cancel_button_id).show();
+        }
+    }
+}
+function restore_table_content(obj){
+    var start = $(obj).attr('count_start');
+    var class_day = $("#class_day_list").val();
+    var class_day_list = class_day.split(" ");
+    var end = $(obj).attr('count_end');
+    var edit_button_id = "#edit_day_button";
+    var save_button_id = "#save_day_button";
+    var delete_button_id = "#delete_day_button";
+    var cancel_button_id = "#cancel_day_button";
+    $(edit_button_id).show();
+    $(save_button_id).hide();
+    $(delete_button_id).show();
+    $(cancel_button_id).hide();
+    for(i=start;i<end;i++){
+        restore_content(i);
+    }
+    for(i=0;i<class_day_list.length;i++){
+        var count = class_day_list[i];
+        if(count){
+            var edit_button_id = "#edit_day_button"+count;
+            var save_button_id = "#save_day_button"+count;
+            var delete_button_id = "#delete_day_button"+count;
+            var cancel_button_id = "#cancel_day_button"+count;
+            $(edit_button_id).show();
+            $(save_button_id).hide();
+            $(delete_button_id).show();
+            $(cancel_button_id).hide();
+        }
+    }
+}
+function delete_table_tr_content(obj){
+    var start = $(obj).attr('count_start');
+    var end = $(obj).attr('count_end');
+    var data_array = new Array();
+    var i = 0;
+    for(var k=start;k<=end;k++){
+        i = i+1;
+        var section_time = "#section_tt"+k;
+        var teacher_time = "#teacher_tt"+k;
+        var teacher_time_id = $(teacher_time).val();
+        var section_time_id = $(section_time).val();
+        dict = {
+            'teacher_time_id': teacher_time_id,
+            'section_time_id': section_time_id,
+        }
+        data_array.push(dict);
+    }
+    console.log(data_array);
+    $.ajax({
+        url:'/delete_selected_day_time_table/',
+        type: "POST",
+        data:{
+            'data': data_array,
+            'total': i,
+        },
+        success:function(data){
+            alert(data.msg);
+            show_time_table();
+        },
+    });
+}
+function save_table_tr_content(obj){
+    var count = $(obj).attr('count');
+    var start = $(obj).attr('count_start');
+    var end = $(obj).attr('count_end');
+    var data_array = new Array();
+    var i = 0;
+    for(var k=start;k<=end;k++){
+        i = i+1;
+        var day_id = "#view_day"+k;
+        var start_time_id = "#pttst"+k;
+        var end_time_id = "#pttet"+k;
+        var subject_id = "#pttts"+k;
+        var section_time = "#section_tt"+k;
+        var teacher_time = "#teacher_tt"+k;
+        var start_time = $(start_time_id).val();
+        var end_time = $(end_time_id).val();
+        var subject_teacher_id = $(subject_id).val();
+        var teacher_time_id = $(teacher_time).val();
+        var section_time_id = $(section_time).val();
+        var day = $(day_id).val();
+        dict = {
+            'start_time': start_time,
+            'end_time': end_time,
+            'subject_teacher_id': subject_teacher_id,
+            'teacher_time_id': teacher_time_id,
+            'section_time_id': section_time_id,
+            'day': day
+        }
+        data_array.push(dict);
+    }
+    console.log(data_array);
+    var section = $("#id_section").val();
+    $.ajax({
+        url:'/edit_selected_day_time_table/',
+        type: "POST",
+        data:{
+            'data': data_array,
+            'section': section,
+            'total': i,
+        },
+        success:function(data){
+            alert("msg");
+            show_time_table();
+        },
+    });
+}
+function restore_table_tr_content(obj){
+    var count = $(obj).attr('count');
+    var start = $(obj).attr('count_start');
+    var end = $(obj).attr('count_end');
+    var edit_button_id = "#edit_day_button"+count;
+    var save_button_id = "#save_day_button"+count;
+    var delete_button_id = "#delete_day_button"+count;
+    var cancel_button_id = "#cancel_day_button"+count;
+    $(edit_button_id).show();
+    $(save_button_id).hide();
+    $(delete_button_id).show();
+    $(cancel_button_id).hide();
+    for(i=start;i<=end;i++){
+        restore_content(i);
+    }
+}
+function edit_table_tr_content(obj){
+    var count = $(obj).attr('count');
+    var start = $(obj).attr('count_start');
+    var end = $(obj).attr('count_end');
+    var edit_button_id = "#edit_day_button"+count;
+    var save_button_id = "#save_day_button"+count;
+    var delete_button_id = "#delete_day_button"+count;
+    var cancel_button_id = "#cancel_day_button"+count;
+    $(edit_button_id).hide();
+    $(save_button_id).show();
+    $(delete_button_id).hide();
+    $(cancel_button_id).show();
+    for(i=start;i<=end;i++){
+        edit_content(i);
+    }
+}
+function delete_table_td_content(obj){
+        var k = $(obj).attr('count');
+        var section_time = "#section_tt"+k;
+        var teacher_time = "#teacher_tt"+k;
+        var teacher_time_id = $(teacher_time).val();
+        var section_time_id = $(section_time).val();
+        $.ajax({
+            url:'/delete_selected_time_table/',
+            type: "GET",
+            data:{
+                'teacher_time_id': teacher_time_id,
+                'section_time_id': section_time_id,
+            },
+            success:function(data){
+                alert(data.msg);
+                show_time_table();
+            },
+        });
+    }
+    function save_table_td_content(obj){
+        var k = $(obj).attr('count');
+        var day_id = "#view_day"+k;
+        var start_time_id = "#pttst"+k;
+        var end_time_id = "#pttet"+k;
+        var subject_id = "#pttts"+k;
+        var section_time = "#section_tt"+k;
+        var teacher_time = "#teacher_tt"+k;
+        var start_time = $(start_time_id).val();
+        var end_time = $(end_time_id).val();
+        var subject_teacher_id = $(subject_id).val();
+        var teacher_time_id = $(teacher_time).val();
+        var section_time_id = $(section_time).val();
+        var day = $(day_id).val();
+        var section = $("#id_section").val();
+        $.ajax({
+            url:'/edit_selected_time_table/',
+            type: "GET",
+            data:{
+                'start_time': start_time,
+                'end_time': end_time,
+                'subject_teacher_id': subject_teacher_id,
+                'teacher_time_id': teacher_time_id,
+                'section_time_id': section_time_id,
+                'day': day,
+                'section': section,
+            },
+            success:function(data){
+                alert("msg");
+                show_time_table();
+            },
+        });
+    }
+    function restore_table_td_content(obj){
+        var k = $(obj).attr('count');
+        restore_content(k);
+    }
+    function restore_content(k){
+        var start_time_id = "#pttst"+k;
+        var end_time_id = "#pttet"+k;
+        var subject_id = "#pttts"+k;
+        var edit_start_time_id = "#edit_pttst"+k;
+        var edit_end_time_id = "#edit_pttet"+k;
+        var edit_subject_id = "#edit_pttts"+k;
+        var save_button_id = "#save_button"+k;
+        var edit_button_id = "#edit_button"+k;
+        var start_time_span_id = "#start_time_span"+k;
+        var end_time_span_id = "#end_time_span"+k;
+        var cancel_button_id = "#cancel_button"+k;
+        var delete_button_id = "#delete_button"+k;
+        $(end_time_id).val($(edit_end_time_id).val());
+        $(start_time_id).val($(edit_start_time_id).val());
+        $(subject_id).val($(edit_subject_id).val());
+        $(start_time_id).prop("readonly", true);
+        $(end_time_id).prop("readonly", true);
+        $(subject_id).prop("disabled", true);
+        $(edit_button_id).show();
+        $(save_button_id).hide();
+        $(delete_button_id).show();
+        $(cancel_button_id).hide();
+        $(start_time_span_id).hide();
+        $(end_time_span_id).hide();
+    }
+    function edit_table_td_content(obj){
+        var k = $(obj).attr('count');
+        edit_content(k);
+    }
+    function edit_content(k){        
+        var start_time_id = "#pttst"+k;
+        var end_time_id = "#pttet"+k;
+        var subject_id = "#pttts"+k;
+        var save_button_id = "#save_button"+k;
+        var edit_button_id = "#edit_button"+k;
+        var start_time_span_id = "#start_time_span"+k;
+        var end_time_span_id = "#end_time_span"+k;
+        var cancel_button_id = "#cancel_button"+k;
+        var delete_button_id = "#delete_button"+k;
+        $(start_time_id).prop("readonly", false);
+        $(end_time_id).prop("readonly", false);
+        $(subject_id).prop("disabled", false);
+        $(edit_button_id).hide();
+        $(save_button_id).show();
+        $(delete_button_id).hide();
+        $(cancel_button_id).show();
+        $(start_time_span_id).show();
+        $(end_time_span_id).show();
+        $(start_time_span_id).html('<i class="glyphicon glyphicon-time"></i>');
+        $(end_time_span_id).html('<i class="glyphicon glyphicon-time"></i>');
+    }
+    function load_previous_available_subject(obj){
+        var day_of_week = ["Monday", "Tuesday", "WednesDay", "Thursday", "Friday", "Saturday", "Sunday"];
+        var subject_id = $(obj).attr('id');
+        var new_id = subject_id.replace('pttts','');
+        
+        var j = new_id.replace(/[^0-9]+/ig,"");
+        var start_id = "#pttst"+j;
+        var end_id = "#pttet"+j;
+        var start_time = $(start_id).val();
+        var end_time = $(end_id).val();
+        var subject_teacher =$(obj).val();
+        var day = day_of_week[j];
+        var teacher_time = "#teacher_tt"+j;
+        var teacher_table_id = $(teacher_time).val();
+        if(subject_teacher>0){
+            $.ajax({
+                url:'/check_previous_teacher_available/',
+                data:{
+                    'start_time':start_time,
+                    'end_time': end_time,
+                    'subject_teacher': subject_teacher,
+                    'day': day,
+                    'teacher_table_id': teacher_table_id,
+                },
+                success:function(data){
+                    if(data.msg=="available"){
+
+                    } else if(data.merge=="merge"){
+                        if(cnf_msg = confirm("want to merge class")){
+                            console.log("hi");
+                        }else {
+                            $(obj).val(0);
+                        }
+                    } else {
+                        alert("teacher is not available at this time")
+                        $(obj).val(0);
+                    }
+                }
+            });
+        }
+    }
+    function show_time_table(){
+        var day_of_week = ["Monday", "Tuesday", "WednesDay", "Thursday", "Friday", "Saturday", "Sunday"];
+        var section = $("#id_section").val();
+        $.ajax({
+            url:'/student_time_table_view/',
+            type: "GET",
+            data:{
+                'section': section,
+            },
+            success:function(data){
+                $("#previous_timetable_div").show();
+                var thead_str = '<tr class="hdclr"><th width="10%">Day</th><th>Action</th><th>Paticular</th>';
+                for(i=1; i<=data.maximum;i++){
+                    thead_str += '<th colspan="2">Class'+i+'</th>';
+                }
+                thead_str += '</tr>';
+                var body_str = '';
+                var m = 0;
+                var k = 0;
+                var class_day = "";
+                for(i=0; i<data.section_time_table.length;i++){
+                    if(data.section_time_table[i].class.length>0){
+                        class_day += i + " ";
+                        var class_length = data.section_time_table[i].class.length;
+                        var start = k;
+                        var end = k+class_length-1;
+                        body_str += '<tr><td rowspan="3">'+data.section_time_table[i].day+'</td>';
+                        body_str += '<td rowspan="3">';
+                        body_str += '<button id="edit_day_button'+i+'" onclick="edit_table_tr_content(this);" count_start="'+start+'" count_end="'+end+'" count="'+i+'">Edit</button><button style="display: none;" id="save_day_button'+i+'" onclick="save_table_tr_content(this);" count_start="'+start+'" count_end="'+end+'" count="'+i+'">Save</button>';
+                        body_str += '<button id="delete_day_button'+i+'" onclick="delete_table_tr_content(this);" count_start="'+start+'" count_end="'+end+'" count="'+i+'">Delete</button><button id="cancel_day_button'+i+'"style="display: none;" onclick="restore_table_tr_content(this);" count_start="'+start+'" count_end="'+end+'" count="'+i+'">Cancel</button>';    
+                        body_str += '</td>';
+                        body_str += '<td>Time</td>';
+                        k = m;
+                        for(j=0; j<data.section_time_table[i].class.length;j++){
+                            body_str += '<td>';
+                            body_str += '<div class="col-sm-12 col-xs-12 tmop">';
+                            body_str += '<div class="input-group bootstrap-timepicker timepicker">';
+                            body_str += '<input type="text" class="form-control input-small timepicker1" id="pttst'+k+'" value="'+data.section_time_table[i].class[j].fromtime+'" readonly="readonly">';
+                            body_str += '<span class="input-group-addon" id="start_time_span'+k+'" style="display: none;><i class="glyphicon glyphicon-time"></i></span>';
+                            body_str += '</div>';
+                            body_str += '</div>';
+                            body_str += '<input type="text" class="form-control input-small timepicker1" id="edit_pttst'+k+'" value="'+data.section_time_table[i].class[j].fromtime+'" style="display: none;">';
+                            body_str += '</td>';
+                            body_str += '<td>';
+                            body_str += '<div class="col-sm-12 col-xs-12 tmop">';
+                            body_str += '<div class="input-group bootstrap-timepicker timepicker">';
+                            body_str += '<input type="text" class="form-control input-small timepicker1" id="pttet'+k+'" value="'+data.section_time_table[i].class[j].totime+'" readonly="readonly">';
+                            body_str += '<span class="input-group-addon" id="end_time_span'+k+'" style="display: none;><i class="glyphicon glyphicon-time"></i></span>';
+                            body_str += '</div>';
+                            body_str += '</div>';
+                            body_str += '<input type="text" class="form-control input-small timepicker1" id="edit_pttet'+k+'" value="'+data.section_time_table[i].class[j].totime+'" style="display: none;">';
+                            body_str += '</td>';
+                            k = k+1;
+                        }
+                        body_str += '</tr>';
+                        body_str += '<tr><td>Subject</td>';
+                        k = m;
+                        for(j=0; j<data.section_time_table[i].class.length;j++){
+                            body_str += '<td  colspan="2">';
+                            body_str += '<div class="form-group col-sm-12 col-xs-12 mn10">';
+                            body_str += '<select class="form-control subject_dropdown" id="pttts'+k+'"  onchange="load_previous_available_subject(this)" disabled="disabled">';
+                            for(l=0;l<data.subject_list.length;l++){
+                                if(data.subject_list[l].id==data.section_time_table[i].class[j].subject_teacher_id) {
+                                    body_str += '<option value="'+ data.subject_list[l].id +'" selected="selected">'+ data.subject_list[l].name +'</option>';
+                                } else {
+                                    body_str += '<option value="'+ data.subject_list[l].id +'">'+ data.subject_list[l].name +'</option>';
+                                }
+                            }
+                            body_str += '</select>';
+                            body_str += '<select class="form-control subject_dropdown" id="edit_pttts'+k+'" style="display: none;">';
+                            for(l=0;l<data.subject_list.length;l++){
+                                if(data.subject_list[l].id==data.section_time_table[i].class[j].subject_teacher_id) {
+                                    body_str += '<option value="'+ data.subject_list[l].id +'" selected="selected">'+ data.subject_list[l].name +'</option>';
+                                } else {
+                                    body_str += '<option value="'+ data.subject_list[l].id +'">'+ data.subject_list[l].name +'</option>';
+                                }
+                            }
+                            body_str += '</select>';
+                            body_str += '</div>';
+                            body_str += '</td>';
+                            k = k+1;
+                        }
+                        body_str += '</tr>';
+                        body_str += '<tr><td>Action</td>';
+                        k = m;
+                        for(j=0; j<data.section_time_table[i].class.length;j++){
+                            body_str += '<td  colspan="2">';
+                            body_str += '<input type="hidden" id="section_tt'+k+'" value="'+data.section_time_table[i].class[j].id+'">';
+                            body_str += '<input type="hidden" id="teacher_tt'+k+'" value="'+data.section_time_table[i].class[j].teacher_id+'">';
+                            body_str += '<input type="hidden" id="view_day'+k+'" value="'+day_of_week[i]+'">';
+                            body_str += '<button id="edit_button'+k+'" onclick="edit_table_td_content(this);" count="'+k+'">Edit</button><button style="display: none;" id="save_button'+k+'" onclick="save_table_td_content(this);" count="'+k+'">Save</button>';
+                            body_str += '<button id="delete_button'+k+'" onclick="delete_table_td_content(this);" count="'+k+'">Delete</button><button id="cancel_button'+k+'"style="display: none;" onclick="restore_table_td_content(this);" count="'+k+'">Cancel</button>';
+                            body_str += '</td>';
+                            k = k+1;
+                        }
+                        body_str += '</tr>';
+                        m=k;
+                    }
+                }
+                body_str += '<tr><td><input type="hidden" id="class_day_list" value="'+class_day+'"><button id="edit_day_button" onclick="edit_table_content(this);" count_start="0" count_end="'+k+'">Edit</button><button style="display: none;" id="save_day_button" onclick="save_table_content(this);" count_start="0" count_end="'+k+'">Save</button>';
+                body_str += '<button id="delete_day_button" onclick="delete_table_content(this);" count_start="0" count_end="'+k+'">Delete</button><button id="cancel_day_button"style="display: none;" onclick="restore_table_content(this);" count_start="0" count_end="'+k+'">Cancel</button></td></tr>';
+                $("#previous_timetable_table thead").html(thead_str);
+                $("#previous_timetable_table tbody").html(body_str);
+                $('.timepicker1').timepicker();
+            },
+            error:function(data){
+                
+            }
+        });   
+    }
+    
+    $("#id_stream").change(function(){
+        var url=$("#assignSubjectTeacherForm").attr("data-course-url");
+        var stream_id=$(this).val();
+        $.ajax({
+            url:url,
+        data:{
+            'stream':stream_id,
+        },
+        success:function(data){
+            $("#id_course").html(data);
+        }
+        });
+    });
+    $("#id_course").change(function(){
+        var url=$("#assignSubjectTeacherForm").attr("data-batch-url");
+        var course_id=$(this).val();
+        $.ajax({
+            url:url,
+            data:{
+                'course':course_id,
+            },
+            success:function(data){
+                $("#id_batch").html(data);
+            }
+        });
+    });
+    $("#id_batch").change(function(){
+        var url=$("#assignSubjectTeacherForm").attr("data-semestar-url");
+        var batch_id=$(this).val();
+        var course_id=$("#id_course").val();
+        var stream_id = $("#id_stream").val();
+        $.ajax({
+            url:url,
+            data:{
+                'batch_id': batch_id,
+                'course':course_id,
+                'stream_id': stream_id,
+            },
+            success:function(data){
+                $("#id_semestar").html(data);
+            }
+        });
+    });
+    $("#id_semestar").change(function(){       
+        var semestar_id =$(this).val();
+        $.ajax({
+            url:'/get_section_subject/',
+            data:{
+                'semestar_id': semestar_id,
+            },
+            success:function(data){
+                subj_str = "<option>----------</option>";
+                sec_str = "<option>----------</option>";
+                if(data.subject_list.length){
+                    for(var i in data.subject_list) {
+                        subj_str += "<option value=\""+ data.subject_list[i].id +"\">"+ data.subject_list[i].name +"</option>";
+                    }
+                }
+                if(data.section_list.length){
+                    for(var i in data.section_list) {
+                        sec_str += "<option value=\""+ data.section_list[i].id +"\">"+ data.section_list[i].name +"</option>";
+                    }
+                }
+                $("#id_section").html(sec_str);
+                $("#id_subject").html(subj_str);
+            },
+            error:function(data){
+                $("#id_section").html("<option>----------</option>");
+                $("#id_subject").html("<option>----------</option>");
+            }
+        });
+    });
+    $("#id_section").change(function(){
+        show_time_table();
+        $("#daytable").show();
+    });
+
+    $("#class_time_submit").on("click", function(e){
+        e.preventDefault();
+        $("#time_table_div").show();
+        
+        table_str = "";
+        var day_of_week = ["Monday", "Tuesday", "WednesDay", "Thursday", "Friday", "Saturday", "Sunday"];
+        var day_class = new Array(7);
+        var maxi = 0;
+        for(var i=1; i<8; i++){
+            var class_div = "#class"+i;
+            var break_div = "#break"+i;
+            var class_count = parseInt($(class_div).val());
+            var break_count = parseInt($(break_div).val());
+            if(class_count>0){
+                var total_count = class_count + break_count;
+                if(total_count > maxi){
+                    maxi = total_count;
+                }
+                day_class[i-0] = total_count
+            } else {
+                day_class[i-0] = 0;
+            }
+        }
+        //var maxi = Math.max.apply(Math, day_class);
+        console.log(maxi);
+        thead_str  = '<tr class="hdclr"><th width="10%">Day</th>';
+        for(i=1;i<=maxi;i++){
+            thead_str += '<th>Class'+i+'</th>';
+        }
+        thead_str += '</tr>';
+        for(var i=1; i<8; i++){
+            var class_div = "#class"+i;
+            var break_div = "#break"+i;
+            var class_count = parseInt($(class_div).val());
+            var break_count = parseInt($(break_div).val());
+            if(class_count>0){
+                var starttimeId = "#intime"+i;
+                var endtimeId = "#outtime"+i;
+                var starttime = $(starttimeId).val();
+                var endtime = $(endtimeId).val();
+                var total_count = class_count + break_count;
+                var tr_str = "<tr><td>"+ day_of_week[i-1] +"</td>";
+                for(var j=0; j<total_count; j++){
+                    tr_str += '<td>';
+                    tr_str += '<div class="col-sm-12 col-xs-12 tmop">';
+                    tr_str += '<div class="input-group bootstrap-timepicker timepicker">';
+                    if(j==0){
+                        tr_str += '<input type="text" class="form-control input-small timepicker1" id="ttst'+day_of_week[i-1]+j+'" value="'+starttime+'">';
+                    } else {
+                        tr_str += '<input type="text" class="form-control input-small timepicker1" id="ttst'+day_of_week[i-1]+j+'">';
+                    }
+                    tr_str += '<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>';
+                    tr_str += '</div>';
+                    tr_str += '</div>';
+                    tr_str += '<div class="col-sm-12 col-xs-12 tmop">';
+                    tr_str += '<div class="input-group bootstrap-timepicker timepicker">';
+                    if(j==(total_count-1)){
+                        tr_str += '<input type="text" class="form-control input-small timepicker1" id="ttet'+day_of_week[i-1]+j+'" value="'+endtime+'">';
+                    } else {
+                        tr_str += '<input type="text" class="form-control input-small timepicker1" id="ttet'+day_of_week[i-1]+j+'">';
+                    }
+                    tr_str += '<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>';
+                    tr_str += '</div>';
+                    tr_str += '</div>';
+                    tr_str += '<div class="form-group col-sm-12 col-xs-12 mn10">';
+                    tr_str += '<select class="form-control subject_dropdown" id="ttts'+day_of_week[i-1]+j+'"  onchange="load_available_subject(this)">';
+                    tr_str += '</select>';
+                    tr_str += '</div>';
+                    tr_str += '</td>';
+                }
+                for(; j<maxi; j++){
+                    tr_str += "<td></td>";
+                }
+                tr_str += "</tr>";
+                table_str += tr_str;
+            } 
+        }
+        $("#timetable_table thead").html(thead_str);
+        $("#timetable_table tbody").html(table_str);
+        $('.timepicker1').timepicker();
+        var semestar_id = $("#id_semestar").val();
+        $.ajax({
+            url:'/load_subject_available/',
+            data:{
+                'semestar_id': semestar_id,
+            },
+            success:function(data){
+                $(".subject_dropdown").html(data);
+            }
+        });
+    });
+    function load_available_subject(obj){
+        var subject_id = $(obj).attr('id');
+        var new_id = subject_id.replace('ttts','');
+        var day = new_id.replace(/[^A-Za-z]+/ig,"");
+        var j = new_id.replace(/[^0-9]+/ig,"");
+        var start_id = "#ttst"+day+j;
+        var end_id = "#ttet"+day+j;
+        var start_time = $(start_id).val();
+        console.log(start_time);
+        var end_time = $(end_id).val();
+        console.log(end_time);
+        var subject_teacher =$(obj).val();
+        if(subject_teacher>0){
+            $.ajax({
+                url:'/check_teacher_available/',
+                data:{
+                    'start_time':start_time,
+                    'end_time': end_time,
+                    'subject_teacher': subject_teacher,
+                    'day': day,
+                },
+                success:function(data){
+                    if(data.msg=="available"){
+
+                    } else if(data.merge=="merge"){
+                        if(cnf_msg = confirm("want to merge class")){
+                            console.log("hi");
+                        }else {
+                            $(obj).val("");
+                        }
+                    } else {
+                        alert("teacher is not available at this time")
+                        $(obj).val("");
+                    }
+                }
+            });
+        }
+    }
+    
+    function saveTimeTable(){
+        var day_of_week = ["Monday", "Tuesday", "WednesDay", "Thursday", "Friday", "Saturday", "Sunday"];
+        var day_class = new Array(7);
+        var maxi = 0;
+        var dataArray = new Array();
+        for(var i=1; i<8; i++){
+            var class_div = "#class"+i;
+            var break_div = "#break"+i;
+            var class_count = parseInt($(class_div).val());
+            var break_count = parseInt($(break_div).val());
+            if(class_count>0){
+                var total_count = class_count + break_count;
+                day_class[i-0] = total_count
+            } else {
+                day_class[i-0] = 0;
+            }
+        }
+        for(var i=1; i<8; i++){
+            if(day_class[i]>0){
+                for(j=0;j<day_class[i];j++){
+                    var start_time_id = '#ttst'+day_of_week[i-1]+j;
+                    var end_time_id = '#ttet'+day_of_week[i-1]+j;
+                    var subject_teacher_id = '#ttts'+day_of_week[i-1]+j;
+                    dict = {
+                        "day":day_of_week[i-1],
+                        "start_time": $(start_time_id).val(),
+                        "end_time": $(end_time_id).val(),
+                        "subject_id": $(subject_teacher_id).val(),
+                    }
+                    dataArray.push(dict);
+                }
+            }
+        }
+        $.ajax({
+            url:'/save_time_table/',
+            type: "POST",
+            data:{
+                'dataArray':dataArray,
+                'total': dataArray.length,
+                'section': $("#id_section").val(),
+                },
+            success:function(data){
+                alert("Time table saved successfully!!!");
+                show_time_table();
+                $("#time_table_div").hide();
+            }
+        });
+    }
+    function getCookie(c_name) {
+        if (document.cookie.length > 0)
+        {
+            c_start = document.cookie.indexOf(c_name + "=");
+            if (c_start != -1)
+            {
+                c_start = c_start + c_name.length + 1;
+                c_end = document.cookie.indexOf(";", c_start);
+                if (c_end == -1) c_end = document.cookie.length;
+                return unescape(document.cookie.substring(c_start,c_end));
+            }
+        }
+        return "";
+    }
+    $(function(){
+        $.ajaxSetup({
+            headers:{"X-CSRFToken":getCookie('csrftoken')}
+        });
+    });
+</script> 
+
+
+{% endblock content %}

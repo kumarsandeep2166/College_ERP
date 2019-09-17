@@ -1,0 +1,157 @@
+<aside>
+    <div id="sidebar" class="nav-collapse">
+        <div class="leftside-navigation">
+            <ul class="sidebar-menu" id="nav-accordion">
+                <li>
+                    <a href="/">
+                        <i class="fa fa-dashboard"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="sub-menu">
+                    <a href="javascript:;">  
+                        <i class="fa fa-book" aria-hidden="true"></i>
+                        <span>Student Management</span>
+                    </a>
+                    <ul class="sub"> 
+                        <!-- <li><a href="/admissionfrm">Student Admission</a></li> -->
+                        <!-- <li><a href="/studentadmissionlist">Student Admission Details</a></li> -->
+                        <li><a href="/applicantfrm">Student Application Form</a></li>
+                        <li><a href="/studentadmissionform">Student Admission Form</a></li>
+                        <li><a href="/student-list">Student List</a></li>
+                        <li><a href="/student_enroll_list">Enroll Student</a></li>
+                        <li><a href="/enrollstudentlistview">Enrolled Student List</a></li>
+                    </ul>
+                </li>
+                <li class="sub-menu">
+                    <a href="javascript:;" class="">
+                        <i class="fa fa-users" aria-hidden="true"></i>
+                        <span>Employee Management </span>
+                    </a>
+                    <ul class="sub" id="emp1">
+                        <li><a href="{% url 'employee_create'%}">Employee Create Form</a></li>
+                        <li><a href="/employee">Manage Employee</a></li>                                        
+                    </ul>
+                </li>
+                <li class="sub-menu">
+                        <a href="javascript:;" class="">
+                           <i class="fa fa-book" aria-hidden="true"></i>
+                            <span>Admission Management </span>
+                        </a>
+                        <ul class="sub">
+                            <li><a href="#">Student Admission</a></li>
+                            <li><a href="#">Manage Employee</a></li>                                             
+                        </ul>
+                    </li>
+                <li class="sub-menu" id="enqry">
+                        <a href="javascript:;" class="">
+                            <i class="fa fa-share" aria-hidden="true"></i>
+                            <span>Enquiry</span>
+                        </a>
+                        <ul class="sub">
+                            <li><a href="/enquiry">Enquiry</a></li>  
+                            <li><a href="/applicantfrm">Take An Enquiry</a></li>                                     
+                        </ul>
+                </li>
+                <li class="sub-menu">
+                    <a href="javascript:;" class="">
+                        <i class="fa fa-book" aria-hidden="true"></i>
+                        <span>Course Management </span>
+                    </a>
+                    <ul class="sub"  id="strm1">
+                        <li><a href="{% url 'stream_list' %}">Stream</a></li>
+                        <li><a href="{% url 'course_list' %}">Course</a></li>
+                        <li><a href="{% url 'batch_list' %}">Batch</a></li>
+                                        
+                    </ul>
+                </li>
+                <li class="sub-menu" id="fee">
+                    <a href="javascript:;" class="">
+                        <i class="fa fa-inr" aria-hidden="true"></i>
+                        <span>Fees Management </span>
+                    </a>
+                    <ul class="sub" id="fee1">                        
+                        
+                        <!-- <li><a href="{% url 'feestype_create' %}">Fees Type Create</a></li> 
+                        <li><a href="{% url 'feeplan_list' %}">Fees List</a></li>
+                        <li><a href="{% url 'feeplan_create' %}">Fees SetUp</a></li>                   -->
+                        <li><a href="{% url 'collect_student_fee' %}">Collect Student Fee</a></li>                  
+                        <li><a href="{% url 'student_enroll_list' %}">Enroll From Student List</a></li>                  
+                        <li><a href="/moneyreceiptdetails/">Money Receipt Details</a></li>                  
+                        <!-- <li><a href="{% url 'batch_list' %}">Batch</a></li>
+                        <li><a href="{% url 'section_list' %}">Section</a></li> -->                        
+                    </ul>
+                </li>
+                <li class="sub-menu">
+                    <a href="javascript:;">
+                        <i class="fa fa-book"></i>
+                        <span>Academics </span>
+                    </a>
+                    <ul class="sub">
+                        <li><a href="/semestar/">Semestar</a></li>
+                        <li><a href="{% url 'section_list' %}">Section</a></li>   
+                        <li><a href="/subject/">Subject</a></li>
+                        <li><a href="/subject_teacher/">Assign Subject</a></li>
+                        <li><a href="/student_section_list/">Section Student</a></li>
+                        <li><a href="/attendance/">Take Attendance</a></li>
+                        <li><a href="/student_section_assign/">Allot Student Section</a></li>
+                        <li><a href="/class_timing_setting/">Set Time Table</a></li>
+                        <li><a href="/student_time_table_load/">Student Time Table</a></li>
+                        <li><a href="/teacher_time_table_load/">Teacher Time Table</a></li>
+                    </ul>
+                </li>
+                <li class="sub-menu">
+                    <a href="javascript:;">
+                        <i class="fa fa-envelope"></i>
+                        <span>MIS </span>
+                    </a>
+                    <ul class="sub">
+                        <li><a href="/student-list">Approve Student Details</a></li>
+                        
+                    </ul>
+                </li> 
+                <li class="sub-menu">
+                    <a href="javascript:;">
+                        <i class="fa fa-envelope"></i>
+                        <span>Exam Section</span>
+                    </a>
+                    <ul class="sub">
+                        <li><a href="/examtype_create">Exam Type Setting</a></li>
+                        <li><a href="/examtype_list">Exam Type list</a></li>
+                        <li><a href="/course_exam_setting">Course Type Setting</a></li>
+                        <li><a href="/subjectexamlist">Subject Exam List</a></li>
+                        <li><a href="/subject_exam_create">Subject Exam Create</a></li>
+                        <li><a href="/exam_attendance">Exam Attendance</a></li>
+                        <li><a href="/mark_entry">Exam Mark Entry</a></li>
+                        
+                    </ul>
+                </li> 
+                <li class="sub-menu">
+                        <a href="javascript:;">
+                            <i class="fa fa-envelope"></i>
+                            <span>Library Section</span>
+                        </a>
+                        <ul class="sub">
+                            <li><a href="/product_category_list">Product Category Setting</a></li>
+                            <li><a href="/booktypeformlist/">Book Type Setting</a></li>
+                            
+                            
+                        </ul>
+                    </li> 
+                <li class="sub-menu">
+                    <a href="javascript:;">
+                        <i class="fa fa-envelope"></i>
+                        <span>Mail </span>
+                    </a>
+                    <ul class="sub">
+                            <li><a href="#">Student Details</a></li>
+                        <li><a href="#">Compose Mail</a></li>
+                        <li><a href="#">View Mail</a></li>
+                    </ul>
+                </li>              
+            </ul>
+        </div>
+    </div>
+</aside>
+
+<script src="/static/js/app.min.js"></script>

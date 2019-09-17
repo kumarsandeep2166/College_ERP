@@ -1,0 +1,37 @@
+{% extends 'student/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<script>
+        document.getElementById("strm").className += " active";
+        document.getElementById("strm1").className += " active";
+        document.getElementById("strm03").className += " active";        
+</script>
+<style>
+        #strm03 a{
+                color:#fff !important;
+        }
+</style>
+<section id="main-content">
+        <div class="wrapper">
+                <div class="col-sm-12 col-xs-12">
+                    <button type="submit" class="btn btn-info feebtn"><a href="{% url 'feestype_create' %}">Add Fee Type</a></button>
+                    <table class="table table-bordered table-striped table-condensed">
+                            <thead>
+                                <tr class="hdclr">
+                                        <th>Sl No.</th>
+                                        <th>Fees Type</th> 
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for i in object_list %}
+                                <tr>
+                                        <td>{{i.id}}</td>
+                                        <td>{{i.fee_type}}</td>                                       
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                </div>
+        </div>
+</section>
+{% endblock content %}

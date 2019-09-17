@@ -1,0 +1,45 @@
+{% extends 'student/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<script>
+        document.getElementById("strm").className += " active";
+        document.getElementById("strm1").className += " active";
+        document.getElementById("strm01").className += " active";        
+</script>
+<style>
+        #strm01 a{
+                color:#fff !important;
+        }
+</style>
+<section id="main-content">
+        <div class="wrapper">
+                <div class="col-sm-12 col-xs-12">
+                    <button type="submit" class="btn btn-info feebtn"><a href="{% url 'stream_create' %}">Add A Stream</a></button>
+                    <table class="table table-bordered table-striped table-condensed">
+                            <thead>
+                                <tr class="hdclr">
+                                        <th>Sl No.</th>
+                                        <th>Stream Name</th>                              
+                                        <th>Short Name</th>                              
+                                        <!-- <th>Action</th> -->
+                                        
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for i in object_list %}
+                                <tr>
+                                        <td>{{i.id}}</td>
+                                        <td>{{i.name}}</td>
+                                        <td>{{i.short_name}}</td>
+                                       
+                                        
+                                        <!-- <td><a href="{% url 'section_detail' pk=i.pk %}">View</a>||<a href="{% url 'section_edit' pk=i.pk %}">Edit</a>||<a href="{% url 'section_delete' pk=i.pk %}">Delete</a></td>
+                                        -->
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                </div>
+        </div>
+</section>
+{% endblock content %}

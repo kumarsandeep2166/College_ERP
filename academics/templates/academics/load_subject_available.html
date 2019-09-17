@@ -1,0 +1,4 @@
+<option value="0">Break</option>
+{% for obj in subject_objs %}
+<option value="{{obj.pk}}">{{obj.subject}}-({{obj.teacher}})</option>
+{% endfor %}

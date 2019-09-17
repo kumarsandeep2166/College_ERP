@@ -1,0 +1,83 @@
+{% extends 'student/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<section id="main-content">
+    <div class="wrapper">
+            <div class="col-sm-8 col-xs-12 col-sm-offset-2">
+            <div class="text-center">
+                <h1 class="hdrcolorbg">
+                    Add Subject
+                </h1>
+            </div>
+            <form class="frmbgg clear-fx" action="." method="post"  id="semesterForm" data-course-url="{% url 'ajax_load_course' %}" data-batch-url="{% url 'ajax_load_batch' %}" data-semestar-url="{% url 'ajax_load_sem' %}">
+                <div class="row">
+                {% csrf_token %}
+                <div class="form-group col-sm-4 col-xs-12">
+                    {{ form.stream| as_crispy_field}}
+                </div>
+                <div class="form-group col-sm-4 col-xs-12">
+                    {{ form.course| as_crispy_field}}
+                </div>
+                <div class="form-group col-sm-4 col-xs-12">
+                    {{ form.batch| as_crispy_field}}
+                </div>
+                <div class="form-group col-sm-4 col-xs-12">
+                    {{ form.semestar| as_crispy_field}}
+                </div>                
+                <div class="form-group col-sm-4 col-xs-12">
+                    {{ form.name| as_crispy_field}}
+                </div>
+                <button type="submit" class="btn btn-info save">Create</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</section>
+<script type="text/javascript">
+    $("#id_stream").change(function(){
+        var url=$("#semesterForm").attr("data-course-url");
+        var stream_id=$(this).val();
+        $.ajax({
+            url:url,
+        data:{
+            'stream':stream_id,
+        },
+        success:function(data){
+            $("#id_course").html(data);
+        }
+        });
+    });
+    $("#id_course").change(function(){
+        var url=$("#semesterForm").attr("data-batch-url");
+        var course_id=$(this).val();
+        $.ajax({
+            url:url,
+            data:{
+                'course':course_id,
+            },
+            success:function(data){
+                $("#id_batch").html(data);
+            }
+        });
+    });
+    $("#id_batch").change(function(){
+        var url=$("#semesterForm").attr("data-semestar-url");
+        var batch_id=$(this).val();
+        var course_id=$("#id_course").val();
+        var stream_id = $("#id_stream").val();
+        $.ajax({
+            url:url,
+            data:{
+                'batch_id': batch_id,
+                'course':course_id,
+                'stream_id': stream_id,
+            },
+            success:function(data){
+                $("#id_semestar").html(data);
+            }
+        });
+    });
+    
+</script> 
+
+{% endblock content %}

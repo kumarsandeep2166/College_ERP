@@ -1,0 +1,285 @@
+﻿{% extends 'student/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+<script>
+        document.getElementById("emp").className += " active";
+        document.getElementById("emp1").className += " active";
+        document.getElementById("emp01").className += " active";        
+</script>
+<style>
+        #emp01 a{
+                color:#fff !important;
+        }
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.css">
+<section id="main-content">
+    <div class="wrapper">
+        <div class="row">
+            <div class="col-lg-8 col-sm-8 col-sm-offset-2">
+                <div class="">
+                <div class="panel-body">
+                    <div class="text-center">
+                        <h1 class="hdrcolorbg">
+                            Employee Management
+                        </h1>
+                    </div>
+                <form role="form" class="frmbgg" action="." method="POST">
+                    {% csrf_token %}
+                    
+                    <div class="row">
+                         <div class="col-sm-12">
+                          <div class="row">
+                                <div class="form-group col-sm-3 col-xs-12">
+                                        {{ form.title| as_crispy_field}}
+                                </div>
+                                <div class="form-group col-sm-3 col-xs-12">
+                                        {{ form.first_name| as_crispy_field}}
+                                </div>
+                                <div class="form-group col-sm-3 col-xs-12">
+                                        {{ form.middle_name| as_crispy_field}}
+                                </div>
+                                <div class="form-group col-sm-3 col-xs-12">
+                                        {{ form.last_name| as_crispy_field}}
+                                </div>
+                          </div>
+            <div class="row">
+                    <div class="form-group col-sm-3 col-xs-12" >
+                            {{ form.date_of_birth| as_crispy_field}}
+                    </div>
+                    <div class="form-group col-sm-3 col-xs-12">
+                            {{ form.gender| as_crispy_field}}
+                    </div>
+                    <div class="form-group col-sm-3 col-xs-12">
+                            {{ form.fathers_name| as_crispy_field}}
+                    </div>
+                    <div class="form-group col-sm-3 col-xs-12">
+                            {{ form.mothers_name| as_crispy_field}}
+                    </div>
+                </div>
+                <div class="row">
+                   
+                
+                <div class="form-group col-sm-4 col-xs-12">
+                        {{ form.employee_designation| as_crispy_field}}
+                </div>
+                <div class="form-group col-sm-4 col-xs-12">
+                        {{ form.stream| as_crispy_field}}
+                </div>
+            </div>
+           
+            <div class="row">
+                <div class="form-group col-sm-3 col-xs-12">
+                        {{ form.phone_no| as_crispy_field}}</div>
+                <div class="form-group col-sm-3 col-xs-12">
+                        {{ form.aadhar_no| as_crispy_field}}
+                </div>
+                <div class="form-group col-sm-3 col-xs-12">
+                        {{ form.pan_no| as_crispy_field}}
+                </div>
+                <div class="form-group col-sm-3 col-xs-12">
+                        {{ form.epfo_no| as_crispy_field}}
+                </div>
+        </div>
+        <div class="row">
+                <div class="form-group col-sm-3 col-xs-12">
+                        {{ form.nationality| as_crispy_field}}</div>
+                <div class="form-group col-sm-3 col-xs-12">
+                        {{ form.caste| as_crispy_field}}
+                </div>
+                <div class="form-group col-sm-3 col-xs-12">
+                        {{ form.religion| as_crispy_field}}
+                </div>
+                <div class="form-group col-sm-3 col-xs-12">
+                        {{ form.scale_of_pay| as_crispy_field}}
+                </div>
+                <div class="form-group col-sm-3 col-xs-12">
+                        {{ form.type_of_joining| as_crispy_field}}
+                </div>
+                <div class="form-group col-sm-3 col-xs-12">
+                        {{ form.physically_handicaped| as_crispy_field}}
+                </div>
+                <div class="form-group col-sm-3 col-xs-12">
+                        {{ form.email| as_crispy_field}}
+                </div>                
+                <div class="form-group col-sm-3 col-xs-12">
+                        {{ form.pin| as_crispy_field}}
+                </div>
+        </div>
+        <div class="row">
+                <div class="form-group col-sm-3 col-xs-12">
+                        {{ form.city| as_crispy_field}}
+                </div>
+                <div class="form-group col-sm-3 col-xs-12">
+                        {{ form.district| as_crispy_field}}
+                </div>
+                <div class="form-group col-sm-3 col-xs-12">
+                        {{ form.state| as_crispy_field}}
+                </div>
+                <div class="form-group col-sm-3 col-xs-12">
+                        {{ form.country| as_crispy_field}}
+                </div> 
+                <div class="form-group col-sm-3 col-xs-12">
+                        {{ form.landmark| as_crispy_field}}
+                </div>
+                <div class="form-group col-sm-3 col-xs-12">
+                        {{ form.communication_lane_address| as_crispy_field}}
+                </div>
+                <div class="form-group col-sm-6 col-xs-12">
+                    {{ form.communication_address| as_crispy_field}}
+                </div>        
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-xs-12"><label>Qualification</label>
+                <table class="table table-bordered table-striped cf">
+                    <thead class="cf">
+                        <tr class="dth">
+                            <th>Exam</th>
+                            <th>Stream</th>
+                            <th>School/College</th>
+                            <th>Board/University</th>
+                            <th>Full Mark</th>
+                            <th>Secured Mark</th>
+                            <th>% / CGPA</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>10th</td>
+                            <td>{{ form.tenth_subjects| as_crispy_field}}</td>
+                            <td>{{ form.tenth_school| as_crispy_field}}</td>
+                            <td>{{ form.tenth_board| as_crispy_field}}</td>
+                            <td>{{ form.tenth_full_mark| as_crispy_field}}</td>
+                            <td>{{ form.tenth_secured_mark| as_crispy_field}}</td>
+                            <td>{{ form.tenth_percentage| as_crispy_field}}</td>
+                        </tr>
+                        <tr>
+                            <td>+2</td>
+                            <td>{{ form.twelth_stream| as_crispy_field}}</td>
+                            <td>{{ form.twelth_college| as_crispy_field}}</td>
+                            <td>{{ form.twelth_board| as_crispy_field}}</td>
+                            <td>{{ form.twelth_full_mark| as_crispy_field}}</td>
+                            <td>{{ form.twelth_secured_mark| as_crispy_field}}</td>
+                            <td>{{ form.tewlth_percentage| as_crispy_field}}</td>
+                        </tr>
+                        <tr>
+                            <td>Graduate</td>
+                            <td>{{ form.degree_stream| as_crispy_field}}</td>
+                            <td>{{ form.degree_college| as_crispy_field}}</td>
+                            <td>{{ form.degree_university| as_crispy_field}}</td>
+                            <td>{{ form.degree_full_mark| as_crispy_field}}</td>
+                            <td>{{ form.degree_secured_mark| as_crispy_field}}</td>
+                            <td>{{ form.degree_percentage| as_crispy_field}}</td>
+                        </tr>
+                        <tr>
+                            <td>Post Graduate</td>
+                            <td>{{ form.postdegree_stream| as_crispy_field}}</td>
+                            <td>{{ form.postdegree_college| as_crispy_field}}</td>
+                            <td>{{ form.postdegree_university| as_crispy_field}}</td>
+                            <td>{{ form.postdegree_full_mark| as_crispy_field}}</td>
+                            <td>{{ form.postdegree_secured_mark| as_crispy_field}}</td>
+                            <td>{{ form.postdegree_percentage| as_crispy_field}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+                <div class="form-group col-sm-3 col-xs-12">
+                        {{ form.bank_name| as_crispy_field}}
+                    </div>
+                <div class="form-group col-sm-3 col-xs-12">
+                        {{ form.bank_account_number| as_crispy_field}}
+                </div>
+                <div class="form-group col-sm-3 col-xs-12">
+                        {{ form.bank_ifsc_code| as_crispy_field}}
+                </div>
+                <div class="form-group col-sm-3 col-xs-12">
+                        {{ form.bank_branch| as_crispy_field}}
+                </div>
+            </div>  
+            <div class="row">               
+                <div class="form-group col-sm-3 col-xs-12">
+                        {{ form.last_appointment_type| as_crispy_field}}
+                </div>
+                <div class="form-group col-sm-3 col-xs-12">
+                        {{ form.last_payment_scale| as_crispy_field}}
+                </div>
+                <div class="form-group col-sm-3 col-xs-12">
+                        {{ form.other_qualifiaction| as_crispy_field}}
+                </div>
+                <div class="form-group col-sm-3 col-xs-12">
+                        {{ form.area_of_specialization| as_crispy_field}}
+                </div>
+                <div class="form-group col-sm-3 col-xs-12">
+                        {{ form.ug_degree| as_crispy_field}}
+                </div>
+                <div class="form-group col-sm-3 col-xs-12">
+                        {{ form.pg_degree| as_crispy_field}}
+                </div>
+                <div class="form-group col-sm-3 col-xs-12">
+                        {{ form.patents_issued| as_crispy_field}}
+                </div>
+                <div class="form-group col-sm-3 col-xs-12">
+                        {{ form.no_of_pg_projects| as_crispy_field}}
+                </div>                
+        </div>
+        <div class="row">
+                <div class="form-group col-sm-3 col-xs-12">
+                        {{ form.teaching_experience| as_crispy_field}}
+                </div>
+                <div class="form-group col-sm-3 col-xs-12">
+                        {{ form.industry_experience| as_crispy_field}}
+                </div>
+                <div class="form-group col-sm-6 col-xs-12">
+                        {{ form.experience_details| as_crispy_field}}
+                </div>
+        </div>
+        <div class="row">                
+            <div class="form-group col-sm-3 col-xs-12">
+                    {{ form.national_journal_no| as_crispy_field}}
+            </div>
+            <div class="form-group col-sm-3 col-xs-12">
+                    {{ form.international_journal_no| as_crispy_field}}
+            </div>
+            <div class="form-group col-sm-6 col-xs-12">
+                    {{ form.journal_details| as_crispy_field}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-sm-3 col-xs-12">
+                    {{ form.national_conference_no| as_crispy_field}}
+            </div>
+            <div class="form-group col-sm-3 col-xs-12">
+                    {{ form.international_conference_no| as_crispy_field}}
+            </div>
+            <div class="form-group col-sm-6 col-xs-12">
+                    {{ form.conference_details| as_crispy_field}}
+            </div>
+            
+            <div class="form-group col-sm-3 col-xs-12">
+                        {{ form.status| as_crispy_field}}
+                </div>
+        </div>
+        
+    </div>
+    </div>
+        <button type="submit" class="btn btn-info cancel">Cancel</button>
+        <button type="submit" class="btn btn-info save">Save & Proceed to Pay</button>
+            </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</section>
+<script src="{% static 'js/datepicker.js' %}"></script>
+<script>
+$( function() {
+        $( "#id_date_of_birth" ).datepicker();
+        $( "#id_date_of_birth" ).attr('autocomplete','off');
+} );
+</script>
+  
+{% endblock content %}

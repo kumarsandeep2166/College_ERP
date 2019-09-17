@@ -1,0 +1,276 @@
+{% extends 'student/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.css">
+<section id="main-content">
+    <div class="wrapper">
+            <div class="col-sm-12 col-xs-12 col-sm-offset-0">
+            <div class="text-center">
+                <h1 class="hdrcolorbg">
+                   Student Attendance
+                </h1>
+            </div>
+            <form class="frmbgg clear-fx"   id="attendancePlan" data-course-url="{% url 'ajax_load_course' %}" data-batch-url="{% url 'ajax_load_batch' %}" data-semestar-url="{% url 'ajax_load_sem' %}" data-subject-url="{% url 'ajax_load_subject' %}" data-attendance-url="{% url 'ajax_load_attendance' %}">
+                <div class="row">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="form-group col-sm-4 col-xs-12">
+                        {{ form.stream| as_crispy_field}}
+                    </div>
+                    <div class="form-group col-sm-4 col-xs-12">
+                        {{ form.course| as_crispy_field}}
+                    </div>
+                    <div class="form-group col-sm-4 col-xs-12">
+                        {{ form.batch| as_crispy_field}}
+                    </div>                
+                    <div class="form-group col-sm-4 col-xs-12">
+                        {{ form.semestar| as_crispy_field}}
+                    </div>
+                    <div class="form-group col-sm-4 col-xs-12">
+                        {{ form.section| as_crispy_field}}
+                    </div>
+                    <div class="form-group col-sm-4 col-xs-12">
+                        {{ form.subject| as_crispy_field}}
+                    </div>   
+                    <!-- <div class="form-group col-sm-4 col-xs-12" >
+                        <label>Date</label>
+                        <input type="date" name="dateinput">                      
+                    </div>                    -->
+                </div>
+
+                <div class="row" id="attendance">
+                    <div class="panel-body" style="overflow-x:auto;">
+                        <table class="table table-bordered table-striped table-condensed" id="table_id">
+                            <thead>
+                                <tr class="hdclr">
+                                    <th>Enroll No.</th>
+                                    <th>Student Name</th>        
+                                    <th>Total Class Held</th>
+                                    <th>Total class Attended</th>
+                                    <th>Total class Absent</th>                          
+                                    <th>Action <input type="date" id="date" onload="getDate()"> </th>
+                                    <th>Remark</th>
+                                </tr>
+                            </thead>
+                            <tbody id="attendance_tbody"> 
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>               
+                
+            </div>
+            <input type="hidden" id="student_count" value="0">
+            <div class="row">
+                <div class="col-sm-6">
+                    <label for="">Topic</label>
+                    <input type="text" name="class_topic" id="class_topic">
+                </div>
+                <div class="col-sm-12">
+                    <label for="">Remark</label>
+                    <textarea name="topic_remark" id="topic_remark" rows="2"></textarea>
+                </div>
+                <div class="col-sm-4">
+                    <label for="">From Time</label>
+                    <input type="time" name="from_date" id="from_date">
+                </div>
+                <div class="col-sm-4">
+                    <label for="">To Time</label>
+                    <input type="time" name="to_date" id="to_date">
+                </div>
+            </div>
+            
+                <button class="btn btn-info save" id="submit_attn">Submit Attendance</button>
+                
+            
+            </form>
+        </div>
+    </div>
+</section>
+<script src="{% static 'js/datepicker.js' %}"></script>
+<script type="text/javascript">
+    $("#id_stream").change(function(event){
+        event.preventDefault();
+        var url=$("#attendancePlan").attr("data-course-url");
+        var stream_id=$(this).val();
+        $.ajax({
+            url:url,
+        data:{
+            'stream':stream_id,
+        },
+        success:function(data){
+            $("#id_course").html(data);
+        }
+        });
+    });
+    $("#id_course").change(function(){
+        var url=$("#attendancePlan").attr("data-batch-url");
+        var course_id=$(this).val();
+        $.ajax({
+            url:url,
+            data:{
+                'course':course_id,
+            },
+            success:function(data){
+                $("#id_batch").html(data);
+            }
+        });
+    });
+    $("#id_batch").change(function(){
+        var url=$("#attendancePlan").attr("data-semestar-url");
+        var batch_id=$(this).val();
+        var course_id=$("#id_course").val();
+        var stream_id = $("#id_stream").val();
+        $.ajax({
+            url:url,
+            data:{
+                'batch_id': batch_id,
+                'course':course_id,
+                'stream_id': stream_id,
+            },
+            success:function(data){
+                $("#id_semestar").html(data);
+            }
+        });
+    });
+    $("#id_semestar").change(function(){       
+        var semestar_id =$(this).val();
+        $.ajax({
+            url:'/get_section_subject/',
+            data:{
+                'semestar_id': semestar_id,
+            },
+            success:function(data){
+                subj_str = "<option>----------</option>";
+                sec_str = "<option>----------</option>";
+                if(data.subject_list.length){
+                    for(var i in data.subject_list) {
+                        subj_str += "<option value=\""+ data.subject_list[i].id +"\">"+ data.subject_list[i].name +"</option>";
+                    }
+                }
+                if(data.section_list.length){
+                    for(var i in data.section_list) {
+                        sec_str += "<option value=\""+ data.section_list[i].id +"\">"+ data.section_list[i].name +"</option>";
+                    }
+                }
+                $("#id_section").html(sec_str);
+                $("#id_subject").html(subj_str);
+            },
+            error:function(data){
+                $("#id_section").html("<option>----------</option>");
+                $("#id_subject").html("<option>----------</option>");
+            }
+        });
+    });
+    $("#id_subject").change(function(){
+        var url=$("#attendancePlan").attr("data-attendance-url");
+        var subject_id =$(this).val();
+        var section_id =$("#id_section").val();
+        $.ajax({
+            url:url,
+            data:{
+                'subject_id': subject_id,
+                'section_id': section_id,
+            },
+            success:function(data){
+                var tableString = "";
+                if(data.attendance_list.length === 0) {
+                    tableString += "<tr><td></td><td></td><td></td><td>No data available.</td><td></td><td></td><td></td></tr>";
+                }
+                else {
+                    for(var i in data.attendance_list){
+                        tableString += "<tr><td>" + data.attendance_list[i].enr_no + "</td>";
+                        tableString += "<td><input type=\"hidden\" id=\"student_id"+i+"\" value=\""+data.attendance_list[i].stud_id+"\"><a href=\"/student_detail/" + data.attendance_list[i].stud_id + "\" target=\"_blank\">" + data.attendance_list[i].name + "</a></td>";
+                        tableString += "<td>" + data.attendance_list[i].total_class + "</td>";
+                        tableString += "<td>" + data.attendance_list[i].class_present + "</td>";
+                        tableString += "<td>" + data.attendance_list[i].class_absent + "</td>";
+                        tableString += "<td><select name=\"attendance"+i+"\" id=\"attendane_type" + i + "\"><option value=\"A\">A</option><option value=\"P\">P</option><option value=\"L\">L</option></select></td>";
+                        tableString += "<td><input type=\"text\" name=\"remark"+i+"\" id=\"remark" + i + "\"></td></tr>";
+                    }
+                }
+                $("#attendance_tbody").html(tableString);
+                $("#student_count").val(data.attendance_list.length);
+            },
+            error:function(data){
+                $("#attendance_tbody").html("");
+                $("#student_count").val(0);
+            }
+        });
+    });
+    $("#submit_attn").on('click', function(event){
+        event.preventDefault();
+        var stud_count = $("#student_count").val();
+        var id_subject = $("#id_subject").val();
+        var id_section = $("#id_section").val();
+        var class_topic = $("#class_topic").val();
+        var topic_remark = $("#topic_remark").val();
+        var from_date = $("#from_date").val();
+        var to_date = $("#to_date").val();
+        var attendancedate= $("#date").val();
+        if(stud_count>0){
+            var stud_list = new Array();
+            var attn_list = new Array();
+            var remark_list = new Array();
+            for(i=0;i<stud_count;i++){
+                var student_id = "#student_id"+i;
+                var stud = $(student_id).val();
+                
+                var attendance_type = "#attendane_type"+0+" option:selected";
+                var attn_type = $(attendance_type).text();
+                
+                var remark_id = "#remark"+i;
+                var remark = $(remark_id).val();
+                attn_list.push({"id":stud, "attn":attn_type, "remark": remark});
+            }
+            $.ajax({
+            method: "POST",
+            url:"/save_attendance/",
+            data:{
+                'attn_list': attn_list,
+                'stud_count': stud_count,
+                'id_subject': id_subject,
+                'id_section': id_section,
+                'from_datetime': from_date,
+                'to_datetime': to_date,
+                'remark': topic_remark,
+                'topic': class_topic,
+                'attendancedate':attendancedate,
+            },
+            success:function(data){
+                if(data.msg=="success"){
+                    url_str = '/attendanceProgressDetailView/?section_id='+data.id_section+'&subject_id='+data.id_subject;
+                    window.location.replace(url_str);
+                } else {
+                    alert(data.msg);
+                }
+            }
+        });
+        }
+    });
+    function getCookie(c_name) {
+        if (document.cookie.length > 0)
+        {
+            c_start = document.cookie.indexOf(c_name + "=");
+            if (c_start != -1)
+            {
+                c_start = c_start + c_name.length + 1;
+                c_end = document.cookie.indexOf(";", c_start);
+                if (c_end == -1) c_end = document.cookie.length;
+                return unescape(document.cookie.substring(c_start,c_end));
+            }
+        }
+        return "";
+    }
+    $(function(){
+        $.ajaxSetup({
+            headers:{"X-CSRFToken":getCookie('csrftoken')}
+        });
+    });
+    $( function() {
+          $( "#date" ).datepicker().datepicker("setDate", new Date());
+        } );
+        
+        </script> 
+
+{% endblock content %}

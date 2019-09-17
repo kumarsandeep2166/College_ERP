@@ -1,0 +1,74 @@
+{% extends 'student/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+
+<section id="main-content">
+    <div class="wrapper">
+        <div class="col-sm-12 col-xs-12 col-sm-offset-0">
+            <div class="text-center">
+                <h1 class="hdrcolorbg">
+                    Update this Location
+                </h1>
+            </div>
+            <form class="frmbgg clear-fx"  method="post"  id="assignSubjectTeacherForm">
+                <div class="row">
+                    {% csrf_token %}
+                    <div class="form-group col-sm-3 col-xs-12">
+                        <label>Selve No</label>
+                        {{ form.selve_no}}
+                    </div>
+                    <div class="form-group col-sm-3 col-xs-12">
+                        <label>Rack No</label>
+                        {{ form.rack_no}}
+                    </div>                    
+                    <div class="form-group col-sm-3 col-xs-12">
+                        <label>Total Capacity</label>
+                        {{ form.capacity}}
+                    </div>
+                </div>
+                    <button class="btn btn-info save" type="submit">Update</button>
+            </form> 
+        </div>       
+    </div>
+</section>
+<script type="text/javascript">
+    // id_room_no
+    $("#id_library_num").change(function(event){
+        console.log("data coming here");
+            event.preventDefault();
+            // var url=$("#mysectionForm").attr("data-course-url");
+            var library_num_id=$("#id_library_num").val();
+            console.log(library_num_id);
+            $.ajax({
+                url:'/load_room_ajax/',
+            data:{
+                'library_num_id':library_num_id,
+            },
+            success:function(data){
+                $("#id_room_no").html(data);
+            }
+            });
+
+        });
+        $("#id_room_no").change(function(event){
+        console.log("data coming here");
+            event.preventDefault();
+            // var url=$("#mysectionForm").attr("data-course-url");
+            var library_num_id=$("#id_library_num").val();
+            var room_num_id=$("#id_room_no").val();
+            
+            $.ajax({
+                url:'/load_selve_ajax/',
+            data:{
+                'library_num_id':library_num_id,
+                'room_num_id':room_num_id,
+            },
+            success:function(data){
+                $("#id_selve_no").html(data);
+            }
+            });
+
+        });
+</script>
+{% endblock content %}

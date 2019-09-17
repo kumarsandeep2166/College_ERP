@@ -1,0 +1,54 @@
+{% extends 'student/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<script>
+        document.getElementById("fee").className += " active";
+        document.getElementById("fee1").className += " active";
+        document.getElementById("fee01").className += " active";        
+</script>
+<style>
+        #fee01 a{
+                color:#fff !important;
+        }
+</style>
+<section id="main-content">
+        <div class="wrapper">
+                <div class="col-sm-12 col-xs-12">
+                    <button type="submit" class="btn btn-info feebtn">
+                            <a href="{% url 'feesmanagement' %}">Add a Fee Type</a>
+                    </button>
+                    <table class="table table-bordered table-striped table-condensed">
+                            <thead>
+                                <tr class="hdclr">
+                                        <th>Sl No.</th>
+                                        <th>Name</th>
+                                        <th>Action</th>                          
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for i in object_list %}
+                                <tr>
+                                <td>{{i.id}}</td>
+                                <td>{{i.fee_type}}</td>
+                               
+                                <td>
+                                        <a href="{% url 'feestype_edit' pk=i.pk %}" class="social-icon smnu">
+                                                <i class="fa fa-pencil editt"></i>
+                                                <div class="tooltip">Edit</div>
+                                        </a>
+                                       
+                                        <form method="post" action="{% url 'fees_delete' pk=i.pk %}" enctype="multipart/form-data" >
+                                                {% csrf_token %}                        
+                                                <button type="submit"  class="social-icon smnu"  id="delete" onclick="return confirm('Are you sure to delete {{ i }}?');">
+                                                        <i class="fa fa-trash-o deletee"></i>  
+                                                </button>
+                                            </form>
+                                </td>                                       
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                </div>
+        </div>
+</section>
+{% endblock content %}

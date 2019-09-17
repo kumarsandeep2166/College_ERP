@@ -1,0 +1,174 @@
+{% load static %}
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="ThemeBucket">
+    <link rel="shortcut icon" href="{% static 'images/favicon.html' %}">
+    <title>Details</title>
+    <!--Core_CSS -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/font-awesome.css' %}" rel="stylesheet" />
+    <!-- Custom_styles -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <link href="{% static 'css/style-responsive.css' %}" rel="stylesheet" />
+    <style>
+        .bggrcpt {
+            background-color: #fff;
+            padding: 40px 40px;
+        }
+
+            .bggrcpt h1 {
+                font-family: sans-serif;
+                letter-spacing: 4px;
+                text-align: center;
+                text-transform: uppercase;
+                font-size: 22px;
+                font-weight: 900;
+                margin-bottom: 60px;
+            }
+
+            .bggrcpt table {
+                font-size: 75%;
+                table-layout: fixed;
+                width: 100%;
+                border-collapse: separate;
+                border-spacing: 2px;
+            }
+
+            .bggrcpt th, td {
+                border-width: 1px;
+                padding: 0.5em;
+                position: relative;
+                text-align: left;
+                font-size: 14px;
+                border-radius: 0.25em;
+                border-style: solid;
+            }
+
+            .bggrcpt th {
+                background: #EEE;
+                border-color: #BBB;
+            }
+
+            .bggrcpt td {
+                border-color: #DDD;
+            }
+
+        .mngtop60 {
+            margin-top: 60px;
+        }
+        
+        .bggrcpt .inpm {
+            outline: 0;
+            padding: 4px 10px;
+        }
+        .smthd {
+            font-size: 15px;
+            font-weight: normal;
+            font-family: 'Roboto', sans-serif;
+        }
+        .bnt {
+            width: 39%;
+            float: left;
+        }
+        .bnt1 {
+            float: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="col-sm-8 col-xs-12 bggrcpt">
+            <div class="row">
+                <h1>Fees Details</h1>
+                <div class="col-sm-7">
+                    <p><b class="bnt">Enrollment Numbers:</b> <span><input type="text" name="Enrollment" class="inpm" value="{{mr_obj.enrollment_number.enrollment_number}}" /></span></p>
+                    <p><b class="bnt">Student Name:</b> <span><input type="text" name="name" class="inpm" value="{{mr_obj.enrollment_number.student_name}}" /></span></p>
+                    <p><b class="bnt">Course:</b> <span><input type="text" name="name" class="inpm" value="{{mr_obj.enrollment_number.course}}" /></span></p>
+                    <p><b class="bnt">MR No:</b> <span><input type="text" name="name" class="inpm" value="{{mr_obj.mr_no}}" /></span></p>
+                </div>               
+            </div>            
+            <h3 class="smthd">Fee Paid</h3>
+            <div>
+                <table class="inventory">
+                    <thead>
+                        <tr>
+                            <th><span>Name</span></th>                            
+                            <th><span>Date</span></th>
+                            <th><span>Amount</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                            {% for i in mr_det_obj %}
+                        <tr>
+
+                            <td>{{ i.fee_details.fee.approve_fee.fees_node.fees_type }}</td>                          
+                            <td>{{ i.fee_details.pay_date }}</td>
+                            <td>Rs.&nbsp;{{i.fee_details.amount}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-sm-4 col-xs-12 col-sm-offset-8 mngtop30">
+                <div class="row">
+                    <table class="balance">
+                        <tbody>
+                            <tr>
+                                <th><span>Total</span></th>
+                                <td><span>Rs. </span><span id="a"> {{mr_obj.amount}}</span><span>/-</span></td>
+                            </tr>                                                   
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- <div class="col-sm-12 col-xs-12">
+                <div class="row">
+                        <button type="submit" name="ctl00$ContentPlaceHolder1$btnBookAdd" value="Print" onclick="return btnprint_onclick();" id="ContentPlaceHolder1_btnBookAdd" class="btn btn-info mngtop30">Print</button>
+                        <a href="/printfee_pdf/{{enr_no.id}}" class="btn btn-info mngtop30">Print</a>
+                </div>
+                
+            </div> -->
+            <!-- <h3 class="smthd" style="text-align: center;">Bill</h3>
+            <div>
+                <table class="inventory">
+                    <thead>
+                        <tr>
+                            <th><span>SL No.</span></th>
+                            <th><span>Particulars</span></th>
+                            <th><span>Amount</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>01</td>
+                            <td><span>Rs/-</span> 10,000</td>
+                            <td><span>Rs/-</span> 50.000</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div> -->
+        </div>        
+    </div>
+
+    <!--Core js-->
+    <script src="{% static 'js/jquery.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script id="Script1" language="javascript" type="text/javascript">
+        function btnprint_onclick() {
+        var DocumentContainer = document.getElementById('tr_EmpReportPrint');
+        var WindowObject = window.open('print', "PrintData", "width=850px,height=650px,top=20,left=250,toolbars=no,scrollbars=yes,status=no,resizable=no");
+        WindowObject.document.writeln(DocumentContainer.innerHTML);
+        WindowObject.document.close();
+        WindowObject.focus();
+        WindowObject.print();
+        }
+        </script>
+        
+</body>
+</html>

@@ -1,0 +1,70 @@
+{% extends 'student/base.html' %}
+{% block content %}
+<script>
+        document.getElementById("stt").className += " active";
+        document.getElementById("stm1").className += " active";
+        document.getElementById("stm03").className += " active";
+ </script>
+ <style>
+     #stm03 a{
+         color:#fff !important;
+     }
+ </style>
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+<section id="main-content">
+    <div class="wrapper">
+            <header class="panel-heading clearfix col-sm-12">
+                <div class="col-sm-4 col-xs-12">
+                    Exam Type List
+                </div>
+            </header>          
+        <div class="row">
+                <div class="panel-body" style="overflow-x:auto;">
+                        <table class="table table-bordered table-striped table-condensed" id="table_exam">
+                            <thead>
+                                <tr class="hdclr">
+                                    <th>Sl No.</th>
+                                    <th>Exam Name</th>                                                               
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for stud in queryset %}
+                                <tr>
+                                        <td>{{stud.id}}</td>
+                                        <td>{{stud}}</td>
+                                        <td>
+                                            <a href="{% url 'examtype_detail' pk=stud.id %}" class="social-icon">
+                                                <i class="fa fa-eye vieww"></i>
+                                                <div class="tooltip">View</div>
+                                            </a>
+                                            
+                                            <form method="post" action="{% url 'examtype_delete' pk=stud.id  %}" enctype="multipart/form-data" >
+                                                {% csrf_token %}                        
+                                                <button type="submit"  class="social-icon"  id="delete" onclick="return confirm('Are you sure to delete {{ stud }}?');">
+                                                        <i class="fa fa-trash-o deletee"></i>  
+                                                </button>
+                                            </form>
+                                        </td> 
+                                </tr>
+                                {% empty %}
+                                <div class="container-fluid">
+                                  <h3>No Posts Found having search query "{{ request.POST.q }}"</h3>
+                                </div>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                </div>
+                  
+        </div>
+    </div>
+</section>
+<script>
+    $(document).ready(function(){
+        $("#table_student").dataTable();
+            });
+  
+</script>
+
+{% endblock content %}

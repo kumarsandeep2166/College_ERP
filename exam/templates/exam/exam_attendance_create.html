@@ -1,0 +1,311 @@
+{% extends 'student/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+<section id="main-content">
+    <div class="wrapper">
+            <div class="col-sm-12 col-xs-12 col-sm-offset-0">
+            <div class="text-center">
+                <h1 class="hdrcolorbg">
+                    Exam Attendance Form
+                </h1>
+            </div>
+            <form class="frmbgg clear-fx"  method="post"  id="assignSubjectTeacherForm" data-course-url="{% url 'ajax_load_course' %}" data-batch-url="{% url 'ajax_load_batch' %}" data-semestar-url="{% url 'ajax_load_sem' %}"  data-subject-url="{% url 'ajax_load_subject' %}">
+                <div class="row">
+                    {% csrf_token %}
+                    <div class="form-group col-sm-3 col-xs-12">
+                        <label>Stream</label>
+                        {{ form.stream}}
+                    </div>
+                    <div class="form-group col-sm-3 col-xs-12">
+                        <label>Course</label>
+                        {{ form.course}}
+                    </div>
+                    <div class="form-group col-sm-3 col-xs-12">
+                        <label>Batch</label>
+                        {{ form.batch}}
+                    </div>
+                    <div class="form-group col-sm-3 col-xs-12">
+                        <label>Semestar</label>
+                        {{ form.semestar}}
+                    </div>
+                    
+                    
+                </div>
+                <div class="row">
+                        <div class="form-group col-sm-3 col-xs-12">
+                            <label>Subject</label>
+                            {{ form.subject}}
+                        </div>                        
+                        <div class="form-group col-sm-3 col-xs-12">
+                            <label>Exam</label>                        
+                            {{ form.exam}}
+                        </div>  
+                        
+               
+            </form> 
+            
+        </div>
+        
+            </div>  
+            <div class="col-sm-12 col-xs-12">
+                <table class="table table-bordered table-striped table-condensed" id="">
+                    <thead>
+                        <tr class="hdclr">
+                            <th>Sl No</th>
+                            <th>Enrollment Number</th>
+                            <th>Name</th>
+                            <th>Attendance<input type="date" id="date"></th>
+                            <th>Remark</th>
+                        </tr>
+                    </thead>
+                    <tbody id="exam_attendance">   
+                        
+                        
+                    </tbody>
+                </table>     
+               
+        <button class="btn btn-info save" id="submit_attn">Submit</button>
+        <input type="hidden" name="student_section" id="total_count" hidden="hidden" value="">
+            </div>
+            
+        </div>
+        </div>
+
+    </div>
+           
+</section>
+<script type="text/javascript">
+    $("#id_stream").change(function(){
+        var url=$("#assignSubjectTeacherForm").attr("data-course-url");
+        var stream_id=$(this).val();
+        $.ajax({
+            url:url,
+        data:{
+            'stream':stream_id,
+        },
+        success:function(data){
+            $("#id_course").html(data);
+        }
+        });
+    });
+    $("#id_course").change(function(){
+        var url=$("#assignSubjectTeacherForm").attr("data-batch-url");
+        var course_id=$(this).val();
+        $.ajax({
+            url:url,
+            data:{
+                'course':course_id,
+            },
+            success:function(data){
+                $("#id_batch").html(data);
+            }
+        });
+    });
+    $("#id_batch").change(function(){
+        var url=$("#assignSubjectTeacherForm").attr("data-semestar-url");
+        var batch_id=$(this).val();
+        var course_id=$("#id_course").val();
+        var stream_id = $("#id_stream").val();
+        $.ajax({
+            url:url,
+            data:{
+                'batch_id': batch_id,
+                'course':course_id,
+                'stream_id': stream_id,
+            },
+            success:function(data){
+                $("#id_semestar").html(data);
+            }
+        });
+    });
+    $("#id_semestar").change(function(){
+        var url=$("#assignSubjectTeacherForm").attr("data-subject-url");
+        var semestar_id = $(this).val();
+        var batch_id=$("#id_batch").val();
+        var course_id=$("#id_course").val();
+        var stream_id = $("#id_stream").val();
+        $.ajax({
+            url:url,
+            data:{
+                'semestar_id':semestar_id,
+                'batch_id': batch_id,
+                'course':course_id,
+                'stream_id': stream_id,
+            },
+            success:function(data){
+                $("#id_subject").html(data);
+            }
+        });
+    });
+    $("#id_subject").change(function(){
+        var subject_id = $(this).val();
+        var semestar_id = $("#id_semestar").val();
+        var batch_id=$("#id_batch").val();
+        var course_id=$("#id_course").val();
+        var stream_id = $("#id_stream").val();
+        $.ajax({
+            url:'/load_subject_exam/',
+            data:{
+                'semestar_id':semestar_id,
+                'batch_id': batch_id,
+                'course':course_id,
+                'stream_id': stream_id,
+                'subject_id':subject_id,
+            },
+            success:function(data){
+                $("#id_exam").html(data);
+            }
+        });
+    });
+    $("#id_exam").change(function(){
+        console.log("exam section starts here");
+        var exam_id = $(this).val();
+        var subject_id = $("#id_subject").val();
+        var semestar_id = $("#id_semestar").val();
+        var batch_id=$("#id_batch").val();
+        var course_id=$("#id_course").val();
+        var stream_id = $("#id_stream").val();
+        $.ajax({
+            url:"/examattendancecreate/",
+            type:'POST',
+            data:{
+                'semestar_id':semestar_id,
+                'batch_id': batch_id,
+                'course':course_id,
+                'stream_id': stream_id,
+                'subject_id':subject_id,
+                'exam_id':exam_id,          
+            },
+            success:function(data){
+                // $("#section_student").html(data);
+                // console.log("success");
+                $("#exam_attendance").val(data.enr_obj_list);
+                var tableString = "";
+                if(data.enr_obj_list.length === 0) {
+                    tableString = "<tr><td></td><td>No Data Available.</td><td></td></tr>";
+                }
+                else {
+                    for(var i=1;i<= data.enr_obj_list.length;i++){
+                        tableString += "<tr><td>"+ i +"</td><td>" + data.enr_obj_list[i-1].enrollment_number + "</td>";                                      
+                        tableString += "<input type=\"hidden\" id=\"exam_attendance_name"+i+"\" value=\""+data.enr_obj_list[i-1].id+"\">" + data.enr_obj_list[i-1].studnt_name + "</td>";    
+                        tableString += "<td>"+data.enr_obj_list[i-1].student_name + "</td>";   
+                        tableString += "<td><select name=\"attendance\" id=\"nums"+i+"\"><option value=\"A\">A</option>";                        
+                        tableString += "<option value=\"P\">P</option></select></td>";
+                        tableString += "<td><input type=\"text\" id=\"attendance_marks"+i+"\"  placeholder=\" Enter remarks\"></td>";
+                        tableString += "</tr>";
+                    }                                          
+                }
+                console.log(tableString);
+                $("#exam_attendance").html(tableString);
+                $("#total_count").val(data.enr_obj_list.length);
+            }
+        });
+    });
+    $("#submit_attn").on('click', function(){
+        console.log("coming here to save part");
+        var semestar = $('#id_semestar').val();
+        var subject = $('#id_subject').val();
+        var exam = $('#id_exam').val();
+        var total_count = $('#total_count').val();
+        var date = $('#date').val();
+        if(total_count>0){
+            var attn_list = new Array();
+            for(i=1;i<=total_count;i++){
+                var exam_attendance = "#exam_attendance_name"+i;
+                var exam_attendance_id = $(exam_attendance).val();
+                var nums = "#nums"+i;
+                var nums_id = $(nums).val();
+                var attendance_marks = "#attendance_marks"+i;
+                var attendance_marks_id = $(attendance_marks).val();
+                attn_list.push({ "exam_attendance_id":exam_attendance_id, "nums_id": nums_id,'attendance_marks_id':attendance_marks_id});
+                console.log(attn_list);
+            }
+            $.ajax({ 
+            method: "POST",
+            url:"/save_exam_attendance/",
+            data:{
+                'attn_list':attn_list,
+                'total_count':total_count,
+                'semestar':semestar,
+                'subject':subject,
+                'exam':exam,
+                'date':date,
+            },
+            success:function(data){
+                if(data.msg=="success"){
+                    alert(data.msg);                   
+                } 
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                    alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+                }   
+
+        });
+        }
+
+        
+    });
+
+    // $("#id_semestar").change(function(){       
+    //     var semestar_id =$(this).val();
+    //     $.ajax({
+    //         url:'/get_section_subject/',
+    //         data:{
+    //             'semestar_id': semestar_id,
+    //         },
+    //         success:function(data){
+    //             subj_str = "<option>----------</option>";
+    //             sec_str = "<option>----------</option>";
+    //             if(data.subject_list.length){
+    //                 for(var i in data.subject_list) {
+    //                     subj_str += "<option value=\""+ data.subject_list[i].id +"\">"+ data.subject_list[i].name +"</option>";
+    //                 }
+    //             }
+    //             if(data.section_list.length){
+    //                 for(var i in data.section_list) {
+    //                     sec_str += "<option value=\""+ data.section_list[i].id +"\">"+ data.section_list[i].name +"</option>";
+    //                 }
+    //             }
+    //             $("#id_section").html(sec_str);
+    //             $("#id_subject").html(subj_str);
+    //         },
+    //         error:function(data){
+    //             $("#id_section").html("<option>----------</option>");
+    //             $("#id_subject").html("<option>----------</option>");
+    //         }
+    //     });
+    // });
+    // $("#id_teacher_department").change(function(){      
+    //     var id_teacher_department =$(this).val();
+    //     $.ajax({
+    //         url:'/teacher_load/',
+    //         data:{
+    //             'stream_id': id_teacher_department,
+    //         },
+    //         success:function(data){
+    //             $("#id_teacher").html(data);
+    //         }
+    //     });
+    // });
+    function getCookie(c_name) {
+        if (document.cookie.length > 0)
+        {
+            c_start = document.cookie.indexOf(c_name + "=");
+            if (c_start != -1)
+            {
+                c_start = c_start + c_name.length + 1;
+                c_end = document.cookie.indexOf(";", c_start);
+                if (c_end == -1) c_end = document.cookie.length;
+                return unescape(document.cookie.substring(c_start,c_end));
+            }
+        }
+        return "";
+    }
+    $(function(){
+        $.ajaxSetup({
+            headers:{"X-CSRFToken":getCookie('csrftoken')}
+        });
+    });
+</script>
+{% endblock content %}

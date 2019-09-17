@@ -1,0 +1,31 @@
+{% extends 'student/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+
+<section id="main-content">
+    <div class="wrapper">
+        <div class="col-sm-12 col-xs-12 col-sm-offset-0">
+            <div class="text-center">
+                <h1 class="hdrcolorbg">
+                    Add A Room Number
+                </h1>
+            </div>
+            <form class="frmbgg clear-fx"  method="post">
+                <div class="row">
+                    {% csrf_token %}
+                    <div class="form-group col-sm-6 col-xs-12">
+                        <label>Library Number</label>
+                        {{ form.library_num}}
+                    </div>
+                    <div class="form-group col-sm-6 col-xs-12">
+                        <label>Room Number</label>
+                        {{ form.name}}
+                    </div>
+                </div>
+                    <button class="btn btn-info save" type="submit">Submit</button>
+            </form> 
+        </div>       
+    </div>
+</section>
+{% endblock content %}

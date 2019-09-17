@@ -1,0 +1,168 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="ThemeBucket">
+    <link rel="shortcut icon" href="{% static 'images/favicon.html' %}">
+    <title>Invoice</title>
+    <!--Core_CSS -->
+    <link href="E:/MAIN PROJECTS/STUDENT_ADMIN/Student_Admin/student_admin/static/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="E:/MAIN PROJECTS/STUDENT_ADMIN/Student_Admin/student_admin/static/css/font-awesome.css" rel="stylesheet" />
+    <!-- Custom_styles -->
+    <link href="E:/MAIN PROJECTS/STUDENT_ADMIN/Student_Admin/student_admin/static/css/style.css" rel="stylesheet">
+    <link href="E:/MAIN PROJECTS/STUDENT_ADMIN/Student_Admin/student_admin/static/css/style-responsive.css" rel="stylesheet" />
+    <style>
+        .brbtm {
+            border-bottom: 1px dashed #6e6d6d;
+        }
+        .bggrcpt {
+            background-color: #fff;
+            padding: 40px 40px;
+        }
+        .bggrcpt h1 {
+            font-family: sans-serif;
+            letter-spacing: 4px;
+            text-align: center;
+            text-transform: uppercase;
+            font-size: 22px;
+            font-weight: 900;
+            margin-bottom: 60px;
+        }
+        .bggrcpt table {
+            font-size: 75%;
+            table-layout: fixed;
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 2px;
+        }
+        .bggrcpt th, td {
+            border-width: 1px;
+            padding: 0.5em;
+            position: relative;
+            text-align: left;
+            font-size: 14px;
+            border-radius: 0.25em;
+            border-style: solid;
+        }
+        .bggrcpt th {
+            background: #EEE;
+            border-color: #BBB;
+        }
+        .bggrcpt td {
+            border-color: #DDD;
+        }
+        .mngtop60{
+            margin-top:60px;
+        }      
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="col-sm-8 col-xs-12 bggrcpt brbtm">
+            <p>[Office Copy]</p>
+            <div>
+                <h1>Invoice</h1>
+                <div>
+                    
+                    <p><b>MR No.</b>:<span>{{ mr_no | safe }}</span></p>
+                </div>
+            </div>
+            <div>
+                <table class="inventory">
+                    <thead>
+                        <tr>
+                            <th><span>Feetype</span></th>
+                            <th><span>Amount Paid</span></th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in fee_list %}
+                        <tr>
+
+                            <td>{{ i.type | safe }}</td>
+                            <td>Rs.&nbsp;{{ i.amount | safe }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-sm-4 col-xs-12 col-sm-offset-8 mngtop30">
+                <div class="row">
+                    <table class="balance">
+                        <tbody>
+                            <tr>
+                                <th><span>Total</span></th>
+                                <td><span>Rs. </span><span id="a"> XXXX</span><span>/-</span></td>
+                            </tr>                                                   
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-sm-12 col-xs-12 mngtop60">
+                <div class="row">
+                    <span class="col-sm-6">Student Signature:</span>
+                    <span class="col-sm-6">Faculty Signature:</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-8 col-xs-12 bggrcpt">
+            <p>[Student Copy]</p>
+            <div>
+                <h1>Invoice</h1>
+                <div>
+                    
+                    <p><b>MR No.</b>: <span>{{mr_no}}</span></p>
+                </div>
+            </div>
+            <div>
+                <table class="inventory">
+                    <thead>
+                        <tr>
+                            <th><span>Feetype</span></th>
+                            <th><span>Amount Paid</span></th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in fee_list %}
+                        <tr>
+
+                            <td>{{ i.type | safe }}</td>
+                            <td>Rs.&nbsp;{{ i.amount | safe }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-sm-4 col-xs-12 col-sm-offset-8 mngtop30">
+                <div class="row">
+                    <table class="balance">
+                        <tbody>
+                            <tr>
+                                <th><span>Total</span></th>
+                                <td><span>Rs. </span><span id="x"> XXXXX</span><span>/-</span></td>
+                            </tr>                                                    
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-sm-12 col-xs-12 mngtop60">
+                <div class="row">
+                    <span class="col-sm-6">Student Signature:</span>
+                    <span class="col-sm-6">Faculty Signature:</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!--Core js-->
+    <script src="E:/MAIN PROJECTS/STUDENT_ADMIN/Student_Admin/student_admin/static/js/jquery.js"></script>
+    <script src="E:/MAIN PROJECTS/STUDENT_ADMIN/Student_Admin/student_admin/static/js/bootstrap.min.js"></script>
+    
+</body>
+</html>

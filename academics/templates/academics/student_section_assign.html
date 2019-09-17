@@ -1,0 +1,235 @@
+{% extends 'student/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+<section id="main-content">
+    <div class="wrapper">
+            <div class="col-sm-12 col-xs-12 col-sm-offset-0">
+            <div class="text-center">
+                <h1 class="hdrcolorbg">
+                    Assign Student To Section
+                </h1>
+            </div>
+            <form class="frmbgg clear-fx"  method="post"  id="assignSubjectTeacherForm" data-course-url="{% url 'ajax_load_course' %}" data-batch-url="{% url 'ajax_load_batch' %}" data-semestar-url="{% url 'ajax_load_sem' %}"  data-subject-url="{% url 'ajax_load_subject' %}">
+                <div class="row">
+                {% csrf_token %}
+                <div class="form-group col-sm-3 col-xs-12">
+                    {{ form.stream}}
+                </div>
+                <div class="form-group col-sm-3 col-xs-12">
+                    {{ form.course}}
+                </div>
+                <div class="form-group col-sm-3 col-xs-12">
+                    {{ form.batch}}
+                </div>
+                <div class="form-group col-sm-3 col-xs-12">
+                        {{ form.semestar}}
+                </div>
+                <div class="form-group col-sm-8 col-xs-12" id="section_student">                        
+                    
+                </div>                
+            </form>    
+            </div>
+            <div class="panel-body" style="overflow-x:auto;">
+                    <div class="text-center">
+                        <h1 class="hdrcolorbg">
+                            Choose From The Selected Areas
+                        </h1>
+                    </div>
+                
+                    <table class="table table-bordered table-striped table-condensed" id="table_id">
+                        <thead>
+                            <tr class="hdclr">
+                                <th>Sl No</th>
+                                <th>Student List</th>
+                                <th>Choose A Section</th>  
+                            </tr>
+                        </thead>
+                        <tbody id="table_body">   
+                                     
+                        </tbody>
+                    </table>
+            
+            <button class="btn btn-info save" id="submit_attn">Assign</button>
+            <input type="hidden" name="student_section" id="total_count" hidden="hidden" value="">
+        </div>
+        </div>
+    </div>
+           
+</section>
+<script type="text/javascript">
+    $("#id_stream").change(function(){
+        var url=$("#assignSubjectTeacherForm").attr("data-course-url");
+        var stream_id=$(this).val();
+        $.ajax({
+            url:url,
+        data:{
+            'stream':stream_id,
+        },
+        success:function(data){
+            $("#id_course").html(data);
+        }
+        });
+    });
+    $("#id_course").change(function(){
+        var url=$("#assignSubjectTeacherForm").attr("data-batch-url");
+        var course_id=$(this).val();
+        $.ajax({
+            url:url,
+            data:{
+                'course':course_id,
+            },
+            success:function(data){
+                $("#id_batch").html(data);
+            }
+        });
+    });
+    $("#id_batch").change(function(){
+        var url=$("#assignSubjectTeacherForm").attr("data-semestar-url");
+        var batch_id=$(this).val();
+        var course_id=$("#id_course").val();
+        var stream_id = $("#id_stream").val();
+        $.ajax({
+            url:url,
+            data:{
+                'batch_id': batch_id,
+                'course':course_id,
+                'stream_id': stream_id,
+            },
+            success:function(data){
+                $("#id_semestar").html(data);
+            }
+        });
+    });
+    $("#id_semestar").change(function(){
+        console.log("print Here");
+        var batch_id=$("#id_batch").val();
+        var semestar = $(this).val();
+        $.ajax({
+            url:"/student_section_assign_ajax/",
+            type:'POST',
+            data:{
+                'batch_id': batch_id,
+                'semestar':semestar               
+            },
+            success:function(data){
+                // $("#section_student").html(data);
+                $("#section_student").val(data.obj_list);
+                var tableString = "";
+                if(data.obj_list.length === 0) {
+                    tableString = "<tr><td></td><td>No Data Available.</td><td></td></tr>";
+                }
+                else {
+                    for(var i=1;i<= data.obj_list.length;i++){
+                        tableString += "<tr><td>"+ i +"</td><td>" + data.obj_list[i-1].student_name + "</td>";                  
+                        tableString += "<td><input type=\"hidden\" id=\"enr_no"+i+"\" value=\""+data.obj_list[i-1].enrollment_number+"\"> <select id=\"section_assign"+i+"\">";
+                        for(var j=0;j< data.section_list.length;j++){
+                            tableString += "<option value=\""+data.section_list[j].id+"\">"+data.section_list[j].name+"</option>"; 
+                        }
+                        tableString += "</select></td>"
+                        tableString += "</tr>";
+                    }                                          
+                }
+                $("#table_body").html(tableString);
+                $("#total_count").val(data.obj_list.length);
+            }
+        });
+    });
+    $("#submit_attn").on('click', function(){
+        console.log("coming here");
+        
+        var total_count = $('#total_count').val();
+        if(total_count>0){
+            var attn_list = new Array();
+            for(i=1;i<=total_count;i++){
+                var enr_no = "#enr_no"+i;
+                var enr_no_id = $(enr_no).val();
+                var section_assign = "#section_assign"+i;
+                var section_assign_id = $(section_assign).val();
+                attn_list.push({ "enr_no_id":enr_no_id, "section_assign_id": section_assign_id});
+                console.log(attn_list);
+            }
+            $.ajax({ 
+            method: "POST",
+            url:"/save_section_student/",
+            data:{
+                'attn_list':attn_list,
+                'total_count':total_count,
+            },
+            success:function(data){
+                if(data.msg=="success"){
+                    alert(data.msg);                   
+                } 
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                    alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+                }   
+
+        });
+        }
+
+        
+    });
+
+    // $("#id_semestar").change(function(){       
+    //     var semestar_id =$(this).val();
+    //     $.ajax({
+    //         url:'/get_section_subject/',
+    //         data:{
+    //             'semestar_id': semestar_id,
+    //         },
+    //         success:function(data){
+    //             subj_str = "<option>----------</option>";
+    //             sec_str = "<option>----------</option>";
+    //             if(data.subject_list.length){
+    //                 for(var i in data.subject_list) {
+    //                     subj_str += "<option value=\""+ data.subject_list[i].id +"\">"+ data.subject_list[i].name +"</option>";
+    //                 }
+    //             }
+    //             if(data.section_list.length){
+    //                 for(var i in data.section_list) {
+    //                     sec_str += "<option value=\""+ data.section_list[i].id +"\">"+ data.section_list[i].name +"</option>";
+    //                 }
+    //             }
+    //             $("#id_section").html(sec_str);
+    //             $("#id_subject").html(subj_str);
+    //         },
+    //         error:function(data){
+    //             $("#id_section").html("<option>----------</option>");
+    //             $("#id_subject").html("<option>----------</option>");
+    //         }
+    //     });
+    // });
+    // $("#id_teacher_department").change(function(){      
+    //     var id_teacher_department =$(this).val();
+    //     $.ajax({
+    //         url:'/teacher_load/',
+    //         data:{
+    //             'stream_id': id_teacher_department,
+    //         },
+    //         success:function(data){
+    //             $("#id_teacher").html(data);
+    //         }
+    //     });
+    // });
+    function getCookie(c_name) {
+        if (document.cookie.length > 0)
+        {
+            c_start = document.cookie.indexOf(c_name + "=");
+            if (c_start != -1)
+            {
+                c_start = c_start + c_name.length + 1;
+                c_end = document.cookie.indexOf(";", c_start);
+                if (c_end == -1) c_end = document.cookie.length;
+                return unescape(document.cookie.substring(c_start,c_end));
+            }
+        }
+        return "";
+    }
+    $(function(){
+        $.ajaxSetup({
+            headers:{"X-CSRFToken":getCookie('csrftoken')}
+        });
+    });
+</script>
+{% endblock content %}

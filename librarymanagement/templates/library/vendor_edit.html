@@ -1,0 +1,52 @@
+{% extends 'student/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+<section id="main-content">
+    <div class="wrapper">
+        <div class="col-sm-12 col-xs-12 col-sm-offset-0">
+            <div class="text-center">
+                <h1 class="hdrcolorbg">
+                    Add A Vendor
+                </h1>
+            </div>
+            <form class="frmbgg clear-fx"  method="post"  id="assignSubjectTeacherForm">
+                <div class="row">
+                    {% csrf_token %}
+                    <div class="form-group col-sm-3 col-xs-12">
+                        <label>Vendor Name</label>
+                        {{ form.name}}
+                    </div>
+                    <div class="form-group col-sm-3 col-xs-12">
+                        <label>Vendor Contact</label>
+                        {{ form.contact}}
+                    </div>
+                    <div class="form-group col-sm-3 col-xs-12">
+                        <label>Vendor Email</label>
+                        {{ form.email}}
+                    </div>
+                    <div class="form-group col-sm-3 col-xs-12">
+                        <label>Address</label>
+                        {{ form.address}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-sm-3 col-xs-12">
+                        <label>Vendor GST</label>
+                        {{ form.gst}}
+                    </div>
+                    <div class="form-group col-sm-3 col-xs-12">
+                        <label>Vendor PAN</label>
+                        {{ form.pan}}
+                    </div>
+                    <div class="form-group col-sm-3 col-xs-12">
+                        <label>Vendor TAN</label>
+                        {{ form.tan}}
+                    </div>
+                </div>
+                    <button class="btn btn-info save" type="submit">Submit</button>
+            </form> 
+        </div>       
+    </div>
+</section>
+{% endblock content %}

@@ -1,0 +1,35 @@
+{% load static %}
+    
+            {% if note_list %}
+                {% for obj in note_list %}
+                    <tr>
+                        <td class="imgTD">
+                            <div class="noteImgDiv">
+                                <img src="{% static 'images/unknownUser.jpeg' %}"  class="img-rounded" width="60" height="64">
+                            </div>
+                        </td>
+                        <td class="tableNotesTD">
+                            <label>By  {{obj.username}} </label>
+                            <div class="col-xs-12"><p> {{obj.note}}  </p></div>
+                        </td>
+                        {% if obj.is_pin %}
+                        <td class="pinnedTD">
+                                <img src="{% static 'images/pin_marked.jpeg' %}" title="This note is pinned to stay on top. Click to unpin it." onclick="pinToggle({{ obj.note_id }});"  role="button">
+                        </td>
+                        {% else %}
+                        <td class="unPinnedTD">
+                                <img src="{% static 'images/pin_addto.jpeg' %}" title="Pin this note to stay on top." onclick="pinToggle({{ obj.note_id }});"  role="button">
+                        </td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                        <td></td><td></td><td></td><td>No Data Found</td><td></td><td></td>
+                </tr>
+            {% endif %}
+        
+                 
+    
+
+           

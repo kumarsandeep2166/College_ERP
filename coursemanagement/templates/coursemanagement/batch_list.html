@@ -1,0 +1,66 @@
+{% extends 'student/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<script>
+        document.getElementById("strm").className += " active";
+        document.getElementById("strm1").className += " active";
+        document.getElementById("strm03").className += " active";        
+</script>
+<style>
+        #strm03 a{
+                color:#fff !important;
+        }
+</style>
+<section id="main-content">
+        <div class="wrapper">
+                <div class="col-sm-12 col-xs-12">
+                    <button type="submit" class="btn btn-info feebtn"><a href="{% url 'batch_create' %}">Add a Batch</a></button>
+                    <table class="table table-bordered table-striped table-condensed">
+                            <thead>
+                                <tr class="hdclr">
+                                        <th>Sl No.</th>
+                                        <th>Stream Name</th>                                                                             
+                                        <th>Course Name</th>
+                                        <th>Session</th>
+                                        <th>Batch Starting Date</th>
+                                        <th>Batch Ending Date</th>
+                                        <th>Remark</th>
+                                       
+                                        <th>Action</th>
+                                        
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for i in object_list %}
+                                <tr>
+                                        <td>{{i.id}}</td>
+                                        <td>{{i.stream}}</td>
+                                        <td>{{i.course_name}}</td>
+                                        <td>{{i.batch_no}}</td>
+                                        <td>{{i.starting_date}}</td>
+                                        <td>{{i.ending_date}}</td>
+                                        <td>{{i.remark}}</td>                                        
+                                        <td width="150">
+                                                <a href="{% url 'batch_detail' pk=i.pk %}" class="social-icon smnu">
+                                                <i class="fa fa-eye vieww"></i>
+                                                <div class="tooltip">View</div>
+                                                </a>
+                                                <a href="{% url 'batch_update' pk=i.pk %}" class="social-icon smnu">
+                                                <i class="fa fa-pencil editt"></i>
+                                                <div class="tooltip">Edit</div>
+                                                </a>
+                                                <form method="post" action="{% url 'batch_delete' pk=i.pk %}" enctype="multipart/form-data" >
+                                                        {% csrf_token %}                        
+                                                        <button type="submit"  class="social-icon smnu"  id="delete" onclick="return confirm('Are you sure to delete {{ i }}?');">
+                                                                <i class="fa fa-trash-o deletee"></i>  
+                                                        </button>
+                                                        </form>
+                                        </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                </div>
+        </div>
+</section>
+{% endblock content %}

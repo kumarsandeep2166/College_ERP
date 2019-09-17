@@ -1,0 +1,32 @@
+<table>
+    <tr>
+        <td>
+            Course Name
+        </td>
+       <td>
+            {{object.course}}
+       </td>
+    </tr>
+    <tr>
+            <td>
+                Batch Name
+            </td>
+           <td>
+                {{object.batch}}
+               
+           </td>
+        </tr>
+    <tr>
+        <td>
+            Fees Type
+        </td>
+        {% for i in object.fees.all %}
+        <td>
+                {{i}}
+        </td>
+        {% endfor %}
+
+    </tr>
+</table>
+
+

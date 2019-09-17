@@ -1,0 +1,145 @@
+{% extends 'student/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+<section id="main-content">
+    <div class="wrapper">
+            <div class="col-sm-8 col-xs-12 col-sm-offset-2">
+            <div class="text-center">
+                <h1 class="hdrcolorbg">
+                    Assign Student To Section
+                </h1>
+            </div>
+            <form class="frmbgg clear-fx"  method="post"  id="assignSubjectTeacherForm" data-course-url="{% url 'ajax_load_course' %}" data-batch-url="{% url 'ajax_load_batch' %}" data-semestar-url="{% url 'ajax_load_sem' %}"  data-subject-url="{% url 'ajax_load_subject' %}">
+                <div class="row">
+                {% csrf_token %}
+                <div class="form-group col-sm-4 col-xs-12">
+                    {{ form.stream}}
+                </div>
+                <div class="form-group col-sm-4 col-xs-12">
+                    {{ form.course}}
+                </div>
+                <div class="form-group col-sm-4 col-xs-12">
+                    {{ form.batch}}
+                </div>
+                <div class="form-group col-sm-4 col-xs-12">
+                        {{ form.semestar}}
+                    </div>
+                <div class="form-group col-sm-4 col-xs-12" id="section_student">
+                    
+                </div>
+                         
+                
+                
+            </div>
+            <button type="submit" class="btn btn-info save">Assign</button>
+            </form>
+        </div>
+    </div>
+           
+</section>
+<script type="text/javascript">
+    $("#id_stream").change(function(){
+        var url=$("#assignSubjectTeacherForm").attr("data-course-url");
+        var stream_id=$(this).val();
+        $.ajax({
+            url:url,
+        data:{
+            'stream':stream_id,
+        },
+        success:function(data){
+            $("#id_course").html(data);
+        }
+        });
+    });
+    $("#id_course").change(function(){
+        var url=$("#assignSubjectTeacherForm").attr("data-batch-url");
+        var course_id=$(this).val();
+        $.ajax({
+            url:url,
+            data:{
+                'course':course_id,
+            },
+            success:function(data){
+                $("#id_batch").html(data);
+            }
+        });
+    });
+    $("#id_batch").change(function(){
+        var url=$("#assignSubjectTeacherForm").attr("data-semestar-url");
+        var batch_id=$(this).val();
+        var course_id=$("#id_course").val();
+        var stream_id = $("#id_stream").val();
+        $.ajax({
+            url:url,
+            data:{
+                'batch_id': batch_id,
+                'course':course_id,
+                'stream_id': stream_id,
+            },
+            success:function(data){
+                $("#id_semestar").html(data);
+            }
+        });
+    });
+    $("#id_semestar").change(function(){
+        console.log("print Here");
+        var batch_id=$("#id_batch").val();
+        
+        $.ajax({
+            url:"/student_section_ajax/",
+            data:{
+                'batch_id': batch_id,
+               
+            },
+            success:function(data){
+                $("#section_student").html(data);
+            }
+        });
+    });
+    // $("#id_semestar").change(function(){       
+    //     var semestar_id =$(this).val();
+    //     $.ajax({
+    //         url:'/get_section_subject/',
+    //         data:{
+    //             'semestar_id': semestar_id,
+    //         },
+    //         success:function(data){
+    //             subj_str = "<option>----------</option>";
+    //             sec_str = "<option>----------</option>";
+    //             if(data.subject_list.length){
+    //                 for(var i in data.subject_list) {
+    //                     subj_str += "<option value=\""+ data.subject_list[i].id +"\">"+ data.subject_list[i].name +"</option>";
+    //                 }
+    //             }
+    //             if(data.section_list.length){
+    //                 for(var i in data.section_list) {
+    //                     sec_str += "<option value=\""+ data.section_list[i].id +"\">"+ data.section_list[i].name +"</option>";
+    //                 }
+    //             }
+    //             $("#id_section").html(sec_str);
+    //             $("#id_subject").html(subj_str);
+    //         },
+    //         error:function(data){
+    //             $("#id_section").html("<option>----------</option>");
+    //             $("#id_subject").html("<option>----------</option>");
+    //         }
+    //     });
+    // });
+    // $("#id_teacher_department").change(function(){      
+    //     var id_teacher_department =$(this).val();
+    //     $.ajax({
+    //         url:'/teacher_load/',
+    //         data:{
+    //             'stream_id': id_teacher_department,
+    //         },
+    //         success:function(data){
+    //             $("#id_teacher").html(data);
+    //         }
+    //     });
+    // });
+    
+</script>  
+
+
+{% endblock content %}

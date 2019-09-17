@@ -1,0 +1,58 @@
+{% extends 'student/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<script>
+        document.getElementById("strm").className += " active";
+        document.getElementById("strm1").className += " active";
+        document.getElementById("strm03").className += " active";        
+</script>
+<style>
+        #strm03 a{
+                color:#fff !important;
+        }
+</style>
+<section id="main-content">
+        <div class="wrapper">
+                <div class="col-sm-12 col-xs-12">
+                    <button type="submit" class="btn btn-info feebtn"><a href="{% url 'location_create' %}">Add a Location</a></button>
+                    <table class="table table-bordered table-striped table-condensed">
+                            <thead>
+                                <tr class="hdclr">
+                                        <th>Sl No.</th>
+                                        <th>Library Number</th>                                                                             
+                                        <th>Room No</th>
+                                        <th>Selve No</th>
+                                        <th>Rack No</th>
+                                        <th>Capacity</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for i in object_list %}
+                                <tr>
+                                    <td>{{ i.id }}</td>
+                                    <td>{{ i.selve_no.library_num }}</td>
+                                    <td>{{ i.selve_no.room_no }}</td>
+                                    <td>{{ i.selve_no }}</td>
+                                    <td>{{ i.rack_no }}</td>
+                                    <td>{{ i.capacity }}</td>
+                                    <td>    
+                                        <a href="{% url 'location_update' pk=i.id %}" class="social-icon">
+                                                <i class="fa fa-pencil editt"></i>
+                                                <div class="tooltip">Edit</div>
+                                        </a>
+                                        <form method="post" action="{% url 'location_delete' pk=i.id  %}">
+                                                {% csrf_token %}                        
+                                                <button type="submit"  class="social-icon"  id="delete" onclick="return confirm('Are you sure to delete {{ i.selve_no }}?');">
+                                                        <i class="fa fa-trash-o deletee"></i>  
+                                                </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                </div>
+        </div>
+</section>
+{% endblock content %}

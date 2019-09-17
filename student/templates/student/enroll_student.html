@@ -1,0 +1,126 @@
+{% extends 'student/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+<script>
+        document.getElementById("stt").className += " active";
+        document.getElementById("stm1").className += " active";
+        document.getElementById("stm03").className += " active";
+ </script>
+ <style>
+     #stm03 a{
+         color:#fff !important;
+     }
+ </style>
+<div class="wrapper">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-8 col-xs-10 col-sm-offset-3">
+                <form role="form" method="POST" id="mysectionForm" data-course-url="{% url 'ajax_load_course' %}" data-batch-url="{% url 'ajax_load_batch' %}" data-section-url="{% url 'ajax_load_enrollment' %}">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-sm-12 col-xs-12">
+                            
+                            <div class="form-group col-sm-6 col-xs-12">
+                                <label for="exampleInputPassword1">Enroll Stream</label>
+                                {{form.stream}}                                
+                            </div>
+                            <div class="form-group col-sm-6 col-xs-12">
+                                    <label for="exampleInputEmail1">Enroll Course</label>
+                                    {{form.course}}                                
+                                </div>
+                            <div class="form-group col-sm-6 col-xs-12">
+                                <label for="exampleInputPassword1">Enroll Batch</label>
+                                {{form.batch}}                                
+                            </div>
+                            <div class="form-group col-sm-6 col-xs-12">
+                                <label for="exampleInputEmail1">Enrollment Number</label>
+                                <input type="text" name="enrollment_number" maxlength="20" 
+                                value="{{ enr_no }}" id="id_enrollment_number">
+                                
+                                                              
+                            </div>
+                            <div class="form-group col-sm-6 col-xs-12" >
+                                <label for="exampleInputPassword1">Date Of Admission</label>
+                                {{form.date_of_admission}}
+                               
+                                                                
+                            </div> 
+                            <div class="form-group col-sm-6 col-xs-12" >
+                                <label for="exampleInputPassword1">Student Name</label>
+                                <input type="text" name="student_name" id="id_student_name" value="{{ name }}">
+                                                                
+                            </div> 
+                        </div>
+                            
+                            <button type="submit" class="btn btn-info subbtn">Submit</button>
+                           <a href="/approvecollection/{{id}}" type="submit"  class="btn btn-info subbtn">Plan Fees</a>
+                        </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+<script type="text/javascript">
+$("#id_stream").change(function(event){
+            event.preventDefault();
+            var url=$("#mysectionForm").attr("data-course-url");
+            var stream_id=$(this).val();
+            $.ajax({
+                url:url,
+            data:{
+                'stream':stream_id,
+            },
+            success:function(data){
+                $("#id_course").html(data);
+            }
+            });
+
+        });
+    $("#id_course").change(function(event){
+        event.preventDefault();
+        var url=$("#mysectionForm").attr("data-batch-url");
+        var course_id=$(this).val();
+        $.ajax({
+            url:url,
+        data:{
+            'course':course_id,
+        },
+        success:function(data){
+            $("#id_batch").html(data);
+        }
+        });
+
+
+    $("#id_batch").change(function(event){
+        //event.preventDefault();
+        var url=$("#mysectionForm").attr("data-section-url");
+        var stream_id=$("#id_stream").val();
+        var course_id=$("#id_course").val();
+        var batch_id=$(this).val();
+        var current_url=$(location).attr('href');
+        var student_id=current_url.substring(current_url.lastIndexOf('/')+1);
+    $.ajax({
+        url:url,
+        data:{
+        'course_id':course_id,
+        'stream_id':stream_id,
+        'batch_id':batch_id,
+        'student_id': student_id,
+        },
+        success:function(data){
+                if(data['msg']){
+                    alert(data['msg']);
+                } else {
+                    $("#id_enrollment_number").val(data['section']);
+                }
+             }
+        });
+    });
+});
+</script>
+</div>
+
+{% endblock content %}

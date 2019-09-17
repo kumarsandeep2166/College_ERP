@@ -1,0 +1,123 @@
+{% extends 'student/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+<section id="main-content">
+    <div class="wrapper">
+        <div class="col-sm-12 col-xs-12 col-sm-offset-0">
+            <div class="text-center">
+                <h1 class="hdrcolorbg">
+                    Student Time Table
+                </h1>
+            </div>
+            <form>
+                <div class="form-group col-sm-4 col-xs-12">
+                    {{ form.teacher| as_crispy_field}}
+                </div>
+            </form>
+            
+        </div>
+    </div>
+    <div class="row" id="time_table_div" style="display: none;">
+        <div class="col-lg-12">
+            <div class="panel" id="print_time_table">
+                <header class="panel-heading clearfix col-sm-12">
+                    <div class="col-sm-4 col-xs-12">
+                        Class TimeTable
+                    </div>
+                </header>
+                <div class="panel-body" style="overflow-x:auto;">
+                    <table class="table table-bordered table-striped table-condensed" id="timetable_table">
+                        <thead>
+            
+                        </thead>
+                        <tbody>
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+
+$("#id_teacher").change(function() {
+    var teacher_id = $("#id_teacher").val(); 
+    $.ajax({
+        url:'/teacher_time_table_view/',
+        type: "GET",
+        data:{
+            'teacher_id': teacher_id,
+        },
+        success:function(data){
+            $("#time_table_div").show();
+            var thead_str = '<tr class="hdclr"><th width="10%">Day</th><th>Paticular</th>';
+            for(i=1; i<=data.maximum;i++){
+                thead_str += '<th colspan="2">Class'+i+'</th>';
+            }
+            thead_str += '</tr>';
+            var body_str = '';
+            for(i=0; i<data.teacher_time_table.length;i++){
+                if(data.teacher_time_table[i].class.length>0){
+                    body_str += '<tr><td rowspan="3">'+data.teacher_time_table[i].day+'</td><td>Time</td>';
+                    for(j=0; j<data.teacher_time_table[i].class.length;j++){
+                        body_str += '<td>';
+                        body_str += data.teacher_time_table[i].class[j].fromtime;
+                        body_str += '</td>';
+                        body_str += '<td>';
+                        body_str += data.teacher_time_table[i].class[j].totime;
+                        body_str += '</td>';
+                    }
+                    body_str += '</tr>';
+                    body_str += '<tr><td>Subject</td>';
+                        for(j=0; j<data.teacher_time_table[i].class.length;j++){
+                        body_str += '<td colspan="2">';
+                        body_str += data.teacher_time_table[i].class[j].subject;
+                        body_str += '</td>';
+                    }
+                    body_str += '</tr>';
+                    body_str += '<tr><td>Class</td>';
+                        for(j=0; j<data.teacher_time_table[i].class.length;j++){
+                        body_str += '<td colspan="2">';
+                        body_str += data.teacher_time_table[i].class[j].stream+'/';
+                        body_str += data.teacher_time_table[i].class[j].course+'/';
+                        body_str += data.teacher_time_table[i].class[j].batch+'/';
+                        body_str += data.teacher_time_table[i].class[j].semestar+'/';
+                        body_str += data.teacher_time_table[i].class[j].section;
+                        body_str += '</td>';
+                    }
+                    body_str += '</tr>';
+                }
+            }
+            
+            
+            $("#timetable_table thead").html(thead_str);
+            $("#timetable_table tbody").html(body_str);
+        },
+        error:function(data){
+            
+        }
+    });
+});
+function getCookie(c_name) {
+    if (document.cookie.length > 0)
+    {
+        c_start = document.cookie.indexOf(c_name + "=");
+        if (c_start != -1)
+        {
+            c_start = c_start + c_name.length + 1;
+            c_end = document.cookie.indexOf(";", c_start);
+            if (c_end == -1) c_end = document.cookie.length;
+            return unescape(document.cookie.substring(c_start,c_end));
+        }
+    }
+    return "";
+}
+$(function(){
+    $.ajaxSetup({
+        headers:{"X-CSRFToken":getCookie('csrftoken')}
+    });
+});
+</script>
+{% endblock content %}

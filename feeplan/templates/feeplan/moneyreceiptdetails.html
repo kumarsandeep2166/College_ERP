@@ -1,0 +1,75 @@
+{% extends 'student/base.html' %}
+{% block content %}
+<script>
+        document.getElementById("stt").className += " active";
+        document.getElementById("stm1").className += " active";
+        document.getElementById("stm03").className += " active";
+ </script>
+ <style>
+     #stm03 a{
+         color:#fff !important;
+     }
+ </style>
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+<section id="main-content">
+    <div class="wrapper">
+            <header class="panel-heading clearfix col-sm-12">
+                <div class="col-sm-4 col-xs-12">
+                    Money Receipt Details
+                </div>
+            </header>          
+        <div class="row">
+                <div class="panel-body" style="overflow-x:auto;">
+                        <table class="table table-bordered table-striped table-condensed" id="table_student">
+                            <thead>
+                                <tr class="hdclr">                                   
+                                    <th>MR Number</th>
+                                    <th>Details</th>                                                               
+                                    <th>Action</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for stud in queryset %}
+                                <tr>                                        
+                                    <td>{{stud.money_receipt.id}}</td>
+                                    <td>{{stud.money_receipt.enrollment_number.enrollment_number}}</td>
+                                    <td>{{stud.fee_details}}</td> 
+                                    <td>{{stud.money_receipt.amount}}</td> 
+                                   
+                                </tr>
+                                {% empty %}
+                                <div class="container-fluid">
+                                  <h3>No Posts Found having search query "{{ request.POST.q }}"</h3>
+                                </div>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                </div>
+                  <!-- Modal -->
+                  <!-- <div class="modal fade" id="myModal" role="dialog">
+                    <div class="modal-dialog">
+                       
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <p>Are you sure, you want to delete?</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-default okbtn">Ok</button>
+                                <button type="button" class="btn btn-default cnlbtn" data-dismiss="modal">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+        </div>
+    </div>
+</section>
+<script>
+    $(document).ready(function(){
+        $("#table_student").dataTable();
+            });
+  
+</script>
+
+{% endblock content %}

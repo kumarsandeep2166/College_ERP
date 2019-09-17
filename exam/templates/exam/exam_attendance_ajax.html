@@ -1,0 +1,51 @@
+<table class="table table-bordered table-striped table-condensed" id="table_id">
+        <thead>
+            <tr class="hdclr">
+                <th>Sl No</th>
+                <th>Enrollment Number</th>
+                <th>Name</th>
+                <th>Attendance</th>
+                <th>Mark</th>                
+            </tr>
+        </thead>
+        <tbody id="exam_attendance">   
+            {% for stud in enr_obj_list %}       
+            <tr>                                                           
+                <td>{{stud.id}}</td> 
+                <td><input type="hidden" name="exam_student" id="enr_name" hidden="hidden"></td>
+                <td><input type="text" name="exam_student" id="exam_enr_num" value="{{stud.enrollment_number }}"></td>
+                <td><input type="text" name="exam_student" id="exam_enr_name" value="{{stud.student_name }}"></td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td>
+                    <input type="hidden" name="student_section_assign" id="exam_type" hidden="hidden">
+                    <input type="text" name="course-exam_setting" id="course_exam">                    
+                </td>
+            </tr>
+                
+            
+        </tbody>
+    </table>    
+    <script> 
+    
+    function getCookie(c_name) {
+        if (document.cookie.length > 0)
+        {
+            c_start = document.cookie.indexOf(c_name + "=");
+            if (c_start != -1)
+            {
+                c_start = c_start + c_name.length + 1;
+                c_end = document.cookie.indexOf(";", c_start);
+                if (c_end == -1) c_end = document.cookie.length;
+                return unescape(document.cookie.substring(c_start,c_end));
+            }
+        }
+        return "";
+    }
+    $(function(){
+        $.ajaxSetup({
+            headers:{"X-CSRFToken":getCookie('csrftoken')}
+        });
+    });
+    </script>

@@ -1,0 +1,320 @@
+{% extends 'student/base.html' %}
+{% block content %}
+<section id="main-content">
+    <div class="wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel">
+                    <div class="panel-body acdbgg">
+                        
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="row">
+                                        <div class="form-group col-sm-3 col-xs-12">
+                                            <label>Enrollment No.</label>
+                                            <input type="text" id="enr_id" class="form-control" placeholder="Enrollment No">
+                                        </div>
+                                        <div class="form-group col-sm-3 col-xs-12">
+                                            <label>Student Name</label>
+                                            <input type="text" id="stud_name" name="stud_name" class="form-control" placeholder="Student Name">
+                                        </div>
+                                        <div class="form-group col-sm-3 col-xs-12">
+                                            <br/> <br/>
+                                            <button type="submit" id="enr_submit" class="btn btn-info save">Submit</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                       
+                        <div class="panel-group" id="accordion">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">First Instalment</a>
+                                    </h4>
+                                </div>
+                                <div id="collapse1" class="panel-collapse collapse in">
+                                    <div class="panel-body">
+                                        <table class="table table-bordered table-striped table-condensed">
+                                            <thead>
+                                                <tr class="hdclr">
+                                                    
+                                                    <th><span>Particulars</span></th>                                                    
+                                                    <th><span>Total Amount</span></th>
+                                                    <th><span>Amount Paid</span></th>
+                                                    <th><span>Amount Left</span></th>
+                                                    <th><span>Amount Pay</span></th>
+                                                    <th><span>Action</span></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tbody1">
+                                                <!-- <tr>
+                                                    
+                                                    <td>xxxx</td>
+                                                    <td>20.01.2019</td>
+                                                    <td><span>Rs/-</span> 50.000</td>
+                                                    <td><span>Rs/-</span> 50.000</td>
+                                                    <td><span>Rs/-</span> 50.000</td>
+                                                    <td><input type="text" class="form-control"></td>
+                                                    <td><button type="submit" class="btn btn-info save" style="float:left;">Submit</button></td>
+                                                </tr> -->
+                                            </tbody>
+                                        </table>
+                                        <input type="hidden" id="tbody1_ids">
+                                        <button type="submit" id="tbody1submit" onclick="pay_multiple_amount(1);">Submit</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">Second Instalment</a>
+                                    </h4>
+                                </div>
+                                <div id="collapse2" class="panel-collapse collapse">
+                                    <div class="panel-body">
+                                        <table class="table table-bordered table-striped table-condensed">
+                                            <thead>
+                                                <tr class="hdclr">
+                                                    
+                                                    <th><span>Particulars</span></th>                                                    
+                                                    <th><span>Total Amount</span></th>
+                                                    <th><span>Amount Paid</span></th>
+                                                    <th><span>Amount Left</span></th>
+                                                    <th><span>Amount Pay</span></th>
+                                                    <th><span>Action</span></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tbody2">
+                                                <!-- <tr>
+                                                    
+                                                    <td>xxxx</td>
+                                                    <td>20.01.2019</td>
+                                                    <td><span>Rs/-</span> 50.000</td>
+                                                    <td><span>Rs/-</span> 50.000</td>
+                                                    <td><span>Rs/-</span> 50.000</td>
+                                                    <td><input type="text" class="form-control"></td>
+                                                    <td><button type="submit" class="btn btn-info save">Submit</button></td>
+                                                </tr> -->
+                                            </tbody>
+                                        </table>
+                                        <input type="hidden" id="tbody2_ids">
+                                        <button id="tbody2submit" onclick="pay_multiple_amount(2);">Submit</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">Third Instalment</a>
+                                    </h4>
+                                </div>
+                                <div id="collapse3" class="panel-collapse collapse">
+                                    <div class="panel-body">
+                                        <table class="table table-bordered table-striped table-condensed">
+                                            <thead>
+                                                <tr class="hdclr">
+                                                    
+                                                    <th><span>Particulars</span></th>                                                    
+                                                    <th><span>Total Amount</span></th>
+                                                    <th><span>Amount Paid</span></th>
+                                                    <th><span>Amount Left</span></th>
+                                                    <th><span>Amount Pay</span></th>
+                                                    <th><span>Action</span></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tbody3">
+                                                <!-- <tr>                                                   
+                                                    <td>xxxx</td>
+                                                    <td>20.01.2019</td>
+                                                    <td><span>Rs/-</span> 50.000</td>
+                                                    <td><span>Rs/-</span> 50.000</td>
+                                                    <td><span>Rs/-</span> 50.000</td>
+                                                    <td><input type="text" class="form-control"></td>
+                                                    <td><button type="submit" class="btn btn-info save">Submit</button></td>
+                                                </tr> -->
+                                            </tbody>
+                                        </table>
+                                        <input type="hidden" id="tbody3_ids">
+                                        <button type="submit" id="tbody3submit" onclick="pay_multiple_amount(3);">Submit</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> 
+                        
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</section>
+<script type="text/javascript">
+    $("#enr_submit").on('click', function(event){
+        event.preventDefault();
+        var enr_number=$("#enr_id").val();
+    $.ajax({
+        type:'GET',
+        url:'/get_remaning_fee_list/',
+        data:{
+        'enr_number':enr_number,
+        },
+        success:function(data){
+            $("#stud_name").val(data.student_name);
+                var tableString = "";
+                if(data.first_fee_list.length === 0) {
+                    tableString = "<tr><td></td><td>No fee available.</td><td></td><td></td></tr>";
+                }
+                else {
+                    var j = 0;
+                    var ids = "";
+                    for(var i in data.first_fee_list){
+                        tableString += "<tr><td>" + data.first_fee_list[i].fee_type + "</td>";
+                        tableString += "<td>" + data.first_fee_list[i].fee_amount + "</td>";
+                        tableString += "<td>" + data.first_fee_list[i].fee_paid + "</td>";
+                        tableString += "<td>" + data.first_fee_list[i].fee_left + "</td>";
+                        if(data.first_fee_list[i].fee_left>0){
+                            tableString += "<td><input type='text' id='amount"+data.first_fee_list[i].fee_id+"'></td>";
+                            tableString += "<td><a type='button' class='btn btn-info savepay' onclick='pay_amount("+data.first_fee_list[i].fee_id+")'>Submit</a></td></tr>";
+                            if(j==0){
+                                ids = data.first_fee_list[i].fee_id;
+                            } else {
+                                ids += "," + data.first_fee_list[i].fee_id;
+                            }
+                            j = j + 1;
+                        } else {
+                            tableString += "<td></td>";
+                            tableString += "<td></tr>";
+                        }
+                    }
+                    $("#tbody1_ids").val(ids);
+                }
+                $("#tbody1").html(tableString);
+                tableString = "";
+                if(data.second_fee_list.length === 0) {
+                    tableString = "<tr><td></td><td></td><td>No fee available.</td><td></td><td></td></tr>";
+                }
+                else {
+                    var j = 0;
+                    var ids = "";
+                    for(var i in data.second_fee_list){
+                        tableString += "<tr><td>" + data.second_fee_list[i].fee_type + "</td>";
+                        tableString += "<td>" + data.second_fee_list[i].fee_amount + "</td>";
+                        tableString += "<td>" + data.second_fee_list[i].fee_paid + "</td>";
+                        tableString += "<td>" + data.second_fee_list[i].fee_left + "</td>";
+                        if(data.second_fee_list[i].fee_left>0){
+                            tableString += "<td><input type='text' id='amount"+data.second_fee_list[i].fee_id+"'></td>";
+                            tableString += "<td><a type='button' class='btn btn-info savepay' onclick='pay_amount("+data.second_fee_list[i].fee_id+")'>Submit</a></td></tr>";
+                            if(j==0){
+                                ids = data.second_fee_list[i].fee_id;
+                            } else {
+                                ids += "," + data.second_fee_list[i].fee_id;
+                            }
+                            j = j + 1;
+                        } else {
+                            tableString += "<td></td>";
+                            tableString += "<td></tr>";
+                        }
+                    }
+                    $("#tbody2_ids").val(ids);
+                }
+                $("#tbody2").html(tableString);
+                tableString = "";
+                if(data.third_fee_list.length === 0) {
+                    tableString = "<tr><td></td><td></td><td>No fee available.</td><td></td><td></td></tr>";
+                }
+                else {
+                    var j = 0;
+                    var ids = "";
+                    for(var i in data.third_fee_list){
+                        tableString += "<tr><td>" + data.third_fee_list[i].fee_type + "</td>";
+                        tableString += "<td>" + data.third_fee_list[i].fee_amount + "</td>";
+                        tableString += "<td>" + data.third_fee_list[i].fee_paid + "</td>";
+                        tableString += "<td>" + data.third_fee_list[i].fee_left + "</td>";
+                        if(data.third_fee_list[i].fee_left>0){
+                            tableString += "<td><input type='text' id='amount"+data.third_fee_list[i].fee_id+"'></td>";
+                            tableString += "<td><a type='button' class='btn btn-info' onclick='pay_amount("+data.third_fee_list[i].fee_id+")'>Submit</a></td></tr>";
+                            if(j==0){
+                                ids = data.third_fee_list[i].fee_id;
+                            } else {
+                                ids += "," + data.third_fee_list[i].fee_id;
+                            }
+                            j = j + 1;
+                        } else {
+                            tableString += "<td></td>";
+                            tableString += "<td></tr>";
+                        }
+                    }
+                    $("#tbody3_ids").val(ids);
+                }
+                $("#tbody3").html(tableString);
+                
+             }
+        });
+    });
+    function pay_amount(id){        
+        var text_id = "#amount" + id;
+        var pay_value = $(text_id).val();
+        $.ajax({
+            type:'POST',
+            url:'/pay_by_id/',
+            data:{
+            'pay_id': id,
+            'pay_amount': pay_value,
+            },
+            success:function(data){
+                window.location.replace('/viewfeedetailsdetail/'+data.mr_id);
+            },
+        });
+    }
+    function pay_multiple_amount(id){
+        var table_button_id = "#tbody"+id+"_ids";
+        var ids = $(table_button_id).val();
+        var idsArr = ids.split(',');
+        var id_amount_array = new Array();
+        for(var i=0; i<idsArr.length; i++){
+            var text_id = "#amount" + idsArr[i];
+            var pay_value = $(text_id).val();
+            if(pay_value>0){
+                var dict = {
+                    'pay_id': idsArr[i],
+                    'pay_amount': pay_value
+                }
+                id_amount_array.push(dict);
+            }
+        }
+        console.log(id_amount_array);
+        $.ajax({
+            type:'POST',
+            url:'/pay_multiple_fee/',
+            data:{
+                'id_amount_array': id_amount_array,
+                'total': id_amount_array.length,
+            },
+            success:function(data){
+                window.location.replace('/viewfeedetailsdetail/'+data.mr_id);
+            },
+        });
+
+    }
+    function getCookie(c_name) {
+        if (document.cookie.length > 0)
+        {
+            c_start = document.cookie.indexOf(c_name + "=");
+            if (c_start != -1)
+            {
+                c_start = c_start + c_name.length + 1;
+                c_end = document.cookie.indexOf(";", c_start);
+                if (c_end == -1) c_end = document.cookie.length;
+                return unescape(document.cookie.substring(c_start,c_end));
+            }
+        }
+        return "";
+    }
+    $(function(){
+        $.ajaxSetup({
+            headers:{"X-CSRFToken":getCookie('csrftoken')}
+        });
+    });
+</script>
+{% endblock content %}

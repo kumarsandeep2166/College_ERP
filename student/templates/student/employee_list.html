@@ -1,0 +1,114 @@
+{% extends 'student/base.html' %}
+{% block content %}
+<script>
+        document.getElementById("emp").className += " active";
+        document.getElementById("emp1").className += " active";
+        document.getElementById("emp02").className += " active";
+</script>
+<style>
+        #emp02 a{
+                color:#fff !important;
+        }
+</style>
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+<section id="main-content">
+    <div class="wrapper">
+        <header class="panel-heading clearfix col-sm-12">
+            <div class="col-sm-4 col-xs-12">
+                Employee Details
+            </div>
+        </header>
+           
+        <div class="row">
+                <div class="panel-body" style="overflow-x:auto;">
+                        <table class="table table-bordered table-striped table-condensed" id="table_employee">
+                            <thead>
+                                <tr class="hdclr">
+                                    <th>Sl No.</th>
+                                    <th>Employee Name</th>
+                                    <th>Date Of Birth</th>
+                                    <th>Phone Number</th>
+                                    <th>Email</th>                                    
+                                    <th>Designation</th>
+                                    <th>Aadhar Number</th>
+                                    <th>Address</th>  
+                                    <th>Status</th>                                    
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for emp in object_list %}
+                                <tr>
+                                        <td>{{emp.id}}</td>
+                                        <td><a href="{{ emp.get_absolute_url }}">{{emp.title}}{{emp.first_name}}{{emp.middle_name}}{{emp.last_name}}</a></td>
+                                        <td>{{emp.date_of_birth}}</td>
+                                        <td>{{emp.phone_no}}</td>
+                                        <td>{{emp.email}}</td>                                        
+                                        <td>{{emp.employee_designation}}</td>
+                                        <td>{{emp.aadhar_no}}</td>
+                                        <td>{{emp.communication_address}}</td>
+                                        <td>{{emp.status}}</td>      
+                                    
+                                    <td>
+                                        <a href="{% url 'employee_detail' pk=emp.id %}" class="social-icon">
+                                            <i class="fa fa-eye vieww"></i>
+                                            <div class="tooltip">View</div>
+                                        </a>
+                                        <a href="{% url 'employee_edit' pk=emp.id %}" class="social-icon">
+                                            <i class="fa fa-pencil editt"></i>
+                                            <div class="tooltip">Edit</div>
+                                        </a>
+                                        
+                                        <form method="post" action="{% url 'employee_delete' pk=emp.id  %}" enctype="multipart/form-data" >
+                                            {% csrf_token %}                        
+                                            <button type="submit"  class="social-icon"  style="margin-left: 4px;"  id="delete" onclick="return confirm('Are you sure to delete {{ emp }}?');">
+                                                    <i class="fa fa-trash-o deletee"></i>  
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <div class="container-fluid">
+                                  <h3>No Details Found having search query "{{ request.GET.q }}"</h3>
+                                </div>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        <!-- <div class="modal fade deltemodalbox" id="myModal" role="dialog" style="display: none;">
+                        <div class="modal-dialog">
+                           
+                            <div class="modal-content">
+                                <div class="modal-body">
+                                    <form method="post" enctype="multipart/form-data">                                        
+                                        {% csrf_token %}
+                                        <div class="col-sm-12 col-xs-12 mngbtm40"> 
+                                            Are you sure you want to delete {{ object }} ?
+                                        </div>
+                                        <div class="col-sm-4 col-sm-offset-2">
+                                            <input type="submit" value="Submit" class="okbtn" />
+                                        </div>
+                                    <div class="col-sm-4">
+                                        <button type="button" class="btn btn-default cnlbtn" data-dismiss="modal">Cancel</button>        
+                                    </div>                                                            
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+                </div>
+        </div>
+    </div>
+</section>
+<script>
+    $(document).ready(function(){
+        $("#table_employee").dataTable();
+            });
+        $(document).ready(function(event){
+         $('#delete').click(function(){
+             return confirm( "Are you sure to delete This");
+         });
+        });
+     </script>
+{% endblock content %}
+
