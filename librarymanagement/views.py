@@ -16,7 +16,7 @@ from django.http import HttpResponse
 from student.models import Enrollment, Student
 from employee.models import Employee
 from django.db.models import Sum
-import datetime
+from datetime import datetime, date
 import json
 from django.db.models import Q
 
@@ -872,11 +872,9 @@ def get_student_returned_book(student_id):
 
 def autocompletesearchbooksbyname(request):
     data = request.POST.get('term')
-    type_of_book = request.POST.get('select_type')
-    book_name = request.POST.get('book_name')
-    author = request.POST.get('author')
-    publisher = request.POST.get('publisher')
-    print(book_name,author,publisher)
+    type_of_book = request.POST.get('select_type')    
+    print(request.POST)
+    print(data)
     if type_of_book=='Journal':
         Model = Journal
     elif type_of_book=='Magazine':
@@ -886,35 +884,30 @@ def autocompletesearchbooksbyname(request):
     elif type_of_book=='EBook':
         Model = E_Book 
     books = Model.objects.filter(Q(name__icontains=data) | Q(book_author__icontains=data)
-    | Q(publisher__icontains=data)| Q(book_sub_author__icontains=data)| Q(book_author__icontains=author)| Q(publisher__icontains=publisher))
+    | Q(publisher__icontains=data)| Q(book_sub_author__icontains=data))
     results = []
     if Model=="Journal":
         for book in books:
             user_json = {}
             user_json['id'] = book.id
-            user_json['name'] = book.name+" -"+ book.barcode
-            user_json['barcode'] = book.name+" -"+ book.barcode
+            user_json['name'] = book.name
+            user_json['barcode'] =  book.barcode
             results.append(user_json)
     else:
         for book in books:
             user_json = {}
             user_json['id'] = book.id
             user_json['name'] = book.name
-            user_json['author'] = book.barcode
+            user_json['author'] = book.book_author
             user_json['barcode'] =  book.barcode
             results.append(user_json)
     data = json.dumps(results)
-    mimetype = 'application/json'
-    message = "success"
-    return HttpResponse(message, mimetype)
+    mimetype = 'application/json'    
+    return HttpResponse(data, mimetype)
 
 def autocompletesearchbooksbyauthor(request):
     data = request.POST.get('term')
     type_of_book = request.POST.get('select_type')
-    book_name = request.POST.get('book_name')
-    author = request.POST.get('author')
-    publisher = request.POST.get('publisher')
-    print(book_name,author,publisher)
     if type_of_book=='Journal':
         Model = Journal
     elif type_of_book=='Magazine':
@@ -924,35 +917,29 @@ def autocompletesearchbooksbyauthor(request):
     elif type_of_book=='EBook':
         Model = E_Book 
     books = Model.objects.filter(Q(name__icontains=data) | Q(book_author__icontains=data)
-    | Q(publisher__icontains=data)| Q(book_sub_author__icontains=data)| Q(book_author__icontains=author)| Q(publisher__icontains=publisher))
+    | Q(publisher__icontains=data)| Q(book_sub_author__icontains=data))
     results = []
     if Model=="Journal":
         for book in books:
             user_json = {}
             user_json['id'] = book.id
-            user_json['name'] = book.name+" -"+ book.barcode
-            user_json['barcode'] = book.name+" -"+ book.barcode
+            user_json['name'] = book.name
+            user_json['author'] = book.publisher
             results.append(user_json)
     else:
         for book in books:
             user_json = {}
             user_json['id'] = book.id
             user_json['name'] = book.name
-            user_json['author'] = book.barcode
-            user_json['barcode'] =  book.barcode
+            user_json['author'] = book.book_author
             results.append(user_json)
     data = json.dumps(results)
     mimetype = 'application/json'
-    message = "success"
-    return HttpResponse(message, mimetype)
+    return HttpResponse(data, mimetype)
 
 def autocompletesearchbooksbybarcode(request):
     data = request.POST.get('term')
     type_of_book = request.POST.get('select_type')
-    book_name = request.POST.get('book_name')
-    author = request.POST.get('author')
-    publisher = request.POST.get('publisher')
-    print(book_name,author,publisher)
     if type_of_book=='Journal':
         Model = Journal
     elif type_of_book=='Magazine':
@@ -962,27 +949,25 @@ def autocompletesearchbooksbybarcode(request):
     elif type_of_book=='EBook':
         Model = E_Book 
     books = Model.objects.filter(Q(name__icontains=data) | Q(book_author__icontains=data)
-    | Q(publisher__icontains=data)| Q(book_sub_author__icontains=data)| Q(book_author__icontains=author)| Q(publisher__icontains=publisher))
+    | Q(publisher__icontains=data)| Q(book_sub_author__icontains=data)| Q(barcode__icontains=data))
     results = []
     if Model=="Journal":
         for book in books:
             user_json = {}
             user_json['id'] = book.id
-            user_json['name'] = book.name+" -"+ book.barcode
-            user_json['barcode'] = book.name+" -"+ book.barcode
+            user_json['name'] =book.name
+            user_json['barcode'] = book.barcode
             results.append(user_json)
     else:
         for book in books:
             user_json = {}
             user_json['id'] = book.id
             user_json['name'] = book.name
-            user_json['author'] = book.barcode
-            user_json['barcode'] =  book.barcode
+            user_json['barcode'] = book.barcode
             results.append(user_json)
     data = json.dumps(results)
     mimetype = 'application/json'
-    message = "success"
-    return HttpResponse(message, mimetype)
+    return HttpResponse(data, mimetype)
 
 
 def reissuematerial(request,pk):
@@ -1004,7 +989,7 @@ def returnbook(request):
     elif book_category=='EBook':
         obj = EbookIssueStudent.objects.get(pk=book)
     obj.status="Returned"
-    obj.return_date=datetime.date.today()
+    obj.return_date=date.today()
     obj.save()
     student_id = obj.student.pk
     stud_name = str(obj.student)
@@ -1023,8 +1008,10 @@ def returnbook(request):
 
 def get_book_list(request):
     id_string = request.GET.get('book')
+    print(id_string)
     select_type = request.GET.get('select_type')
-    selected_id = int(id_string.split('-')[0])
+    selected_id = id_string.split('-')[0]
+    print("selected_id:",selected_id)
     if select_type=='Journal':
         obj = Journal.objects.get(pk=selected_id)
         book_id = obj.pk
@@ -1051,6 +1038,144 @@ def get_book_list(request):
             availability = "available"
     elif select_type=='Book':
         obj = BookDetails.objects.get(pk=selected_id)
+        print("book:",obj)
+        book_id = obj.pk
+        name = obj.name
+        author = obj.book_author
+        book_category='Book'
+        barcode = obj.barcode
+        book_no  = obj.book_number
+        if obj.available:
+            availability = "not available"
+        else:
+            availability = "available"
+    elif select_type=='EBook':
+        obj = E_Book.objects.get(pk=selected_id)
+        book_id = obj.pk
+        name = obj.name
+        author = obj.book_author
+        book_category='EBook'
+        barcode = obj.barcode
+        book_no  = obj.ebook_no
+        if obj.available:
+            availability = "not available"
+        else:
+            availability = "available"
+    context = {
+        'book_id': book_id,
+        'name':name,
+        'author':author,
+        'availability':availability,
+        'book_category': book_category,
+        'barcode': barcode,
+        'book_no': book_no,
+    }
+    data = json.dumps(context)
+    mimetype = 'application/json'
+    return HttpResponse(data, mimetype)
+
+def get_book_list_author(request):
+    id_string = request.GET.get('book')
+    print(id_string)
+    select_type = request.GET.get('select_type')
+    selected_id = id_string.split('-')[0]
+    print("selected_id:",selected_id)
+    if select_type=='Journal':
+        obj = Journal.objects.get(pk=selected_id)
+        book_id = obj.pk
+        name = obj.name
+        author = ""
+        book_category='Journal'
+        barcode = obj.barcode
+        book_no  = obj.journal_no
+        if obj.available:
+            availability = "not available"
+        else:
+            availability = "available"
+    elif select_type=='Magazine':
+        obj = Magazine.objects.get(pk=selected_id)
+        book_id = obj.pk
+        name = obj.name
+        author = obj.book_author
+        book_category='Magazine'
+        barcode = obj.barcode
+        book_no  = obj.magazine_no
+        if obj.available:
+            availability = "not available"
+        else:
+            availability = "available"
+    elif select_type=='Book':
+        obj = BookDetails.objects.get(pk=selected_id)
+        print("book:",obj)
+        book_id = obj.pk
+        name = obj.name
+        author = obj.book_author
+        book_category='Book'
+        barcode = obj.barcode
+        book_no  = obj.book_number
+        if obj.available:
+            availability = "not available"
+        else:
+            availability = "available"
+    elif select_type=='EBook':
+        obj = E_Book.objects.get(pk=selected_id)
+        book_id = obj.pk
+        name = obj.name
+        author = obj.book_author
+        book_category='EBook'
+        barcode = obj.barcode
+        book_no  = obj.ebook_no
+        if obj.available:
+            availability = "not available"
+        else:
+            availability = "available"
+    context = {
+        'book_id': book_id,
+        'name':name,
+        'author':author,
+        'availability':availability,
+        'book_category': book_category,
+        'barcode': barcode,
+        'book_no': book_no,
+    }
+    data = json.dumps(context)
+    mimetype = 'application/json'
+    return HttpResponse(data, mimetype)
+
+
+def get_book_list_barcode(request):
+    id_string = request.GET.get('book')
+    print(id_string)
+    select_type = request.GET.get('select_type')
+    selected_id = id_string.split('-')[0]
+    print("selected_id:",selected_id)
+    if select_type=='Journal':
+        obj = Journal.objects.get(pk=selected_id)
+        book_id = obj.pk
+        name = obj.name
+        author = ""
+        book_category='Journal'
+        barcode = obj.barcode
+        book_no  = obj.journal_no
+        if obj.available:
+            availability = "not available"
+        else:
+            availability = "available"
+    elif select_type=='Magazine':
+        obj = Magazine.objects.get(pk=selected_id)
+        book_id = obj.pk
+        name = obj.name
+        author = obj.book_author
+        book_category='Magazine'
+        barcode = obj.barcode
+        book_no  = obj.magazine_no
+        if obj.available:
+            availability = "not available"
+        else:
+            availability = "available"
+    elif select_type=='Book':
+        obj = BookDetails.objects.get(pk=selected_id)
+        print("book:",obj)
         book_id = obj.pk
         name = obj.name
         author = obj.book_author
@@ -1232,3 +1357,136 @@ def new_book_student_issue_ajax(request):
     }
     data = json.dumps(context)
     return HttpResponse(data, 'application/json')
+
+def student_book_list(request):
+    message = "Success"
+    data = json.dumps(message)
+    return HttpResponse(data, 'application/json')
+
+def load_book_list_student(request):
+    queryset = BookIssueStudent.objects.all()
+    context = {
+        'queryset':queryset
+    }
+    return render(request, 'library/new_book_issue_student.html', context)
+
+def student_book_return(request):
+    return render(request, 'library/book_return_student.html')
+
+def student_book_return_ajax(request):
+    student = request.GET.get('student')
+    stud_obj = Enrollment.objects.get(enrollment_number=student)
+    if stud_obj is None:
+        message = "Student is not available"
+        stud_name = ''
+        book_list = []
+        book_history = []
+    else:
+        student_id = stud_obj.student_name.pk
+        stud_name = str(stud_obj.student_name)
+        book_list = get_student_current_book(student_id)
+        book_history = get_student_returned_book(student_id)
+        message = "Successfull"
+    
+    context = {
+        'stud_name': stud_name,
+        'book_list': book_list,
+        'book_history': book_history,
+        'message': message,
+    }
+    data = json.dumps(context)
+    return HttpResponse(data, 'application/json')
+
+def get_book_list_barcode_return(request):
+    id_string = request.GET.get('book')
+    print(id_string)
+    select_type = request.GET.get('select_type')
+    selected_id = id_string.split('-')[0]
+    print("selected_id:",selected_id)
+    date_format = "%Y-%m-%d"
+    if select_type=='Journal':
+        obj = JournalIssueStudent.objects.get(pk=selected_id)
+        book_id = obj.pk
+        name = obj.journal.name
+        author = ""
+        book_category='Journal'
+        barcode = obj.journal.barcode
+        book_no  = obj.journal.journal_no
+        issue_date = datetime.strptime(str(issue_date), date_format)
+        return_date = datetime.strptime(str(return_date), date_format)
+        fine_date = datetime.strptime(str(fine_date), date_format)
+        delta = fine_date - return_date
+        fine_amount = int(delta.days) * 1
+        if obj.status == "available":
+            availability = "available"
+        else:
+            availability = "not available"
+
+    elif select_type=='Magazine':
+        obj = MagazineIssueStudent.objects.get(pk=selected_id)
+        book_id = obj.pk
+        name = obj.magazine.name
+        author = obj.magazine.book_author
+        book_category='Magazine'
+        barcode = obj.magazine.barcode
+        book_no  = obj.magazine.magazine_no
+        issue_date = datetime.strptime(str(obj.issue_date), date_format)
+        return_date = datetime.strptime(str(obj.return_date), date_format)
+        fine_date = datetime.strptime(str(obj.fine_date), date_format)
+        delta = fine_date - return_date
+        fine_amount = int(delta.days) * 1
+        if obj.status == "available":
+            availability = "available"
+        else:
+            availability = "not available"
+    elif select_type=='Book':
+        obj = BookIssueStudent.objects.get(pk=selected_id)
+        print("book:",obj)
+        book_id = obj.pk
+        name = obj.book.name
+        author = obj.book.book_author
+        book_category='Book'
+        barcode = obj.book.barcode
+        book_no  = obj.book.book_number
+        issue_date = datetime.strptime(str(obj.issue_date), date_format)
+        return_date = datetime.strptime(str(obj.return_date), date_format)
+        fine_date = datetime.strptime(str(obj.fine_date), date_format)
+        delta = fine_date - return_date
+        fine_amount = int(delta.days) * 1
+        if obj.status == "available":
+            availability = "available"
+        else:
+            availability = "not available"
+    elif select_type=='EBook':
+        obj = EbookIssueStudent.objects.get(pk=selected_id)
+        book_id = obj.pk
+        name = obj.e_book.name
+        author = obj.e_book.book_author
+        book_category='EBook'
+        barcode = obj.e_book.barcode
+        book_no  = obj.e_book.ebook_no
+        issue_date = datetime.strptime(str(obj.issue_date), date_format)
+        return_date = datetime.strptime(str(obj.return_date), date_format)
+        fine_date = datetime.strptime(str(obj.fine_date), date_format)
+        delta = fine_date - return_date
+        fine_amount = int(delta.days) * 1
+        if obj.status == "available":
+            availability = "available"
+        else:
+            availability = "not available"
+    context = {
+        'book_id': book_id,
+        'name':name,
+        'author':author,
+        'availability':availability,
+        'book_category': book_category,
+        'barcode': barcode,
+        'book_no': book_no,
+        'issue_date': str(issue_date),
+        'return_date': str(return_date),
+        'fine_date': str(fine_date),
+        'fine_amount': fine_amount,
+    }
+    data = json.dumps(context)
+    mimetype = 'application/json'
+    return HttpResponse(data, mimetype)

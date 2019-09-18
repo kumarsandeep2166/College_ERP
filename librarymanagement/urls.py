@@ -64,4 +64,10 @@ urlpatterns = [
     path('autocompletesearchbooksbyname/',views.autocompletesearchbooksbyname, name='autocompletesearchbooksbyname'),
     path('autocompletesearchbooksbyauthor/',views.autocompletesearchbooksbyauthor, name='autocompletesearchbooksbyauthor'),
     path('autocompletesearchbooksbybarcode/',views.autocompletesearchbooksbybarcode, name='autocompletesearchbooksbybarcode'),
+    path('get_book_list_author/',views.get_book_list_author, name='get_book_list_author'),
+    path('get_book_list_barcode/',views.get_book_list_barcode, name='get_book_list_barcode'),
+    path('student_book_return/',views.student_book_return, name='student_book_return'),
+    path('student_book_return_ajax/',views.student_book_return_ajax, name='student_book_return_ajax'),
+    path('get_book_list_barcode_return/',views.get_book_list_barcode_return, name='get_book_list_barcode_return'),
+
 ]

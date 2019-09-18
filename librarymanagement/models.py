@@ -254,6 +254,8 @@ class BookIssueStudent(models.Model):
     re_issuse = models.DateField(null=True, blank=True)
     status = models.CharField(max_length=25)
     is_active = models.BooleanField(default=False)
+    fine_amount = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
+    fine_date = models.DateField(null=True, blank=True)
     #location = models.ForeignKey(Location,on_delete=models.CASCADE)
     
 class BookIssueTeacher(models.Model):
@@ -273,6 +275,9 @@ class JournalIssueStudent(models.Model):
     re_issuse = models.DateField(null=True, blank=True)
     status = models.CharField(max_length=25)
     is_active = models.BooleanField(default=False)
+    fine_amount = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
+    fine_date = models.DateField(null=True, blank=True)
+
 
 class JournalIssueTeacher(models.Model):
     employee_id=models.ForeignKey(Employee, on_delete=models.CASCADE,null=True, blank=True)
@@ -291,6 +296,9 @@ class EbookIssueStudent(models.Model):
     re_issuse = models.DateField(null=True, blank=True)
     status = models.CharField(max_length=25)
     is_active = models.BooleanField(default=False)
+    fine_amount = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
+    fine_date = models.DateField(null=True, blank=True)
+
 
 class EbookIssueTeacher(models.Model):
     employee_id=models.ForeignKey(Employee, on_delete=models.CASCADE,null=True, blank=True)
@@ -309,6 +317,7 @@ class MagazineIssueStudent(models.Model):
     re_issuse = models.DateField(null=True, blank=True)
     status = models.CharField(max_length=25)
     is_active = models.BooleanField(default=False)
+    fine_date = models.DateField(null=True, blank=True)
 
 class MagazineIssueTeacher(models.Model):
     magazine = models.ForeignKey(Magazine, on_delete=models.CASCADE,null=True, blank=True)

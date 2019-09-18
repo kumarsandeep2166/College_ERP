@@ -21,8 +21,8 @@
                         </span>
                     </div>
                 </div>
-                <div class="col-sm-12 col-xs-12" id="hidden_div" style="display:none;">
-                    <div class=" col-sm-offset-1 col-sm-10 dvtbg">
+                <div class="col-sm-12 col-xs-8" id="hidden_div" style="display:none;">
+                    <div class=" col-sm-offset-1 col-sm-8 dvtbg">
                         <div class="form-group col-sm-3 col-xs-12">    
                             <label>Select Type</label>                
                             <select class="form-control" name="books_present" id="books_type">
@@ -32,17 +32,9 @@
                                 <option value='EBook'>E-Book</option>                           
                             </select>
                         </div>
-                        <div class="form-group col-sm-3 col-xs-12">
-                            <label>Material name:</label>                  
-                            <input type="text" name="autocomplete_box_books" id="book_name">
-                        </div> 
-                        <div class="form-group col-sm-3 col-xs-12">
-                            <label>Author</label>                 
-                            <input type="text" name="autocomplete_box_books" id="book_author">
-                        </div> 
-                        <div class="form-group col-sm-3 col-xs-12">
-                            <label>BarCode</label>                   
-                            <input type="text" name="autocomplete_box_books" id="book_barcode">
+                        <div class="form-group col-sm-4 col-xs-12">
+                            <label>Enter Material BarCode:</label>                   
+                            <input type="text" name="autocomplete_box_books" id="book_barcode">                            
                         </div>  
                     </div>                  
                 </div> 
@@ -54,9 +46,9 @@
                                 <th>Material Name</th>
                                 <th>Material Author/ Publisher</th>
                                 <th>Material Type</th>
-                                <th>Material Number</th>
-                                <th>Barcode</th>
-                                <th>Status</th>
+                                <th>Issue Date</th>
+                                <th>Return Date</th>
+                                <th>Fine Amount</th>
                                 <th>Action</th>                
                             </tr>
                         </thead>
@@ -136,21 +128,20 @@ $( function() {
 $("#search_btn").on('click',function(){
     var student = $("#student_search").val();        
     $.ajax({
-        url:"/new_book_student_issue_ajax/",
+        url:"/student_book_return_ajax/",
         type:'GET',
         data:{
             'student': student,
-        },
-        
+        },        
         success:function(data){
             if(data.stud_name === ""){
                 alert("student not available");
                 console.log(data);
             }
-            else{
+            else{       
+                console.log('student available');         
                 $("#hidden_div").show();
-                $("#table_book_list").show();
-                $("#table_book_history").show();
+                // $("#table_book_history").show();
             }
         },            
     });        
@@ -159,126 +150,6 @@ $("#search_btn").on('click',function(){
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.0/themes/base/jquery-ui.css" />
 <script src="http://code.jquery.com/ui/1.10.0/jquery-ui.js"></script>
 <script type="text/javascript">
-    $(function() 
-        {
-        $("#book_name").autocomplete({
-            minLength: 2,        
-            source: function( request, response )
-            {             
-                $.ajax(
-                    {
-                    url: "/autocompletesearchbooksbyname/",
-                    data: {
-                        term: request.term,
-                        'select_type':$("#books_type").val(),                        
-                        },      
-                    type: "POST",  // a jQuery ajax POST transmits in querystring format in utf-8
-                    dataType: "json",   //return data in json format
-                    success: function( data )
-                        {
-                            response( $.map( data, function( item )
-                            {  
-                                return{
-                                        label: item.name,
-                                        value: item.id + "-" + item.name
-                                    }                                
-                            }));                        
-                        }
-                    });               
-                },
-            select: function(event, ui){
-                getBookByName(ui.item.value);
-            }  
-        });
-    });
-function getBookByName(item){
-    var select_type = $("#books_type").val();
-    $.ajax({
-        url: "/get_book_list/",
-        data: {
-            'book': item,
-            'select_type':select_type,
-        },      
-        type: "GET", 
-        success: function(data){    
-            console.log("case here");        
-            $("#selected_book_list").show();
-            var tableString = "";
-            tableString += "<tr><td>"+ data.book_id +"</td>";
-            tableString += "<td>" + data.name + "</td>";
-            tableString += "<td>" + data.author + "</td>";
-            tableString += "<td>" + data.book_category + "</td>";
-            tableString += "<td>" + data.barcode + "</td>";
-            tableString += "<td>" + data.book_no + "</td>";
-            tableString += "<td>" + data.availability + "</td>";
-            if(data.availability=="available"){
-                tableString += "<td>" + "<input type='submit' value='Issue' book_id='"+ data.book_id +"' book_category='"+ data.book_category +"' onclick='issue_this_book(this);' id=\"issue"+data.book_id+"\">" + "</td>";
-            }            
-            tableString += "</tr>";
-            $("#selected_book").html(tableString);
-        },
-    });
-}
-$(function() 
-    {
-        $("#book_author").autocomplete({
-        minLength: 2,        
-        source: function( request, response )
-        {             
-            $.ajax(
-                {
-                url: "/autocompletesearchbooksbyauthor/",
-                data: {
-                    term: request.term,
-                    'select_type':$("#books_type").val(),
-                    },      
-                type: "POST",  // a jQuery ajax POST transmits in querystring format in utf-8
-                dataType: "json",   //return data in json format
-                success: function( data )
-                    {
-                        response( $.map( data, function( item )
-                        {  
-                            return{
-                                    label: item.author,
-                                    value: item.id + "-" + item.author                                    
-                                }                                
-                        }));                        
-                    }
-                });               
-            },
-        select: function(event, ui){
-            getBookByAuthor(ui.item.value);
-        } 
-    });
-});
-function getBookByAuthor(item){
-    var select_type = $("#books_type").val();
-    $.ajax({
-        url: "/get_book_list_author/",
-        data: {
-            'book': item,
-            'select_type':select_type,
-        },      
-        type: "GET", 
-        success: function(data){    
-            console.log("case here");        
-            $("#selected_book_list").show();
-            var tableString = "";
-            tableString += "<tr><td>"+ data.book_id +"</td>";
-            tableString += "<td>" + data.name + "</td>";
-            tableString += "<td>" + data.author + "</td>";
-            tableString += "<td>" + data.book_category + "</td>";
-            tableString += "<td>" + data.barcode + "</td>";
-            tableString += "<td>" + data.book_no + "</td>";
-            tableString += "<td>" + data.availability + "</td>";
-            if(data.availability=="available"){
-                tableString += "<td>" + "<input type='submit' value='Issue' book_id='"+ data.book_id +"' book_category='"+ data.book_category +"' onclick='issue_this_book(this);' id=\"issue"+data.book_id+"\">" + "</td>";
-            }            
-            tableString += "</tr>";
-            $("#selected_book").html(tableString);
-        },
-    });
-}
 $(function() 
     {
         $("#book_barcode").autocomplete({
@@ -314,7 +185,7 @@ $(function()
 function getBookByBarcode(item){
     var select_type = $("#books_type").val();
     $.ajax({
-        url: "/get_book_list_barcode/",
+        url: "/get_book_list_barcode_return/",
         data: {
             'book': item,
             'select_type':select_type,
@@ -328,70 +199,15 @@ function getBookByBarcode(item){
             tableString += "<td>" + data.name + "</td>";
             tableString += "<td>" + data.author + "</td>";
             tableString += "<td>" + data.book_category + "</td>";
-            tableString += "<td>" + data.barcode + "</td>";
-            tableString += "<td>" + data.book_no + "</td>";
-            tableString += "<td>" + data.availability + "</td>";
+            tableString += "<td>" + data.issue_date + "</td>";
+            tableString += "<td>" + data.return_date + "</td>";
+            tableString += "<td>" + data.fine_amount + "</td>";
+            tableString += "<td>" + "<input type='submit' class='btn btn-danger' onclick='return_this_book(this);' value='Return' book_id='"+ data.book_id +"' book_category='"+ data.book_category +"' id=\"return"+data.book_id+"\">";
             if(data.availability=="available"){
                 tableString += "<td>" + "<input type='submit' value='Issue' book_id='"+ data.book_id +"' book_category='"+ data.book_category +"' onclick='issue_this_book(this);' id=\"issue"+data.book_id+"\">" + "</td>";
             }            
             tableString += "</tr>";
             $("#selected_book").html(tableString);
-        },
-    });
-}
-function issue_this_book(obj){
-    var book_id = $(obj).attr('book_id');
-    var book_category = $(obj).attr('book_category');
-    var student = $("#student_search").val();
-    console.log(book_id,book_category, student);
-    $.ajax({
-        url: "/issue_this_book_ajax/",
-        data: {
-            'book_id': book_id,
-            'book_category':book_category,
-            'student':student,
-        },      
-        type: "GET", 
-        success: function(data){            
-            $("#table_book_list").show();
-            $("#table_book_history").show();
-                var tableString = "";
-                console.log(data.book_list.length);
-                if(data.book_list.length === 0) {
-                    tableString = "<tr><td></td><td></td><td></td><td>No Data Available.</td><td></td><td></td><td></td></tr>";
-                }
-                else{
-                    for(var i=0;i< data.book_list.length;i++){
-                        tableString += "<tr><td>"+ data.book_list[i].id +"</td>";
-                        tableString += "<td>" + data.book_list[i].book + "</td>";
-                        tableString += "<td>" + data.book_list[i].book_author + "</td>";
-                        tableString += "<td>" + data.book_list[i].category + "</td>";
-                        tableString += "<td>" + data.book_list[i].issue_date + "</td>";
-                        tableString += "<td>" + data.book_list[i].status + "</td>";
-                        tableString += "<td>" + "<input type='submit' class='btn btn-danger' onclick='return_this_book(this);' value='Return' book_id='"+ data.book_list[i].id +"' book_category='"+ data.book_list[i].category +"' id=\"return"+data.book_list[i].id+"\">";
-                        tableString += "<input type='submit' class='btn btn-primary' onclick='reissue_this_book(this);' value='Re-Issue' book_id='"+ data.book_list[i].id +"' book_category='"+ data.book_list[i].category +"' id=\"reissue"+data.book_list[i].id+"\">" + "</td>";
-                        tableString += "</tr>";
-                    }                   
-                }
-                $("#book_list_issued").html(tableString);
-                var tableString="";
-                if(data.book_history.length === 0){
-                    tableString = "<tr><td></td><td></td><td>No Data Available.</td><td></td></tr>";
-                }
-                else{
-                    for(var i=0; i<data.book_history;i++){
-                        tableString += "<tr><td>"+ data.book_history[i].id +"</td>";
-                        tableString += "<td>" + data.book_history[i].book + "</td>";
-                        tableString += "<td>" + data.book_history[i].book_author + "</td>";
-                        tableString += "<td>" + data.book_history[i].return_date + "</td>";
-                        tableString += "<td>" + data.book_history[i].status + "</td>";
-                        if(data.book_history[i].status=="available"){
-                            tableString += "<td>" + "<input type='submit' value='Issue' book_id='"+ data.book_history[i].id +"' onclick='issue_this_book(this);'  onclick='issue_this_book(this);' id=\"issue"+data.book_history[i].id+"\">" + "</td>";
-                        }                           
-                        tableString += "</tr>";
-                    }
-                }
-                $("#book_list_returned").html(tableString);            
         },
     });
 }
@@ -447,10 +263,6 @@ function return_this_book(obj){
                 $("#book_list_returned").html(tableString);
         }
     });
-}
-
-function load_book_list(){
-    console.log('data come here');
 }
 </script>
 {% endblock content %}
