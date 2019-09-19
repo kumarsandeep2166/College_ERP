@@ -671,7 +671,7 @@ def issuebook(request):
                 b = BookIssueStudent()
                 b.status=status
                 b.is_active=True
-                b.issue_date=datetime.date.today()
+                b.issue_date=date.today()
                 b.student=student
                 b.book=book
                 b.save()
@@ -702,7 +702,7 @@ def ajax_issue_book(request):
     stud_obj = Student.objects.get(pk=student_id)
     book_id = request.POST.getlist('book_id_list[]')
     status="Issued"
-    curr_date = datetime.date.today()
+    curr_date = date.today()
     for i in book_id:
         book_obj = BookDetails.objects.get(pk=int(i))
         BookIssueStudent.objects.create(
@@ -1211,34 +1211,6 @@ def get_book_list_barcode(request):
     mimetype = 'application/json'
     return HttpResponse(data, mimetype)
 
-def issuse_book_teacher(request):
-    return render(request, 'library/issue_book_teacher.html')
-
-def issue_new_book_ajax_teacher(request):
-    employee = request.GET.get('employee')
-    emp_obj = Employee.objects.get(enrollment_number=employee)
-    if stud_obj is None:
-        message = "Student is not available"
-        stud_name = ''
-        book_list = []
-        book_history = []
-    else:
-        student_id = emp_obj.student_name.pk
-        stud_name = str(stud_obj.student_name)
-        book_list = get_student_current_book(student_id)
-        book_history = get_student_returned_book(student_id)
-        message = "Successfull"
-    
-    context = {
-        'stud_name': stud_name,
-        'book_list': book_list,
-        'book_history': book_history,
-        'message': message,
-    }
-    print(book_list)
-    book_available_json = json.dumps(context)
-    return HttpResponse(book_available_json, 'application/json')
-
 def issue_this_book_ajax(request):
     student = request.GET.get('student')
     book_id = request.GET.get('book_id')
@@ -1254,7 +1226,7 @@ def issue_this_book_ajax(request):
         issue_obj = JournalIssueStudent.objects.create(
             student=student_id,
             journal=obj,
-            issue_date = datetime.date.today(),
+            issue_date = date.today(),
             status = "Issued",
         )
         obj.available = 1
@@ -1264,7 +1236,7 @@ def issue_this_book_ajax(request):
         issue_obj = MagazineIssueStudent.objects.create(
             student=student_id,
             magazine=obj,
-            issue_date = datetime.date.today(),
+            issue_date = date.today(),
             status = "Issued",            
         )
         obj.available = 1
@@ -1274,7 +1246,7 @@ def issue_this_book_ajax(request):
         issue_obj = BookIssueStudent.objects.create(
             student=student_id,
             book=obj,
-            issue_date = datetime.date.today(),
+            issue_date = date.today(),
             status = "Issued",            
         )
         obj.available = 1
@@ -1284,7 +1256,7 @@ def issue_this_book_ajax(request):
         issue_obj = EbookIssueStudent.objects.create(
             student=student_id,
             e_book=obj,
-            issue_date = datetime.date.today(),
+            issue_date = date.today(),
             status = "Issued",            
         )
         obj.available = 1
@@ -1490,3 +1462,376 @@ def get_book_list_barcode_return(request):
     data = json.dumps(context)
     mimetype = 'application/json'
     return HttpResponse(data, mimetype)
+
+def issuse_book_teacher(request):
+    return render(request, 'library/issue_book_teacher.html')
+
+def issue_new_book_ajax_teacher(request):
+    employee = request.GET.get('employee')
+    emp_first = employee.split()[0]
+    emp_second = employee.split()[1]
+    emp_obj = Employee.objects.get(first_name=emp_first,last_name=emp_second)
+    #print(emp_obj.pk)
+    if emp_obj is None:
+        message = "Employee is not available"
+        emp_name = ''
+        book_list = []
+        book_history = []
+    else:
+        emp_id = emp_obj.pk
+        emp_name = str(emp_obj)
+        book_list = get_teacher_current_book(emp_id)
+        book_history = get_teacher_returned_book(emp_id)
+        message = "Successfull"
+    
+    context = {
+        'emp_id':emp_id,
+        'emp_name': emp_name,
+        'book_list': book_list,
+        'book_history': book_history,
+        'message': message,
+    }
+    book_available_json = json.dumps(context)
+    return HttpResponse(book_available_json, 'application/json')
+
+
+def get_teacher_current_book(emp_id):
+    book_list = []
+    book_objs = BookIssueTeacher.objects.filter(employee_id=emp_id,status="Issued", is_active=True)  
+    for obj in book_objs:
+        book_dict = {}
+        book_dict['id'] = obj.id
+        book_dict['student'] = str(obj.employee_id)
+        book_dict['book'] = str(obj.book.name)
+        book_dict['book_author'] = str(obj.book.book_author)
+        book_dict['book_type'] = str(obj.book.book_type.name)
+        book_dict['category'] = "Book"
+        book_dict['status'] = obj.status
+        book_dict['issue_date'] = str(obj.issue_date)
+        book_dict['is_active'] = obj.is_active       
+        book_list.append(book_dict)
+
+    book_objs = JournalIssueTeacher.objects.filter(employee_id=emp_id,status="Issued", is_active=True)
+    for obj in book_objs:
+        book_dict = {}
+        book_dict['id'] = obj.id
+        book_dict['student'] = str(obj.employee_id)
+        book_dict['journal'] = str(obj.journal.name)
+        book_dict['book_author'] = str(obj.journal.publisher)
+        book_dict['book_type'] = str(obj.book.journal_type.name)
+        book_dict['category'] = "Journal"
+        book_dict['status'] = obj.status
+        book_dict['issue_date'] = str(obj.issue_date)
+        book_dict['is_active'] = obj.is_active
+        book_list.append(book_dict)
+
+    book_objs = EbookIssueTeacher.objects.filter(employee_id=emp_id,status="Issued", is_active=True)
+    for obj in book_objs:
+        book_dict = {}
+        book_dict['id'] = obj.id
+        book_dict['student'] = str(obj.employee_id)
+        book_dict['e_book'] = str(obj.e_book.name)
+        book_dict['book_author'] = str(obj.book.book_author)
+        book_dict['book_type'] = str(obj.book.ebook_type.name)
+        book_dict['category'] = "Ebook"
+        book_dict['status'] = obj.status
+        book_dict['issue_date'] = str(obj.issue_date)
+        book_dict['is_active'] = obj.is_active    
+        book_list.append(book_dict)
+
+    book_objs = MagazineIssueTeacher.objects.filter(employee_id=emp_id,status="Issued", is_active=True)
+    for obj in book_objs:
+        book_dict = {}
+        book_dict['id'] = obj.id
+        book_dict['student'] = str(obj.employee_id)
+        book_dict['magazine'] = str(obj.magazine.name)
+        book_dict['book_type'] = str(obj.book.magazine_type.name)
+        book_dict['category'] = "Magazine"
+        book_dict['book_author'] = str(obj.book.book_author)
+        book_dict['status'] = obj.status
+        book_dict['issue_date'] = str(obj.issue_date)
+        book_dict['is_active'] = obj.is_active  
+        book_list.append(book_dict)
+    return book_list
+
+
+def get_teacher_returned_book(emp_id):
+    book_list = []
+    book_objs = BookIssueTeacher.objects.filter(employee_id=emp_id,status="Returned", is_active=True)
+    for obj in book_objs:
+        book_dict = {}
+        book_dict['id'] = obj.id
+        book_dict['student'] = str(obj.employee_id)
+        book_dict['book'] = str(obj.book.name)
+        book_dict['book_type'] = str(obj.book.book_type.name)
+        book_dict['category'] = "Book"
+        book_dict['book_author'] = str(obj.book.book_author)
+        book_dict['status'] = obj.status
+        book_dict['return_date'] = str(obj.return_date)
+        book_dict['is_active'] = obj.is_active  
+        book_list.append(book_dict)
+
+    book_objs = JournalIssueTeacher.objects.filter(employee_id=emp_id,status="Returned", is_active=True)
+    for obj in book_objs:
+        book_dict = {}
+        book_dict['id'] = obj.id
+        book_dict['student'] = str(obj.employee_id)
+        book_dict['journal'] = str(obj.journal.name)
+        book_dict['book_author'] = str(obj.journal.publisher)
+        book_dict['category'] = "Journal"
+        book_dict['book_type'] = str(obj.book.journal_type.name)
+        book_dict['status'] = obj.status
+        book_dict['return_date'] = str(obj.return_date)
+        book_dict['is_active'] = obj.is_active
+        book_list.append(book_dict)
+
+    book_objs = EbookIssueTeacher.objects.filter(employee_id=emp_id,status="Returned", is_active=True)
+    for obj in book_objs:
+        book_dict = {}
+        book_dict['id'] = obj.id
+        book_dict['student'] = str(obj.employee_id)
+        book_dict['e_book'] = str(obj.e_book.name)
+        book_dict['book_author'] = str(obj.book.book_author)
+        book_dict['book_type'] = str(obj.book.ebook_type.name)
+        book_dict['category'] = "EBook"
+        book_dict['status'] = obj.status
+        book_dict['return_date'] = str(obj.return_date)
+        book_dict['is_active'] = obj.is_active   
+        book_list.append(book_dict)
+
+    book_objs = MagazineIssueTeacher.objects.filter(employee_id=emp_id,status="Returned", is_active=True)
+    for obj in book_objs:
+        book_dict = {}
+        book_dict['id'] = obj.id
+        book_dict['student'] = str(obj.employee_id)
+        book_dict['magazine'] = str(obj.magazine.name)
+        book_dict['book_author'] = str(obj.book.book_author)
+        book_dict['book_type'] = str(obj.book.magazine_type.name)
+        book_dict['category'] = "Magazine"
+        book_dict['status'] = obj.status
+        book_dict['return_date'] = str(obj.return_date)
+        book_dict['is_active'] = obj.is_active
+        book_list.append(book_dict)
+    return book_list
+
+def issue_this_book_teacher_ajax(request):
+    employee = request.GET.get('employee')
+    emp_first = employee.split()[0]
+    emp_second = employee.split()[1]
+    student_id = Employee.objects.get(first_name=emp_first,last_name=emp_second)
+    book_id = request.GET.get('book_id')
+    book_category = request.GET.get('book_category')    
+    message = ""
+    book_list = []
+    book_history = []
+    if book_category=='Journal':
+        obj = Journal.objects.get(pk=book_id)
+        issue_obj = JournalIssueTeacher.objects.create(
+            employee_id=student_id,
+            journal=obj,
+            issue_date = date.today(),
+            status = "Issued",
+        )
+        obj.available = 1
+        obj.save()
+    elif book_category=='Magazine':
+        obj = Magazine.objects.get(pk=book_id)
+        issue_obj = MagazineIssueTeacher.objects.create(
+            employee_id=student_id,
+            magazine=obj,
+            issue_date = date.today(),
+            status = "Issued",            
+        )
+        obj.available = 1
+        obj.save()
+    elif book_category=='Book':
+        obj = BookDetails.objects.get(pk=book_id)
+        issue_obj = BookIssueTeacher.objects.create(
+            employee_id=student_id,
+            book=obj,
+            issue_date = date.today(),
+            status = "Issued",            
+        )
+        obj.available = 1
+        obj.save()
+    elif book_category=='EBook':
+        obj = E_Book.objects.get(pk=book_id)
+        issue_obj = EbookIssueTeacher.objects.create(
+            employee_id=student_id,
+            e_book=obj,
+            issue_date = date.today(),
+            status = "Issued",            
+        )
+        obj.available = 1
+        obj.save()
+     
+    book_list = get_teacher_current_book(student_id)
+    book_history = get_teacher_returned_book(student_id)
+    message = "success"
+    context = {        
+        'book_id':book_id,
+        'book_category':book_category,
+        'book_list':book_list,
+        'book_history':book_history,
+        'message': message,
+    }
+    data = json.dumps(context)
+    return HttpResponse(data, 'application/json')
+
+def teacher_book_return(request):
+    return render(request, 'library/book_return_teacher.html')
+
+def teacher_book_return_ajax(request):
+    employee = request.GET.get('employee')
+    emp_first = employee.split()[0]
+    emp_second = employee.split()[1]
+    emp_obj = Employee.objects.get(first_name=emp_first,last_name=emp_second)
+    #print(emp_obj.pk)
+    if emp_obj is None:
+        message = "Employee is not available"
+        emp_name = ''
+        book_list = []
+        book_history = []
+    else:
+        emp_id = emp_obj.pk
+        emp_name = str(emp_obj)
+        book_list = get_teacher_current_book(emp_id)
+        book_history = get_teacher_returned_book(emp_id)
+        message = "Successfull"
+    
+    context = {
+        'emp_id':emp_id,
+        'emp_name': emp_name,
+        'book_list': book_list,
+        'book_history': book_history,
+        'message': message,
+    }
+    book_available_json = json.dumps(context)
+    return HttpResponse(book_available_json, 'application/json')
+
+def get_book_list_barcode_return_teacher(request):
+    id_string = request.GET.get('book')
+    print(id_string)
+    select_type = request.GET.get('select_type')
+    selected_id = id_string.split('-')[0]
+    print("selected_id:",selected_id)
+    date_format = "%Y-%m-%d"
+    if select_type=='Journal':
+        obj = JournalIssueTeacher.objects.get(pk=selected_id)
+        book_id = obj.pk
+        name = obj.journal.name
+        author = ""
+        book_category='Journal'
+        barcode = obj.journal.barcode
+        book_no  = obj.journal.journal_no
+        issue_date = datetime.strptime(str(issue_date), date_format)
+        return_date = datetime.strptime(str(return_date), date_format)        
+        if obj.status == "available":
+            availability = "available"
+        else:
+            availability = "not available"
+
+    elif select_type=='Magazine':
+        obj = MagazineIssueTeacher.objects.get(pk=selected_id)
+        book_id = obj.pk
+        name = obj.magazine.name
+        author = obj.magazine.book_author
+        book_category='Magazine'
+        barcode = obj.magazine.barcode
+        book_no  = obj.magazine.magazine_no
+        issue_date = datetime.strptime(str(obj.issue_date), date_format)
+        return_date = datetime.strptime(str(obj.return_date), date_format)
+        if obj.status == "available":
+            availability = "available"
+        else:
+            availability = "not available"
+    elif select_type=='Book':
+        obj = BookIssueTeacher.objects.get(pk=selected_id)
+        print("book:",obj)
+        book_id = obj.pk
+        name = obj.book.name
+        author = obj.book.book_author
+        book_category='Book'
+        barcode = obj.book.barcode
+        book_no  = obj.book.book_number
+        issue_date = datetime.strptime(str(obj.issue_date), date_format)
+        return_date = datetime.strptime(str(obj.return_date), date_format)
+        if obj.status == "available":
+            availability = "available"
+        else:
+            availability = "not available"
+    elif select_type=='EBook':
+        obj = EbookIssueStudent.objects.get(pk=selected_id)
+        book_id = obj.pk
+        name = obj.e_book.name
+        author = obj.e_book.book_author
+        book_category='EBook'
+        barcode = obj.e_book.barcode
+        book_no  = obj.e_book.ebook_no
+        issue_date = datetime.strptime(str(obj.issue_date), date_format)
+        return_date = datetime.strptime(str(obj.return_date), date_format)
+        if obj.status == "available":
+            availability = "available"
+        else:
+            availability = "not available"
+    context = {
+        'book_id': book_id,
+        'name':name,
+        'author':author,
+        'availability':availability,
+        'book_category': book_category,
+        'barcode': barcode,
+        'book_no': book_no,
+        'issue_date': str(issue_date),
+        'return_date': str(return_date),
+    }
+    data = json.dumps(context)
+    mimetype = 'application/json'
+    return HttpResponse(data, mimetype)
+
+def returnbook_teacher(request):
+    book = int(request.GET.get('book_id'))
+    book_category = request.GET.get('book_category')    
+    print(book,book_category)
+    message = ""
+    book_list = []
+    book_history = []
+    if book_category=='Journal':
+        obj = JournalIssueTeacher.objects.get(pk=book)
+        if obj.status == "Issued":
+            obj.status = "Returned"
+    elif book_category=='Magazine':
+        obj = MagazineIssueTeacher.objects.get(pk=book)
+        if obj.status == "Issued":
+            obj.status = "Returned"
+    elif book_category=='Book':
+        obj = BookIssueTeacher.objects.get(pk=book)
+        if obj.status == "Issued":
+            obj.status = "Returned"
+    elif book_category=='EBook':
+        obj = EbookIssueTeacher.objects.get(pk=book)
+        if obj.status == "Issued":
+            obj.status = "Returned"
+    obj.return_date=date.today()
+    obj.save()
+    employee_id = obj.employee_id
+    emp_name = str(obj.employee_id)
+    book_list = get_teacher_current_book(employee_id)
+    book_history = get_teacher_returned_book(employee_id)
+    message = "success"
+    context = {
+        'emp_name': emp_name,
+        'book_list':book_list,
+        'book_history':book_history,
+        'status':str(obj.status),
+        'message': message,
+    }
+    data = json.dumps(context)
+    mimetype = 'application/json'
+    return HttpResponse(data, mimetype)
+
+"""
+from ui book_id , book category is coming 
+book_id will get on whom the book is issued.
+then make status returned when returned.
+"""

@@ -69,5 +69,10 @@ urlpatterns = [
     path('student_book_return/',views.student_book_return, name='student_book_return'),
     path('student_book_return_ajax/',views.student_book_return_ajax, name='student_book_return_ajax'),
     path('get_book_list_barcode_return/',views.get_book_list_barcode_return, name='get_book_list_barcode_return'),
+    path('issue_this_book_teacher_ajax/',views.issue_this_book_teacher_ajax, name='issue_this_book_teacher_ajax'),
+    path('teacher_book_return/',views.teacher_book_return, name='teacher_book_return'),
+    path('teacher_book_return_ajax/',views.teacher_book_return_ajax, name='teacher_book_return_ajax'),
+    path('get_book_list_barcode_return_teacher/',views.get_book_list_barcode_return_teacher, name='get_book_list_barcode_return_teacher'),
+    path('returnbook_teacher/',views.returnbook_teacher, name='returnbook_teacher'),
 
 ]
