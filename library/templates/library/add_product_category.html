@@ -1,0 +1,26 @@
+{% extends 'student/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+<section id="main-content">
+    <div class="wrapper">
+        <div class="col-sm-12 col-xs-12 col-sm-offset-0">
+            <div class="text-center">
+                <h1 class="hdrcolorbg">
+                    Add A Product Category
+                </h1>
+            </div>
+            <form class="frmbgg clear-fx"  method="post"  id="assignSubjectTeacherForm" data-course-url="{% url 'ajax_load_course' %}" data-batch-url="{% url 'ajax_load_batch' %}" data-semestar-url="{% url 'ajax_load_sem' %}"  data-subject-url="{% url 'ajax_load_subject' %}">
+                <div class="row">
+                    {% csrf_token %}
+                    <div class="form-group col-sm-3 col-xs-12">
+                        <label>Product Name</label>
+                        {{ form.name}}
+                    </div>
+                </div>  
+                    <button class="btn btn-info save" type="submit">Submit</button>
+            </form> 
+        </div>       
+    </div>
+</section>
+{% endblock content %}

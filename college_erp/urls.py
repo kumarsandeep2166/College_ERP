@@ -14,7 +14,7 @@ urlpatterns = [
     path('',include('academics.urls')),  
     path('',include('exam.urls')),
     path('',include('collegesetup.urls')),
-    path('',include('librarymanagement.urls')),
+    path('',include('library.urls')),
     path('',include('hostel.urls')),
 ]
 

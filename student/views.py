@@ -33,7 +33,7 @@ def applicantfrm(request):
         form=StudentEnquiryForm(request.POST or None)
         if form.is_valid():
             form.save()
-            #return redirect('admissionfrm')
+            return redirect('enquiry_list')
         return render(request,'student/applicantfrm.html',{'form':form})
 
     # if request.method=='POST':
@@ -219,7 +219,7 @@ class EnrollmnetViewDetail(DetailView):
         return context
 
 @login_required(login_url='/login')
-def ajax_load_enrollment(request):    
+def ajax_load_enrollment(request):
     stream_id=request.GET.get('stream_id')
     course_id=request.GET.get('course_id')
     batch_id=request.GET.get('batch_id')
@@ -227,7 +227,7 @@ def ajax_load_enrollment(request):
     student_obj = Student.objects.get(pk=student_id)
     stream_obj = Stream.objects.get(pk=stream_id)
     course_obj = Course.objects.get(pk=course_id)
-    batch_obj = Batch.objects.get(pk=batch_id) 
+    batch_obj = Batch.objects.get(pk=batch_id)
     try:
         enr_obj = Enrollment.objects.get(student_name=student_obj)
         if enr_obj:

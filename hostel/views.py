@@ -13,7 +13,7 @@ from .models import StaffDesignation, Hostel, HostelStaff, \
     Room, Bed, RoomAllotment, Application, Leave, HostelAttendance, \
     Visitor
 from .forms import StaffDesignationForm, HostelForm, HostelStaffForm, \
-    RoomForm
+    RoomForm, RoomAllotmentForm
 # Create your views here.
 
 class StaffDesignationCreateView(CreateView):
@@ -164,7 +164,7 @@ class RoomCreateView(CreateView):
     template_name = 'hostel/add_room.html'
 
     def get_context_data(self, **kwargs):
-        context = super(RoomCreateView,self).get_context_data(**kwargs)        
+        context = super(RoomCreateView,self).get_context_data(**kwargs)
         return context
     def get(self,request,*args,**kwargs):
         context={'form': RoomForm(),}
@@ -176,7 +176,6 @@ class RoomCreateView(CreateView):
             #return HttpResponseRedirect(reverse_lazy)
         return redirect('/hostel_room_list/')
 
-
 class RoomList(ListView):
     template_name='hostel/hostel_room_list.html'
     context_object_name='hostel_room_list'
@@ -185,7 +184,6 @@ class RoomList(ListView):
     def get_context_data(self,**kwargs):
         context=super().get_context_data(**kwargs)
         return context
-
 
 def room_update(request, pk):
     if request.method=="POST":
@@ -203,7 +201,18 @@ def room_update(request, pk):
         context = {"form": form}
         return render(request, 'hostel/room_update.html', context)
 
-
 class RoomDeleteView(DeleteView):
     model=Room
     success_url=reverse_lazy('hostel_room_list')
+
+def roomallotment(request):
+    form = RoomAllotmentForm()
+    if request.method == "GET":
+        form = form
+        return render(request,'hostel/roomallotment_student.html',{'form':form})
+    else:
+        form = RoomAllotmentForm(request.POST or None)
+        if form.is_valid():
+            form.save()
+            return redirect('/hostel_room_list/')
+    

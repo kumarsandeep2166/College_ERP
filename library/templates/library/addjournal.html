@@ -1,0 +1,113 @@
+{% extends 'student/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.css">
+<section id="main-content">
+    <div class="wrapper">
+        <div class="col-sm-12 col-xs-12 col-sm-offset-0">
+            <div class="text-center">
+                <h1 class="hdrcolorbg">
+                    Add A Journal
+                </h1>
+            </div>
+            <form class="frmbgg clear-fx"  method="post" enctype="multipart/form-data"  id="assignSubjectTeacherForm" data-course-url="{% url 'ajax_load_course' %}" data-batch-url="{% url 'ajax_load_batch' %}" data-semestar-url="{% url 'ajax_load_sem' %}"  data-subject-url="{% url 'ajax_load_subject' %}">
+                <div class="row">
+                    {% csrf_token %}
+                    <div class="form-group col-sm-3 col-xs-12">
+                        <label>Journal Number</label>
+                        {{ form.journal_no}}
+                    </div>
+                    <div class="form-group col-sm-3 col-xs-12">
+                        <label>Publisher</label>
+                        {{ form.publisher}}
+                    </div>
+                    <div class="form-group col-sm-3 col-xs-12">
+                        <label>ISSN Number</label>
+                        {{ form.ISSN}}
+                    </div>
+                    <div class="form-group col-sm-3 col-xs-12">
+                        <label>E ISSN No.</label>
+                        {{ form.E_ISSn}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-sm-3 col-xs-12">
+                        <label>Location</label>
+                        {{ form.location}}
+                    </div> 
+                    <div class="form-group col-sm-3 col-xs-12">
+                        <label>Product Category</label>
+                        {{ form.category}}
+                    </div>                        
+                    <div class="form-group col-sm-3 col-xs-12">
+                        <label>Journal Type</label>                        
+                        {{ form.journal_type}}
+                    </div>
+                    <div class="form-group col-sm-3 col-xs-12">
+                        <label>Source</label>                        
+                        {{ form.source}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-sm-3 col-xs-12">
+                        <label>Journal Format</label>                        
+                        {{ form.journal_format}}
+                    </div> 
+                    <div class="form-group col-sm-3 col-xs-12">
+                        <label>Supplier</label>                        
+                        {{ form.supplier}}
+                    </div>
+                    <div class="form-group col-sm-3 col-xs-12">
+                        <label>Subject</label>                 
+                        {{ form.subject}}
+                    </div> 
+                    <div class="form-group col-sm-3 col-xs-12">
+                        <label>Purchase Order</label>                        
+                        {{ form.purchase_oder}}
+                    </div>                   
+                </div>
+                <div class="row">
+                    <div class="form-group col-sm-3 col-xs-12">
+                        <label>Edition</label>                        
+                        {{ form.edition}}
+                    </div>  
+                    <div class="form-group col-sm-3 col-xs-12">
+                        <label>Link</label>                        
+                        {{ form.link}}
+                    </div>  
+                </div>
+                    <button class="btn btn-info save" type="submit">Submit</button>
+            </form> 
+        </div>       
+    </div>
+</section>
+<script type="text/javascript">
+    function getCookie(c_name) {
+        if (document.cookie.length > 0)
+        {
+            c_start = document.cookie.indexOf(c_name + "=");
+            if (c_start != -1)
+            {
+                c_start = c_start + c_name.length + 1;
+                c_end = document.cookie.indexOf(";", c_start);
+                if (c_end == -1) c_end = document.cookie.length;
+                return unescape(document.cookie.substring(c_start,c_end));
+            }
+        }
+        return "";
+    }
+    $(function(){
+        $.ajaxSetup({
+            headers:{"X-CSRFToken":getCookie('csrftoken')}
+        });
+    });
+</script>
+<script src="{% static 'js/datepicker.js' %}"></script>
+<script>
+$( function() {
+        $( "#id_publication_date" ).datepicker();
+        $( "#id_publication_date" ).attr('autocomplete','off');
+} );
+</script>
+{% endblock content %}

@@ -1,0 +1,104 @@
+{% extends 'student/base.html' %}
+{% block content %}
+<script>
+        document.getElementById("stt").className += " active";
+        document.getElementById("stm1").className += " active";
+        document.getElementById("stm03").className += " active";
+ </script>
+ <style>
+     #stm03 a{
+         color:#fff !important;
+     }
+ </style>
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+<section id="main-content">
+    <div class="wrapper">
+        <header class="panel-heading clearfix col-sm-12">
+            <div class="col-sm-8 col-xs-12">
+                Book List
+            </div>
+            <div class="col-sm-4 col-xs-12">
+                <button type="submit" class="btn btn-info feebtn"><a href="{% url 'add_book' %}">Add a Book</a></button>
+            </div>
+            
+        </header>
+        <div class="row">
+            <div class="panel-body" style="overflow-x:auto;">
+                <table class="table table-bordered table-striped table-condensed" id="table_student">
+                    <thead>
+                        <tr class="hdclr">
+                            <th>Sl No.</th>
+                            <th>Book Name</th>
+                            <th>ISBN</th>
+                            <th>Book Author</th>                                    
+                            <th>Publication Date</th>
+                            <th>Book Type</th>
+                            <th>Book Price</th>                                   
+                            <th>Cover Image</th>                                                            
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for stud in object_list %}
+                        <tr>
+                            <td>{{stud.id}}</td>
+                            <td>{{stud.name}}</td>
+                            <td>{{stud.ISBN}}</td>
+                            <td>{{stud.book_author}}</td>                                        
+                            <td>{{stud.publication_date}}</td>
+                            <td>{{stud.book_type}}</td>
+                            <td>{{stud.book_price}}</td>
+                            <td><img src="/media/{{ stud.cover }}" alt="..." style="height: 65px; width:80px;"></td> 
+                            <td>
+                                <!-- <a href="{% url 'student_detail' pk=stud.id %}" class="social-icon">
+                                    <i class="fa fa-eye vieww"></i>
+                                    <div class="tooltip">View</div>
+                                </a>-->
+                                <a href="{% url 'book_edit' pk=stud.id %}" class="social-icon">
+                                    <i class="fa fa-pencil editt"></i>
+                                    <div class="tooltip">Edit</div>
+                                </a>
+                                
+                                <form method="post" action="{% url 'delete_book' pk=stud.id  %}" enctype="multipart/form-data" >
+                                    {% csrf_token %}                        
+                                    <button type="submit"  class="social-icon"  id="delete" onclick="return confirm('Are you sure to delete {{ stud }}?');">
+                                            <i class="fa fa-trash-o deletee"></i>  
+                                    </button>
+                                </form> 
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <div class="container-fluid">
+                            <h3>No Posts Found having search query "{{ request.GET }}"</h3>
+                        </div>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                </div>
+                  <!-- Modal -->
+                  <!-- <div class="modal fade" id="myModal" role="dialog">
+                    <div class="modal-dialog">
+                       
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <p>Are you sure, you want to delete?</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-default okbtn">Ok</button>
+                                <button type="button" class="btn btn-default cnlbtn" data-dismiss="modal">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+        </div>
+    </div>
+</section>
+<script>
+    $(document).ready(function(){
+        $("#table_student").dataTable();
+            });
+  
+</script>
+
+{% endblock content %}

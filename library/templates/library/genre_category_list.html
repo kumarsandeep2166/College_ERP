@@ -1,0 +1,57 @@
+{% extends 'student/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+<script>
+        document.getElementById("strm").className += " active";
+        document.getElementById("strm1").className += " active";
+        document.getElementById("strm01").className += " active";        
+</script>
+<style>
+        #strm01 a{
+                color:#fff !important;
+        }
+</style>
+<section id="main-content">
+        <div class="wrapper">
+                <div class="col-sm-12 col-xs-12">
+                    <button type="submit" class="btn btn-info feebtn"><a href="{% url 'genre_create' %}">Add A Genre</a></button>
+                    <table class="table table-bordered table-striped table-condensed" id="booktype_table">
+                            <thead>
+                                <tr class="hdclr">
+                                        <th>Sl No.</th>
+                                        <th>Type Name</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for i in object_list %}
+                                <tr>
+                                        <td>{{i.id}}</td>
+                                        <td>{{i.name}}</td>
+                                        <td>
+                                                <a href="{% url 'book_type_update' pk=i.pk %}" class="social-icon smnu">
+                                                <i class="fa fa-pencil editt"></i>
+                                                <div class="tooltip">Edit</div>
+                                                </a>
+                                                <form method="post" action="{% url 'book_type_delete' pk=i.pk %}" enctype="multipart/form-data" >
+                                                        {% csrf_token %}                        
+                                                        <button type="submit"  class="social-icon"  id="delete" onclick="return confirm('Are you sure to delete {{ i }}?');">
+                                                        <i class="fa fa-trash-o deletee"></i>  
+                                                        </button>
+                                                </form>
+                                        </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                </div>
+        </div>
+</section>
+<script>
+    $(document).ready(function(){
+        $("#booktype_table").dataTable();
+    });
+</script>
+{% endblock content %}

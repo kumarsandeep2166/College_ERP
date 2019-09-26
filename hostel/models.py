@@ -15,6 +15,7 @@ ApplicationStatus = (
     ('In Progress', 'In Progress'),
     ('Approved', 'Approved'),
     ('Rejected', 'Rejected'),
+    ('Occupied', 'Occupied'),
 )
 
 AttendanceStatus = (
@@ -46,7 +47,7 @@ class HostelStaff(models.Model):
 
 
 class Room(models.Model):
-    hostel = models.ForeignKey(Hostel, on_delete=models.CASCADE)
+    hostel = models.ForeignKey(Hostel, on_delete=models.CASCADE)    
     room_number = models.CharField(max_length=50)
     bed_count = models.IntegerField(default=1)
     bed_left = models.IntegerField(default=1)

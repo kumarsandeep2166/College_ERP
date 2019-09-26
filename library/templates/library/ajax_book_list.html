@@ -1,0 +1,53 @@
+<table class="table table-stripped">
+    <thead class="alert-success">
+    <tr>
+        <th>Select</th>
+        <th>Book Name</th>
+        <th>Book Subtitle</th>
+        <th>Book Author</th>
+        <th>Book Type</th>
+        <th>Barcode</th>                   
+        <th>Status</th>                   
+    </tr>
+    </thead>
+    <tbody id="table1" >
+        {% for book in books %}
+        <tr>
+            <td><input type="checkbox" name="issue" value="{{ book.id }}"></td>
+            <td>{{ book.name }}</td>
+            <td>{{ book.book_subtitle }}</td>
+            <td>{{ book.book_author }}</td>
+            <td>{{ book.book_type.name }}</td>
+            <td>{{ book.barcode }}</td>
+            <td>Available</td>
+        </tr>       
+        {% endfor %}
+    </tbody>
+</table>
+<table class="table table-stripped">
+    <thead class="alert-success">
+    <tr>
+        <th>Select</th>
+        <th>Book Name</th>
+        <th>Book Subtitle</th>
+        <th>Book Author</th>
+        <th>Book Type</th>
+        <th>Barcode</th>                   
+        <th>Status</th>                   
+    </tr>
+    </thead>
+    <tbody id="table2" >           
+        {% for book in data %}
+        <tr>
+            <td><input type="checkbox" value="{{ book.id }}"></td>
+            <td>{{ book.book.name }}</td>
+            <td>{{ book.book.book_subtitle }}</td>
+            <td>{{ book.book.book_author }}</td>
+            <td>{{ book.book.book_type.name }}</td>
+            <td>{{ book.book.barcode }}</td>
+
+            <td>Issued</td>
+        </tr>        
+        {% endfor %}           
+    </tbody>
+</table>

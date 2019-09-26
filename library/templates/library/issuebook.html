@@ -1,0 +1,105 @@
+{% extends 'student/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.css">
+<section id="main-content">
+    <div class="wrapper">
+        <div>
+            <div class="alert alert-info">Transaction / Issue / Return</div>
+                <div class="form-group pull-left">
+                    <label>Student Name:</label>
+                    <br/>
+                    <select class="form-control" name="student_id" id="student">
+                        <option value=''>--------------------</option>
+                        {% for student in students %}
+                        <option value='{{ student.student_name.id }}'>{{ student.student_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group pull-right">
+                    <span name="save_borrow" class="btn btn-primary" id="issue_btn"><span class="glyphicon glyphicon-thumbs-up"></span>
+                        Issue
+                </span>
+                </div>
+                <div id="book_table"></div> 
+                   
+           
+        </div>
+        </div>       
+    </div>
+</section>
+<script type="text/javascript">
+    function getCookie(c_name) {
+        if (document.cookie.length > 0)
+        {
+            c_start = document.cookie.indexOf(c_name + "=");
+            if (c_start != -1)
+            {
+                c_start = c_start + c_name.length + 1;
+                c_end = document.cookie.indexOf(";", c_start);
+                if (c_end == -1) c_end = document.cookie.length;
+                return unescape(document.cookie.substring(c_start,c_end));
+            }
+        }
+        return "";
+    }
+    $(function(){
+        $.ajaxSetup({
+            headers:{"X-CSRFToken":getCookie('csrftoken')}
+        });
+    });
+</script>
+<script src="{% static 'js/datepicker.js' %}"></script>
+<script>
+$( function() {
+        $( "#id_publication_date" ).datepicker();
+        $( "#id_publication_date" ).attr('autocomplete','off');
+} );
+$("#student").change(function(){
+        console.log("print Here");
+        var student=$("#student").val();
+        
+        console.log(student);
+        $.ajax({
+            url:"/ajax_showbook_list/",
+            type:'POST',
+            data:{
+                'student': student,
+                           
+            },
+            success:function(data){
+                $("#book_table").html(data);
+               
+            }
+        });
+    });
+</script>
+<script type="text/javascript">
+    $("#issue_btn").on('click',function(){
+        var book_id_list = new Array();
+        var count = 0;
+        $.each($("input[name='issue']"), function(){
+            if($(this).is(':checked')){
+                book_id_list.push($(this).val());
+                count = count + 1;
+            }
+        });
+        var student=$("#student").val();
+        $.ajax({
+            url:"/ajax_issue_book/",
+            type:'POST',
+            data:{
+                'student': student,
+                'count': count,
+                'book_id_list': book_id_list,
+            },
+            success:function(data){
+                $("#book_table").html(data);
+               
+            }
+        });
+    });
+    
+</script>
+{% endblock content %}

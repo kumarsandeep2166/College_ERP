@@ -1835,3 +1835,42 @@ from ui book_id , book category is coming
 book_id will get on whom the book is issued.
 then make status returned when returned.
 """
+def existing_book_entry(request):
+    return render(request,'library/existing_book_entry.html')
+
+def existing_book_entry_ajax(request):
+    
+    context = {        
+        'message': message,
+    }
+    data = json.dumps(context)
+    mimetype = 'application/json'
+    return HttpResponse(data, mimetype)
+
+
+def existing_journal_entry(request):
+    
+    context = {        
+        'message': message,
+    }
+    data = json.dumps(context)
+    mimetype = 'application/json'
+    return HttpResponse(data, mimetype)
+
+def existing_ebook_entry(request):
+    
+    context = {        
+        'message': message,
+    }
+    data = json.dumps(context)
+    mimetype = 'application/json'
+    return HttpResponse(data, mimetype)
+
+def existing_magazine_entry(request):
+    
+    context = {        
+        'message': message,
+    }
+    data = json.dumps(context)
+    mimetype = 'application/json'
+    return HttpResponse(data, mimetype)

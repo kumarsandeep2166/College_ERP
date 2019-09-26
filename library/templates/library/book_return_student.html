@@ -14,7 +14,7 @@
             <div class="alert alert-info">Transaction / Issue / Return</div>
                 <div class="form-group pull-left">
                     <div class="">
-                        <label>Employee Name:</label>
+                        <label>Student Name:</label>
                         <input type="search" name="student_search" id="student_search">
                         <span name="save_borrow" class="btn btn-primary search_buttton_book" id="search_btn"><span class="glyphicon glyphicon-thumbs-up"></span>
                         Search
@@ -47,7 +47,8 @@
                                 <th>Material Author/ Publisher</th>
                                 <th>Material Type</th>
                                 <th>Issue Date</th>
-                                <th>Return Date</th>                                
+                                <th>Return Date</th>
+                                <th>Fine Amount</th>
                                 <th>Action</th>                
                             </tr>
                         </thead>
@@ -125,20 +126,20 @@ $( function() {
 
 <script type="text/javascript">
 $("#search_btn").on('click',function(){
-    var employee = $("#student_search").val();        
+    var student = $("#student_search").val();        
     $.ajax({
-        url:"/teacher_book_return_ajax/",
+        url:"/student_book_return_ajax/",
         type:'GET',
         data:{
-            'employee': employee,
+            'student': student,
         },        
         success:function(data){
-            if(data.emp_name === ""){
-                alert("employee not available");
+            if(data.stud_name === ""){
+                alert("student not available");
                 console.log(data);
             }
             else{       
-                console.log('employee available');
+                console.log('student available');         
                 $("#hidden_div").show();
                 // $("#table_book_history").show();
             }
@@ -200,68 +201,13 @@ function getBookByBarcode(item){
             tableString += "<td>" + data.book_category + "</td>";
             tableString += "<td>" + data.issue_date + "</td>";
             tableString += "<td>" + data.return_date + "</td>";
-            if(data.status=="Issued"){
-                tableString += "<td>" + "<input type='submit' class='btn btn-danger' onclick='return_this_book(this);' value='Return' book_id='"+ data.book_id +"' book_category='"+ data.book_category +"' id=\"return"+data.book_id+"\">";                
-            }else{
+            tableString += "<td>" + data.fine_amount + "</td>";
+            tableString += "<td>" + "<input type='submit' class='btn btn-danger' onclick='return_this_book(this);' value='Return' book_id='"+ data.book_id +"' book_category='"+ data.book_category +"' id=\"return"+data.book_id+"\">";
+            if(data.availability=="available"){
                 tableString += "<td>" + "<input type='submit' value='Issue' book_id='"+ data.book_id +"' book_category='"+ data.book_category +"' onclick='issue_this_book(this);' id=\"issue"+data.book_id+"\">" + "</td>";
-            }          
+            }            
             tableString += "</tr>";
             $("#selected_book").html(tableString);
-        },
-    });
-}
-function issue_this_book(obj){
-    var book_id = $(obj).attr('book_id');
-    var book_category = $(obj).attr('book_category');
-    var employee = $("#student_search").val();    
-    $.ajax({
-        url: "/issue_this_book_teacher_ajax/",
-        data: {
-            'book_id': book_id,
-            'book_category':book_category,
-            'employee':employee,
-        },      
-        type: "GET", 
-        success: function(data){
-            $("#table_book_list").show();
-            $("#table_book_history").show();
-                var tableString = "";
-                console.log(data.book_list.length);
-                if(data.book_list.length === 0) {
-                    tableString = "<tr><td></td><td></td><td></td><td>No Data Available.</td><td></td><td></td><td></td></tr>";
-                }
-                else{
-                    for(var i=0;i< data.book_list.length;i++){
-                        tableString += "<tr><td>"+ data.book_list[i].id +"</td>";
-                        tableString += "<td>" + data.book_list[i].book + "</td>";
-                        tableString += "<td>" + data.book_list[i].book_author + "</td>";
-                        tableString += "<td>" + data.book_list[i].category + "</td>";
-                        tableString += "<td>" + data.book_list[i].issue_date + "</td>";
-                        tableString += "<td>" + data.book_list[i].status + "</td>";
-                        tableString += "<td>" + "<input type='submit' class='btn btn-danger' onclick='return_this_book(this);' value='Return' book_id='"+ data.book_list[i].id +"' book_category='"+ data.book_list[i].category +"' id=\"return"+data.book_list[i].id+"\">";
-                        tableString += "<input type='submit' class='btn btn-primary' onclick='reissue_this_book(this);' value='Re-Issue' book_id='"+ data.book_list[i].id +"' book_category='"+ data.book_list[i].category +"' id=\"reissue"+data.book_list[i].id+"\">" + "</td>";
-                        tableString += "</tr>";
-                    }                   
-                }
-                $("#book_list_issued").html(tableString);
-                var tableString="";
-                if(data.book_history.length === 0){
-                    tableString = "<tr><td></td><td></td><td>No Data Available.</td><td></td></tr>";
-                }
-                else{
-                    for(var i=0; i<data.book_history;i++){
-                        tableString += "<tr><td>"+ data.book_history[i].id +"</td>";
-                        tableString += "<td>" + data.book_history[i].book + "</td>";
-                        tableString += "<td>" + data.book_history[i].book_author + "</td>";
-                        tableString += "<td>" + data.book_history[i].return_date + "</td>";
-                        tableString += "<td>" + data.book_history[i].status + "</td>";
-                        if(data.book_history[i].status=="available"){
-                            tableString += "<td>" + "<input type='submit' value='Issue' book_id='"+ data.book_history[i].id +"' onclick='issue_this_book(this);'  onclick='issue_this_book(this);' id=\"issue"+data.book_history[i].id+"\">" + "</td>";
-                        }                           
-                        tableString += "</tr>";
-                    }
-                }
-                $("#book_list_returned").html(tableString);            
         },
     });
 }
@@ -270,7 +216,7 @@ function return_this_book(obj){
     var book_category = $(obj).attr('book_category');
     console.log(book_id,book_category);
     $.ajax({
-        url:"/returnbook_teacher/",
+        url:"/returnbook/",
         type:'GET',
         data:{
             'book_id': book_id,

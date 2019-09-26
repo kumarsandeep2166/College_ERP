@@ -1,0 +1,262 @@
+{% extends 'student/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.css">
+<section id="main-content">
+    <div class="wrapper">
+        <div class="col-sm-12 col-xs-12 col-sm-offset-0">
+            <div class="text-center">
+                <h1 class="hdrcolorbg">
+                    Add A Book
+                </h1>
+            </div>
+            <form class="frmbgg clear-fx"  method="post" enctype="multipart/form-data"  id="assignSubjectTeacherForm" data-course-url="{% url 'ajax_load_course' %}" data-batch-url="{% url 'ajax_load_batch' %}" data-semestar-url="{% url 'ajax_load_sem' %}"  data-subject-url="{% url 'ajax_load_subject' %}">
+                <div class="row" id="base_div">
+                    {% csrf_token %}
+                    <div class="form-group col-sm-3 col-xs-12">
+                        <label>Book Bar Code</label>                        
+                        {{ form.barcode}}
+                    </div> 
+                    <div class="form-group col-sm-3 col-xs-12">
+                        <label>Product Category</label>
+                        {{ form.product_category}}
+                    </div> 
+                    <div class="form-group col-sm-3 col-xs-12">
+                        <label>Stream</label>
+                        {{ form.stream}}
+                    </div>
+                    <div class="form-group col-sm-3 col-xs-12">
+                        <label>Course</label>
+                        {{ form.course}}
+                    </div>                    
+                </div>               
+                <div class="row">
+                    <div class="form-group col-sm-3 col-xs-12">
+                        <label>Subject</label>
+                        {{ form.subject}}
+                    </div>
+                    <div class="form-group col-sm-3 col-xs-12">
+                        <label>Book Type</label>
+                        {{ form.book_type}}
+                    </div>
+                    <div class="form-group col-sm-3 col-xs-12">
+                        <label>Genre</label>                        
+                        {{ form.genre_category}}
+                    </div>
+                    
+                    <div class="form-group col-sm-3 col-xs-12">
+                        <label>Book Number</label> 
+                        <input type="text" name="book_number" maxlength="20" 
+                        value="{{ book_no }}" id="id_book_number">
+                    </div> 
+                </div> 
+               
+                <div id="book_hidden_div" style="display: none;">
+                    <div class="row">
+                        <div class="form-group col-sm-3 col-xs-12">
+                            <label>Book Name</label>
+                            {{ form.name}}
+                        </div>
+                        <div class="form-group col-sm-3 col-xs-12">
+                            <label>ISBN Number</label>
+                            {{ form.ISBN}}
+                        </div>
+                        <div class="form-group col-sm-3 col-xs-12">
+                            <label>ISSN Number</label>
+                            {{ form.ISSN}}
+                        </div>
+                        <div class="form-group col-sm-3 col-xs-12">
+                            <label>EISSN Number</label>
+                            {{ form.E_ISSn}}
+                        </div>                        
+                    </div>
+                    <div class="row"> 
+                        <div class="form-group col-sm-3 col-xs-12">
+                            <label>Publisher</label>                        
+                            {{ form.publisher}}
+                        </div>  
+                        <div class="form-group col-sm-3 col-xs-12">
+                            <label>Publication Date</label>
+                            {{ form.publication_date}}
+                        </div>       
+                        <div class="form-group col-sm-3 col-xs-12">
+                            <label>Book Price</label>                        
+                            {{ form.book_price}}
+                        </div>
+                        <div class="form-group col-sm-3 col-xs-12">
+                            <label>Book Description</label>                        
+                            {{ form.book_description}}
+                        </div>
+                    </div>
+                   
+                    <div class="row">
+                        <div class="form-group col-sm-3 col-xs-12">
+                            <label>Book Author</label>                        
+                            {{ form.book_author}}
+                        </div>  
+                        <div class="form-group col-sm-3 col-xs-12">
+                            <label>Book Sub Author1</label>                        
+                            {{ form.book_sub_author1}}
+                        </div>
+                        <div class="form-group col-sm-3 col-xs-12">
+                            <label>Book Sub Author2</label>                        
+                            {{ form.book_sub_author2}}
+                        </div>
+                        <div class="form-group col-sm-3 col-xs-12">
+                            <label>Book Sub Author2</label>                        
+                            {{ form.book_sub_author3}}
+                        </div>      
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-sm-3 col-xs-12">
+                            <label>Book Author4</label>                        
+                            {{ form.book_sub_author4}}
+                        </div>  
+                        <div class="form-group col-sm-3 col-xs-12">
+                            <label>Book Sub Author5</label>                        
+                            {{ form.book_sub_author5}}
+                        </div>
+                        <div class="form-group col-sm-3 col-xs-12">
+                            <label>Book Sub Author6</label>                        
+                            {{ form.book_sub_author6}}
+                        </div>
+                        <div class="form-group col-sm-3 col-xs-12">
+                            <label>Book Sub Author7</label>                        
+                            {{ form.book_sub_author7}}
+                        </div>      
+                    </div>
+                    <div class="row">                        
+                        <div class="form-group col-sm-3 col-xs-12">
+                            <label>Link</label>                        
+                            {{ form.link}}
+                        </div>
+                        <div class="form-group col-sm-3 col-xs-12">
+                            <label>Source</label>                        
+                            {{ form.source}}
+                        </div>   
+                        <div class="form-group col-sm-3 col-xs-12">
+                            <label>Journal Format</label>                        
+                            {{ form.journal_format}}
+                        </div>
+                        <div class="form-group col-sm-3 col-xs-12">
+                            <label>Product Format</label>                        
+                            {{ form.product_format}}
+                        </div>                       
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-sm-3 col-xs-12">
+                            <label>Edition</label>                        
+                            {{ form.edition}}
+                        </div>
+                        <div class="form-group col-sm-3 col-xs-12">
+                            <label>Number Of Pages</label>                        
+                            {{ form.no_of_pages}}
+                        </div>
+                        <div class="form-group col-sm-3 col-xs-12">
+                            <label>Language</label>                        
+                            {{ form.language}}
+                        </div>      
+                    </div>
+                    <div class="row">                        
+                        <div class="form-group col-sm-3 col-xs-12">
+                            <label>Purchase From</label>                        
+                            {{ form.purchase_order}}
+                        </div> 
+                        <div class="form-group col-sm-3 col-xs-12">
+                            <label>Location</label>                        
+                            {{ form.location}}
+                        </div>   
+                        <div class="form-group col-sm-3 col-xs-12">
+                            <label>Cover Image</label>                        
+                            {{ form.cover}}
+                        </div>                 
+                    </div>
+                </div>
+                <button class="btn btn-info save" type="submit">Submit</button>
+            </div>
+                
+                   
+            </form> 
+        </div>       
+    </div>
+</section>
+<script type="text/javascript">
+    function getCookie(c_name) {
+        if (document.cookie.length > 0)
+        {
+            c_start = document.cookie.indexOf(c_name + "=");
+            if (c_start != -1)
+            {
+                c_start = c_start + c_name.length + 1;
+                c_end = document.cookie.indexOf(";", c_start);
+                if (c_end == -1) c_end = document.cookie.length;
+                return unescape(document.cookie.substring(c_start,c_end));
+            }
+        }
+        return "";
+    }
+    $(function(){
+        $.ajaxSetup({
+            headers:{"X-CSRFToken":getCookie('csrftoken')}
+        });
+    });
+</script>
+<script src="{% static 'js/datepicker.js' %}"></script>
+<script>
+$( function() {
+        $( "#id_publication_date" ).datepicker();
+        $( "#id_publication_date" ).attr('autocomplete','off');
+} );
+</script>
+<script>
+    $("#id_stream").change(function(event){
+        event.preventDefault();
+        // var url=$("#mysectionForm").attr("data-course-url");
+            var stream_id=$(this).val();
+            $.ajax({
+            url:'/ajax_load_course/',
+            data:{
+                'stream':stream_id,
+            },
+            success:function(data){
+                $("#id_course").html(data);
+            }
+        });
+
+    });
+    $("#id_course").change(function(event){
+        event.preventDefault();
+        console.log("print Here");
+        var product_category=$("#id_product_category").val();
+        var stream=$("#id_stream").val();
+        var course=$("#id_course").val();
+        var subject=$("#id_subject").val();
+        var barcode=$("#id_barcode").val();
+        $("#book_hidden_div").show();
+        console.log("product_category:"+product_category);
+        console.log("stream:"+stream);
+        console.log("course:"+course);
+        console.log("subject:"+subject);
+        $.ajax({
+            url:'/ajax_book_number_load/',
+            type:'GET',
+            data:{
+                'product_category':product_category,
+                'stream':stream,
+                'course':course,
+                'subject':subject,
+                'barcode':barcode,
+            },
+            success:function(data){
+                if(data['msg']){
+                    alert(data['msg']);
+                } else {
+                    $("#id_book_number").val(data['book_num']);
+                }
+             }
+        });
+    });
+    
+</script>
+{% endblock content %}
