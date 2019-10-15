@@ -75,5 +75,4 @@ urlpatterns = [
     path('get_book_list_barcode_return_teacher/',views.get_book_list_barcode_return_teacher, name='get_book_list_barcode_return_teacher'),
     path('returnbook_teacher/',views.returnbook_teacher, name='returnbook_teacher'),
     path('existing_book_entry/',views.existing_book_entry, name='existing_book_entry'),
-
 ]

@@ -8,30 +8,30 @@
         <div class="col-sm-12 col-xs-12 col-sm-offset-0">
             <div class="text-center">
                 <h1 class="hdrcolorbg">
-                    Add A Book
+                    Book Stock Entry Details
                 </h1>
             </div>
             <form class="frmbgg clear-fx"  method="post" enctype="multipart/form-data"  id="assignSubjectTeacherForm" data-course-url="{% url 'ajax_load_course' %}" data-batch-url="{% url 'ajax_load_batch' %}" data-semestar-url="{% url 'ajax_load_sem' %}"  data-subject-url="{% url 'ajax_load_subject' %}">
-                <div class="row" id="base_div">
+                <div class="row">
                     {% csrf_token %}
                     <div class="form-group col-sm-3 col-xs-12">
                         <label>Book Bar Code</label>                        
                         {{ form.barcode}}
                     </div> 
-                    <div class="form-group col-sm-3 col-xs-12">
+                    <div class="form-group col-sm-3 col-xs-12" id="category_div"  style="display: none;">
                         <label>Product Category</label>
                         {{ form.product_category}}
                     </div> 
-                    <div class="form-group col-sm-3 col-xs-12">
+                    <div class="form-group col-sm-3 col-xs-12" id="stream_div"  style="display: none;">
                         <label>Stream</label>
                         {{ form.stream}}
                     </div>
-                    <div class="form-group col-sm-3 col-xs-12">
+                    <div class="form-group col-sm-3 col-xs-12" id="course_div"  style="display: none;">
                         <label>Course</label>
                         {{ form.course}}
                     </div>                    
                 </div>               
-                <div class="row">
+                <div class="row" id="menu_div"  style="display: none;">
                     <div class="form-group col-sm-3 col-xs-12">
                         <label>Subject</label>
                         {{ form.subject}}
@@ -210,6 +210,13 @@ $( function() {
 } );
 </script>
 <script>
+    $("#id_barcode").change(function(event){
+        event.preventDefault();
+        $("#category_div").show();
+        $("#stream_div").show();
+        $("#course_div").show();
+        $("#menu_div").show();
+    });
     $("#id_stream").change(function(event){
         event.preventDefault();
         // var url=$("#mysectionForm").attr("data-course-url");
@@ -234,10 +241,7 @@ $( function() {
         var subject=$("#id_subject").val();
         var barcode=$("#id_barcode").val();
         $("#book_hidden_div").show();
-        console.log("product_category:"+product_category);
-        console.log("stream:"+stream);
-        console.log("course:"+course);
-        console.log("subject:"+subject);
+        
         $.ajax({
             url:'/ajax_book_number_load/',
             type:'GET',

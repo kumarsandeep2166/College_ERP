@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'exam',
     'collegesetup',
     'library',
+    'librarymanagement',
     'hostel',
 
 ]

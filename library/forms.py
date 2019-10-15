@@ -1,11 +1,18 @@
 from django import forms
 from .models import (ProductCategory,BookCategory, BookStockEntry, BookType,
                     BookIssueStudent,BookIssueTeacher,Vendor,Location,LibraryNumber,SelveNo,RoomNo,
-                    GenreCategory, PurchaseOrder, EDITION, FORMATS)
+                    GenreCategory, PurchaseOrder, EDITION, FORMATS,
+                    BookEntryMasterDetails, BookProfileDetails)
 from academics.models import Subject
 from coursemanagement.models import Stream, Course
 from student.models import Student, Enrollment
 from employee.models import Employee
+from django.forms.models import inlineformset_factory
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout, Field, Fieldset, Div, HTML, ButtonHolder, Submit
+from .custom_layout_object import *
+
+
 
 class BookTypeForm(forms.Form):
     name = forms.CharField()
@@ -199,31 +206,31 @@ class BookStockEntryForm(forms.Form):
     name = forms.CharField()
     book_number = forms.CharField()
     barcode = forms.CharField()
-    no_of_pages = forms.IntegerField()
-    language = forms.CharField()
+    no_of_pages = forms.IntegerField(required=False)
+    language = forms.CharField(required=False)
     edition = forms.ChoiceField(choices=EDITION)
-    ISBN = forms.CharField()
-    ISSN = forms.CharField()
-    E_ISSn = forms.CharField()
-    source = forms.CharField()
+    ISBN = forms.CharField(required=False)
+    ISSN = forms.CharField(required=False)
+    E_ISSn = forms.CharField(required=False)
+    source = forms.CharField(required=False)
     journal_format = forms.ChoiceField(choices=FORMATS)
     product_format = forms.ChoiceField(choices=FORMATS)
-    remark = forms.CharField()
-    remark1 = forms.CharField()
-    remark2 = forms.CharField()
-    book_author = forms.CharField()
-    book_sub_author1 = forms.CharField()
-    book_sub_author2 = forms.CharField()
-    book_sub_author3 = forms.CharField()
-    book_sub_author4 = forms.CharField()
-    book_sub_author5 = forms.CharField()
-    book_sub_author6 = forms.CharField()
-    book_sub_author7 = forms.CharField()
-    publisher = forms.CharField()
+    remark = forms.CharField(required=False)
+    remark1 = forms.CharField(required=False)
+    remark2 = forms.CharField(required=False)
+    book_author = forms.CharField(required=False)
+    book_sub_author1 = forms.CharField(required=False)
+    book_sub_author2 = forms.CharField(required=False)
+    book_sub_author3 = forms.CharField(required=False)
+    book_sub_author4 = forms.CharField(required=False)
+    book_sub_author5 = forms.CharField(required=False)
+    book_sub_author6 = forms.CharField(required=False)
+    book_sub_author7 = forms.CharField(required=False)
+    publisher = forms.CharField(required=False)
     publication_date = forms.DateField(required=False)
     cover = forms.ImageField(required=False)
     link = forms.URLField(required=False)
-    book_price = forms.FloatField()
+    book_price = forms.FloatField(required=False)
     book_description = forms.CharField(widget=forms.Textarea)
     stream = forms.ChoiceField(choices=[ (o.id, str(o)) for o in Stream.objects.all()])
     course = forms.ChoiceField(choices=[ (o.id, str(o)) for o in Course.objects.all()])
@@ -266,3 +273,56 @@ class BookStockEntryForm(forms.Form):
 
     def update(self, obj):
         pass
+
+
+class BookEntryMasterDetailsForm(forms.ModelForm):  
+    edition = forms.ChoiceField(choices=EDITION)
+    ISBN = forms.CharField(required=False)
+    ISSN = forms.CharField(required=False)
+    E_ISSn = forms.CharField(required=False)
+    source = forms.CharField(required=False)
+    journal_format = forms.ChoiceField(choices=FORMATS)
+    product_format = forms.ChoiceField(choices=FORMATS)
+    class Meta:
+        model = BookEntryMasterDetails
+        exclude = ()
+
+BookSet = inlineformset_factory(BookEntryMasterDetails,BookProfileDetails, form=BookEntryMasterDetailsForm,
+            fields=['barcode','book_author','book_sub_author1',
+            'book_sub_author2','book_sub_author3','edition','book_price',
+            'ISBN','ISSN','E_ISSn','source','journal_format','product_format','remark'],extra=1,can_delete=True)
+
+class BookProfileDetailsForm(forms.ModelForm):
+    name = forms.CharField(max_length=200)
+    stream = forms.ChoiceField(choices=[ (o.id, str(o)) for o in Stream.objects.all()])
+    course = forms.ChoiceField(choices=[ (o.id, str(o)) for o in Course.objects.all()])
+    subject = forms.ChoiceField(choices=[ (o.id, str(o)) for o in Subject.objects.all()])
+    product_category = forms.ChoiceField(choices=[ (o.id, str(o)) for o in ProductCategory.objects.all()])
+    book_category = forms.ChoiceField(choices=[ (o.id, str(o)) for o in BookCategory.objects.all()])
+    genre_category = forms.ChoiceField(choices=[ (o.id, str(o)) for o in GenreCategory.objects.all()])
+    vendor = forms.ChoiceField(choices=[ (o.id, str(o)) for o in Vendor.objects.all()])
+    purchase_order = forms.ChoiceField(choices=[ (o.id, str(o)) for o in PurchaseOrder.objects.all()])
+    book_type = forms.ChoiceField(choices=[ (o.id, str(o)) for o in BookType.objects.all()])
+    location = forms.ChoiceField(choices=[ (o.id, str(o)) for o in Location.objects.all()])
+    class Meta:
+        model = BookProfileDetails
+        fields = ('__all__')
+
+    def __init__(self, *args, **kwargs):
+        super(BookProfileDetailsForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_tag = True
+        self.helper.form_class = 'frmbgg clear-fx'
+        self.helper.label_class = 'form-group col-sm-3 col-xs-12'
+        self.helper.field_class = 'form-group col-sm-3 col-xs-12'
+        self.helper.layout = Layout(
+            Div(
+                
+                Fieldset('Add Books',
+                    Formset('titles')),                
+                HTML("<br>"),
+                ButtonHolder(Submit('submit', 'Save')),
+                )
+            )
+
+

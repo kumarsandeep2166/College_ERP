@@ -40,4 +40,5 @@ urlpatterns = [
     path('book_category_delete/<int:pk>/', views.BookCategoryDelete.as_view(), name='book_category_delete'),
     path('book_stock_create/', views.BookStockEntryCreate.as_view(), name='book_stock_entry'),
     path('ajax_book_number_load/', views.ajax_book_number_load, name='ajax_book_number_load'),
+    path('book_number_entry/', views.BookCreateView.as_view(), name='book_create_view'),
 ]

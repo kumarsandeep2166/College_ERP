@@ -1,0 +1,183 @@
+{% extends 'student/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.css">
+<section id="main-content">
+    <div class="wrapper">
+        <div class="col-sm-12 col-xs-12 col-sm-offset-0">
+            <div class="text-center">
+                <h1 class="hdrcolorbg">
+                    Book Stock Entry Details
+                </h1>
+            </div>
+            <form class="frmbgg clear-fx"  method="post" enctype="multipart/form-data"  id="assignSubjectTeacherForm" data-course-url="{% url 'ajax_load_course' %}" data-batch-url="{% url 'ajax_load_batch' %}" data-semestar-url="{% url 'ajax_load_sem' %}"  data-subject-url="{% url 'ajax_load_subject' %}">
+                <div class="row">
+                    {% csrf_token %} 
+                    <div class="form-group col-sm-3 col-xs-12">
+                        <label>Book Name</label>
+                        {{ form.name }}
+                    </div> 
+                    <div class="form-group col-sm-3 col-xs-12">
+                        <label>Stream</label>
+                        {{ form.stream }}
+                    </div>
+                    <div class="form-group col-sm-3 col-xs-12">
+                        <label>Course</label>
+                        {{ form.course }}
+                    </div>
+                    <div class="form-group col-sm-3 col-xs-12">
+                        <label>Subject</label>
+                        {{ form.subject }}
+                    </div>
+                </div> 
+                <div class="row">
+                    <div class="form-group col-sm-3 col-xs-12">
+                        <label>Product Category</label>
+                        {{ form.product_category }}
+                    </div>
+                    <div class="form-group col-sm-3 col-xs-12">
+                        <label>Genre Category</label>
+                        {{ form.genre_category }}
+                    </div>
+                    <div class="form-group col-sm-3 col-xs-12">
+                        <label>Book Type</label>
+                        {{ form.book_type}}
+                    </div>
+                    <div class="form-group col-sm-3 col-xs-12">
+                        <label>Number Of Pages</label>                        
+                        {{ form.no_of_pages}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-sm-3 col-xs-12">
+                        <label>Language</label>                        
+                        {{ form.language}}
+                    </div>    
+                    <div class="form-group col-sm-3 col-xs-12">
+                        <label>Purchase From</label>                        
+                        {{ form.purchase_order}}
+                    </div> 
+                    <div class="form-group col-sm-3 col-xs-12">
+                        <label>Location</label>                        
+                        {{ form.location}}
+                    </div>  
+                </div>  
+                  <div class="ghjbg col-sm-12 col-xs-12 clear-fx">
+                      <div class="col-sm-8">
+                        {% crispy form %}  
+                    </div>
+                  </div>   
+                    
+                </div>
+            </form> 
+        </div> 
+    </div>
+</section>
+<script type="text/javascript">
+    function getCookie(c_name) {
+        if (document.cookie.length > 0)
+        {
+            c_start = document.cookie.indexOf(c_name + "=");
+            if (c_start != -1)
+            {
+                c_start = c_start + c_name.length + 1;
+                c_end = document.cookie.indexOf(";", c_start);
+                if (c_end == -1) c_end = document.cookie.length;
+                return unescape(document.cookie.substring(c_start,c_end));
+            }
+        }
+        return "";
+    }
+    $(function(){
+        $.ajaxSetup({
+            headers:{"X-CSRFToken":getCookie('csrftoken')}
+        });
+    });
+</script>
+<script src="{% static 'js/datepicker.js' %}"></script>
+<script>
+$( function() {
+        $( "#id_publication_date" ).datepicker();
+        $( "#id_publication_date" ).attr('autocomplete','off');
+} );
+</script>
+<script>
+    $("#id_barcode").change(function(event){
+        event.preventDefault();
+        $("#category_div").show();
+        $("#stream_div").show();
+        $("#course_div").show();
+        $("#menu_div").show();
+    });
+    $("#id_stream").change(function(event){
+        event.preventDefault();
+        // var url=$("#mysectionForm").attr("data-course-url");
+            var stream_id=$(this).val();
+            $.ajax({
+            url:'/ajax_load_course/',
+            data:{
+                'stream':stream_id,
+            },
+            success:function(data){
+                $("#id_course").html(data);
+            }
+        });
+
+    });
+    $("#id_course").change(function(event){
+        event.preventDefault();
+        console.log("print Here");
+        var product_category=$("#id_product_category").val();
+        var stream=$("#id_stream").val();
+        var course=$("#id_course").val();
+        var subject=$("#id_subject").val();
+        var barcode=$("#id_barcode").val();
+        $("#book_hidden_div").show();
+        
+        $.ajax({
+            url:'/ajax_book_number_load/',
+            type:'GET',
+            data:{
+                'product_category':product_category,
+                'stream':stream,
+                'course':course,
+                'subject':subject,
+                'barcode':barcode,
+            },
+            success:function(data){
+                if(data['msg']){
+                    alert(data['msg']);
+                } else {
+                    $("#id_book_number").val(data['book_num']);
+                }
+             }
+        });
+    });
+    $("#id_bookprofiledetails_set-0-book_number").change(function(event){
+        event.preventDefault();
+        var x = $(this).val();
+        console.log(x);
+    });
+        
+    
+    function add_new_form(event) {
+    event.preventDefault();
+    form_type = $(this).attr("href");
+
+    // for id generation
+    formset = $("#id_" + form_type + "-TOTAL_FORMS");
+    console.log(formset);
+    current_forms_no = formset.val()
+
+    container = $(this).parent().parent();
+    $.get("/ajax/get_form/" + form_type, {"current_forms_no" : current_forms_no}, function(data) {
+        container.append(data);
+        container.append("<hr>");
+
+        // increment form count so they can be saved on server
+        formset.val(parseInt(formset.val()) + 1);
+    })
+}
+</script>
+{% endblock content %}

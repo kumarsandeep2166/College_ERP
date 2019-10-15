@@ -248,7 +248,7 @@ class BookCategory(models.Model):
 
 
 class BookIssueStudent(models.Model):    
-    student = models.ForeignKey(Enrollment,on_delete=models.CASCADE, null=True, blank=True)
+    student = models.ForeignKey(Enrollment,on_delete=models.CASCADE, null=True, blank=True, related_name='student_book_issue')
     book = models.ForeignKey(BookDetails, on_delete=models.CASCADE, null=True, blank=True)
     issue_date = models.DateField(null=True, blank=True)
     return_date = models.DateField(null=True, blank=True)
@@ -260,7 +260,7 @@ class BookIssueStudent(models.Model):
     #location = models.ForeignKey(Location,on_delete=models.CASCADE)
     
 class BookIssueTeacher(models.Model):
-    employee_id=models.ForeignKey(Employee,on_delete=models.CASCADE, null=True, blank=True)
+    employee=models.ForeignKey(Employee,on_delete=models.CASCADE, null=True, blank=True, related_name='employee_book_issue')
     book = models.ForeignKey(BookDetails,on_delete=models.CASCADE, null=True, blank=True)
     issue_date = models.DateField(null=True, blank=True)
     return_date = models.DateField(null=True, blank=True)
@@ -281,7 +281,7 @@ class JournalIssueStudent(models.Model):
 
 
 class JournalIssueTeacher(models.Model):
-    employee_id=models.ForeignKey(Employee, on_delete=models.CASCADE,null=True, blank=True)
+    employee=models.ForeignKey(Employee, on_delete=models.CASCADE,null=True, blank=True)
     journal = models.ForeignKey(Journal, on_delete=models.CASCADE,null=True, blank=True)
     issue_date = models.DateField(null=True, blank=True)
     return_date = models.DateField(null=True, blank=True)
@@ -302,7 +302,7 @@ class EbookIssueStudent(models.Model):
 
 
 class EbookIssueTeacher(models.Model):
-    employee_id=models.ForeignKey(Employee, on_delete=models.CASCADE,null=True, blank=True)
+    employee=models.ForeignKey(Employee, on_delete=models.CASCADE,null=True, blank=True)
     e_book = models.ForeignKey(E_Book, on_delete=models.CASCADE,null=True, blank=True)
     issue_date = models.DateField(null=True, blank=True)
     return_date = models.DateField(null=True, blank=True)

@@ -1,14 +1,14 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import (ProductCategory,BookCategory, BookStockEntry, BookType,
                     BookIssueStudent,BookIssueTeacher,Vendor,Location,LibraryNumber,SelveNo,RoomNo,
-                    GenreCategory, PurchaseOrder)
+                    GenreCategory, PurchaseOrder, BookProfileDetails, BookEntryMasterDetails)
 
-from .forms import (
+from .forms import (BookSet,
     BookTypeForm, BookTypeFormUpdate, 
     VendorForm, ProductCategoryForm, ProductCategoryFormUpdate, 
     BookCategoryForm, BookCategoryFormUpdate,
     GenreCategoryForm, GenreCategoryFormUpdate, PurchaseOrderForm, LocationForm, LocationUpdateForm, 
-    LibraryNumberCreateForm, RoomNoCreateForm, ShelveForm, BookStockEntryForm
+    LibraryNumberCreateForm, RoomNoCreateForm, ShelveForm, BookStockEntryForm, BookEntryMasterDetailsForm, BookProfileDetailsForm
 )
 from django.urls import reverse_lazy
 from django.http import HttpResponse
@@ -21,6 +21,8 @@ from datetime import datetime, date
 import json
 from django.db.models import Q, Count
 from django.views.generic import ListView, CreateView, DeleteView, DetailView, DeleteView, UpdateView
+from django.views.generic import TemplateView
+from django.db import transaction
 
 
 class BookTypeFormList(ListView):
@@ -502,7 +504,7 @@ class BookStockEntryCreate(CreateView):
         form=BookStockEntryForm(request.POST or None)
         if form.is_valid():
             form.save()
-            return redirect('book_stock_list')
+            #return redirect('book_stock_list')
         return render(request,'library/book_stock_create.html',{'form':form})
 
 class BookStockEntryList(ListView):
@@ -535,9 +537,47 @@ def ajax_book_number_load(request):
     book_obj = BookStockEntry.objects.filter(stream=stream_obj, course=course_obj, product_category=product_category_obj).order_by('-pk')
     try:
         book_no_obj = book_obj[0]
+        print("book_no_obj:",book_no_obj)
 
         
     except Exception as e:
         pass
     context={'book_num':1, 'msg': '' }
     return HttpResponse(json.dumps(context), content_type="application/json")
+
+class BookCreateView(CreateView):
+    model = BookProfileDetails
+    form_class = BookProfileDetailsForm
+    template_name = 'library/book_entry_create.html'
+    
+    def get_context_data(self, **kwargs):
+        data = super(BookCreateView, self).get_context_data(**kwargs)
+        if self.request.POST:
+            data['titles'] = BookSet(self.request.POST)
+        else:
+            data['titles'] = BookSet()
+        return data
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        titles = context['titles']
+        with transaction.atomic():
+            form.instance.created_by = self.request.user
+            self.object = form.save()
+            if titles.is_valid():
+                titles.instance = self.object
+                print(form.errors)
+                titles.save()
+
+        return super(BookCreateView, self).form_valid(form)
+    
+    def post(self, request, *args, **kwargs):
+        form = BookProfileDetailsForm(request.POST or None)
+        if form.is_valid():
+            form.save()
+            return redirect('/')
+
+    # def get_success_url(self):
+    #     return reverse_lazy('library:collection_detail', kwargs={'pk': self.object.pk})
+
+    
